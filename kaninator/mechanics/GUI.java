@@ -5,6 +5,7 @@
 package kaninator.mechanics;
 
 import java.util.*;
+import java.awt.Rectangle;
 import kaninator.graphics.*;
 
 /**
@@ -24,16 +25,21 @@ public class GUI
 {
 	private Queue<Drawable> drawables[][];
 	private int padding;
+	private int width, height;
 	
 	/**
 	 * Creates a two dimensional array of Queues in order to store the drawables for each screen section.
 	 * @see kaninator.graphics.Drawable
 	 * @see java.util.Queue
 	 */
-	public GUI()
+	public GUI(int _width, int _height)
 	{
 		padding = 0;
 		drawables = new Queue[3][3];
+		
+		width = _width;
+		height = _height;
+		
 		
 		for(int i = 0; i < 3; i++)
 			for(int j = 0; j < 3; j++)
@@ -84,20 +90,107 @@ public class GUI
 	}
 	
 	/**
-	 * Returns an array containing the drawables in the section.
-	 * @param x The x coordinate for the section.
-	 * @param y The y coordinate for the section.
-	 * @return An array containing all the drawables in the current section.
+	 * Checks if the coordinates provided are inside of any element in the screen section.
+	 * @param i Screen section x coordinate
+	 * @param j Screen section y coordinate
+	 * @param x Pointer x coordinate
+	 * @param y Pointer y coordinate
 	 */
-	public Drawable[] getSection(int x, int y)
+	public int touchesElement(int i, int j, int x, int y)
+	{	
+		int num = 0;
+		int offset = 0;
+		
+		for(Drawable drawable : drawables[i][j])
+		{	
+			int draw_x = getRealX(i, drawable);
+			int draw_y = getRealY(j, offset, drawable);
+
+			if(x > draw_x && x < draw_x + drawable.getWidth()
+					&& y > draw_y && y < draw_y + drawable.getHeight())
+				return num;
+
+			offset += drawable.getHeight() + 1;
+			num++;
+		}
+		
+		return -1;
+	}
+	
+	/**
+	 * 	Parses the GUI and returns an array of VisibleElements that can be passed to the screen.
+	 *  Positions the elements belonging to the same subsection underneath each other.
+	 */
+	public ArrayList<VisibleElement> render()
 	{
-		Drawable elements[] = new Drawable[drawables[x][y].size()];
+		ArrayList<VisibleElement> elements = new ArrayList<VisibleElement>();
 		
-		Iterator<Drawable> it = drawables[x][y].iterator();
-		for(int i = 0; i < elements.length; i++)
-			elements[i] =  it.next();
-		
-		
+		//Loop through each subsection of the gui
+		for(int i = 0; i < 3; i++)
+			for(int j = 0; j < 3; j++)
+			{		
+				//Loops through each element in the subsection
+				//and positions them underneath each other
+				int offset = 0;
+				for(Drawable drawable : drawables[i][j])
+				{	
+					//Estimates a screen position for the elements
+					int draw_x = getRealX(i, drawable);
+					int draw_y = getRealY(j , offset, drawable);
+					
+					elements.add(new VisibleElement(drawable, draw_x, draw_y));
+					offset += drawable.getHeight() + 1;
+				}
+			}
 		return elements;
+	}
+	
+	/**
+	 * Calculates the on-screen x coordinate for the element
+	 * @param i The x coordinate of the screen section
+	 * @param drawable The element in question
+	 * @return The on-screen x coordinate for the element
+	 */
+	private int getRealX(int i, Drawable drawable)	
+	{
+		int draw_x = i * width/2;
+		switch(i)
+		{
+			case 0:
+				draw_x += padding;
+				break;
+			case 1:
+				draw_x -= drawable.getWidth()/2;
+				break;
+			case 2:
+				draw_x -= drawable.getWidth() + padding;
+		}
+		
+		return draw_x;
+	}
+	
+	/**
+	 * Calculates the on-screen y coordinate for the element
+	 * @param j The y coordinate of the screen section
+	 * @param offset The y offset into the screen section.
+	 * @param drawable The element in question
+	 * @return
+	 */
+	private int getRealY(int j, int offset, Drawable drawable)
+	{
+		int draw_y = j * height/2;
+		switch(j)
+		{
+			case 0:
+					draw_y += offset + padding;
+				break;
+			case 1:
+					draw_y = draw_y + offset - drawable.getHeight();
+				break;
+			case 2:
+					draw_y = draw_y - offset - drawable.getHeight() - padding;
+		}
+		
+		return draw_y;
 	}
 }

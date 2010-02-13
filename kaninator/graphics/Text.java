@@ -17,8 +17,7 @@ public class Text implements Drawable
 {
 	private String text;
 	private Font font;
-	//private int size;
-	//private FontMetrics metrics;
+
 	private TextLayout layout;
 	private Color color;
 	

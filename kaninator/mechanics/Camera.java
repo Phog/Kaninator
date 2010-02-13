@@ -4,6 +4,8 @@
  */
 package kaninator.mechanics;
 
+import java.util.ArrayList;
+
 import kaninator.graphics.*;
 
 /**
@@ -32,58 +34,15 @@ public class Camera
 	
 	/**
 	 * Parses the GUI and sends the elements to the canvas.
-	 * Positions the elements belonging to the same subsection underneath each other.
 	 * @see kaninator.mechanics.GUI
 	 * @see kaninator.graphics.VisibleElement
 	 */
 	public void renderGUI()
 	{
-		//Loop through each subsection of the gui
-		for(int i = 0; i < 3; i++)
-			for(int j = 0; j < 3; j++)
-			{
-				Drawable drawables[] = gui.getSection(i, j);
-
-				//Estimates a screen position for the elements
-				int x = i * canvas.getWidth()/2;
-				int y = j * canvas.getHeight()/2;
-
-				
-				//Loops through each element in the subsection
-				//and positions them underneath each other
-				int offset = 0;
-				for(Drawable drawable : drawables)
-				{	
-					int draw_x = x;
-					int draw_y = y;
-					switch(i)
-					{
-						case 0:
-							draw_x += gui.getPadding();
-							break;
-						case 1:
-							draw_x -= drawable.getWidth()/2;
-							break;
-						case 2:
-							draw_x -= drawable.getWidth() + gui.getPadding();
-					}
-					
-					switch(j)
-					{
-						case 0:
-								draw_y += offset + gui.getPadding();
-							break;
-						case 1:
-								draw_y = y + offset - drawable.getHeight();
-							break;
-						case 2:
-								draw_y = y - offset - drawable.getHeight() - gui.getPadding();
-					}
-					
-					canvas.addElement(new VisibleElement(drawable, draw_x, draw_y));
-					offset += drawable.getHeight() + 1;
-				}
-			}
+		ArrayList<VisibleElement> guiElems = gui.render();
+		
+		for(VisibleElement elem : guiElems)
+			canvas.addElement(elem);
 	}
 	
 	/**

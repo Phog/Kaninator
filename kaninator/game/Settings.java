@@ -4,6 +4,7 @@
 package kaninator.game;
 
 import kaninator.mechanics.*;
+import kaninator.mechanics.Menu;
 import kaninator.graphics.*;
 import kaninator.io.*;
 
@@ -18,24 +19,35 @@ import java.awt.event.*;
  */
 public class Settings extends GameState
 {
+	private Menu menu;
+	
 	public Settings(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse)
 	{
 		super(_camera, _gui, _keyboard, _mouse);
+		
+		menu = new Menu(_gui);
+		
+		menu.setTitle(new Text("Settings!", "Arial", 32, Font.BOLD, Color.WHITE));
+		
+		menu.addEntry(new Text("Resolution!", "Arial", 32, Font.BOLD, Color.WHITE),
+						new Text("Resolution!", "Arial", 32, Font.BOLD, Color.RED));
+		
+		menu.addEntry(new Text("Fullscreen!", "Arial", 32, Font.BOLD, Color.WHITE),
+						new Text("Fullscreen!", "Arial", 32, Font.BOLD, Color.RED));
+		
+		menu.addEntry(new Text("Töttöröö!", "Arial", 32, Font.BOLD, Color.WHITE),
+						new Text("Töttöröö!", "Arial", 32, Font.BOLD, Color.RED));
+		
+		menu.addEntry(new Text("Menu!", "Arial", 32, Font.BOLD, Color.WHITE),
+						new Text("Menu!", "Arial", 32, Font.BOLD, Color.RED));
+
 	}
-	
-	
-	
+		
 	private void renderMenu()
 	{
-		gui.clearSection(1, 0);
-		gui.clearSection(1, 1);
-		
-		gui.addToSection(new Text("Settings!", "Arial", 32, Font.BOLD, Color.WHITE), 1, 0);
-		gui.addToSection(new Text("Töttöröö!", "Arial", 24, Font.BOLD, Color.WHITE), 1, 1);
-		gui.addToSection(new Text("Hip hei!", "Arial", 24, Font.BOLD, Color.WHITE), 1, 1);
-		gui.addToSection(new Text("Doopah!", "Arial", 24, Font.BOLD, Color.WHITE), 1, 1);
-		gui.addToSection(new Text("Back!", "Arial", 24, Font.BOLD,Color.RED), 1, 1);
+		menu.render();
 	}
+	
 	
 	
 	/* (non-Javadoc)
@@ -44,15 +56,36 @@ public class Settings extends GameState
 	@Override
 	public int doState()
 	{
-
-		renderMenu();
-		camera.render();
-		try {Thread.sleep(166);} catch(Exception e){}
+		int retvalue = 0;
+		int m_x = 0;
+		int m_y = 0;
 		
-		while(!keyboard.isPressed(KeyEvent.VK_SPACE) && !keyboard.isPressed(KeyEvent.VK_ENTER))
+		while(true)
 		{
+			renderMenu();
+			camera.render();
+			
+			m_x = mouse.get_x();
+			m_y = mouse.get_y();
 			try {Thread.sleep(66);} catch(Exception e){}
+			
+			menu.setPosition(m_x, m_y);
+			
+			if(keyboard.isPressed(KeyEvent.VK_DOWN))
+				menu.moveDown();
+			if(keyboard.isPressed(KeyEvent.VK_UP))
+				menu.moveUp();
+			
+			if(keyboard.isPressed(KeyEvent.VK_SPACE) || keyboard.isPressed(KeyEvent.VK_ENTER) || mouse.isPressed(0))
+				retvalue = menu.select();
+			
+			if(retvalue == 3)
+				break;
+			
 		}
+		
+		gui.clearSection(1, 0);
+		gui.clearSection(1, 1);
 
 		return 0;
 	}

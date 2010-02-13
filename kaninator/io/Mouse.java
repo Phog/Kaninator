@@ -161,5 +161,19 @@ public class Mouse
 	{
 		return y;
 	}
+	
+	/**
+	 * Checks against the values in the parameters if the mouse has been moved.
+	 * @param _x The old x value to check against
+	 * @param _y The old y value to check against
+	 * @return True if the mouse has moved, otherwise false
+	 */
+	public boolean moved(int _x, int _y)
+	{
+		if(_x != x || _y != y)
+			return true;
+		else
+			return false;
+	}
 
 }

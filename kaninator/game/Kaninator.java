@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 
 /**
  * This is the main class of the game.
- * The main method is a state machine containing four states: Menu, Settings, Highscore and Game.
+ * The main method is a state machine containing four states: Main, Settings, Highscore and Game.
  * @author phedman
  */
 public class Kaninator
@@ -31,7 +31,7 @@ public class Kaninator
 		//Creates the depencies used in the different stages
 		JFrame frame = new JFrame();
 		Screen screen = new Screen(frame, 640, 480, false, "Kaninator 0.01");
-		GUI gui = new GUI();
+		GUI gui = new GUI(screen.getWidth(), screen.getHeight());
 		gui.setPadding(25);
 		Camera camera = new Camera(screen, gui);
 		
@@ -43,7 +43,7 @@ public class Kaninator
 		
 		
 		//Initializes the different states
-		states[0] = new Menu(camera, gui, keyboard, mouse); //The main menu
+		states[0] = new Main(camera, gui, keyboard, mouse); //The main menu
 		states[1] = new Settings(camera, gui, keyboard, mouse); //The settings menu
 		
 		//Loops through the states until one returns the sentinel
