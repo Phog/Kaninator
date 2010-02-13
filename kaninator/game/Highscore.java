@@ -41,8 +41,9 @@ public class Highscore extends GameState
 		
 	private void render()
 	{
+		camera.clearGUI();
 		menu.render();
-		camera.render();
+		camera.renderGUI();
 	}
 	
 	
@@ -80,8 +81,8 @@ public class Highscore extends GameState
 			
 		}
 		
-		gui.clearSection(1, 0);
-		gui.clearSection(1, 1);
+		camera.clearGUI();
+		menu.clear();
 
 		return 0;
 	}

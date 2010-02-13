@@ -43,9 +43,11 @@ public class Settings extends GameState
 
 	}
 		
-	private void renderMenu()
+	private void render()
 	{
+		camera.clearGUI();
 		menu.render();
+		camera.renderGUI();
 	}
 	
 	
@@ -62,9 +64,8 @@ public class Settings extends GameState
 		
 		while(true)
 		{
-			renderMenu();
-			camera.render();
-			
+			render();
+	
 			m_x = mouse.get_x();
 			m_y = mouse.get_y();
 			try {Thread.sleep(66);} catch(Exception e){}
@@ -84,8 +85,8 @@ public class Settings extends GameState
 			
 		}
 		
-		gui.clearSection(1, 0);
-		gui.clearSection(1, 1);
+		camera.clearGUI();
+		menu.clear();
 
 		return 0;
 	}

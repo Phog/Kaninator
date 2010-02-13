@@ -68,6 +68,19 @@ public class GUI
 	}
 	
 	/**
+	 * Gets the number of elements in the GUI
+	 */
+	public int size()
+	{
+		int size = 0;
+		for(int i = 0; i < 3; i++)
+			for(int j = 0; j < 3; j++)
+				size += drawables[i][j].size();
+		
+		return size;
+	}
+	
+	/**
 	 * Removes all the Drawable objects contained in the section.
 	 * @param x The x coordinate for the section.
 	 * @param y The y coordinate for the section.

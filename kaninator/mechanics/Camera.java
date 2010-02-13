@@ -43,6 +43,16 @@ public class Camera
 		
 		for(VisibleElement elem : guiElems)
 			canvas.addElement(elem);
+		
+		canvas.draw();
+	}
+	
+	/**
+	 * Clears the GUI from the canvas so it can be redrawn.
+	 */
+	public void clearGUI()
+	{
+		canvas.clearTop(gui.size());
 	}
 	
 	/**
@@ -56,8 +66,5 @@ public class Camera
 		canvas.clear();
 		
 		//TODO: main drawing thing loop... yeah
-		
-		renderGUI();
-		canvas.draw();
 	}
 }

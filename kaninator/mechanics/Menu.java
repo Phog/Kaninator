@@ -62,14 +62,21 @@ public class Menu
 		activeEntries.add(active);
 	}
 	
+	/**
+	 * Clears the screensections in the gui which contain the menu.
+	 */
+	public void clear()
+	{
+		gui.clearSection(1, 0);
+		gui.clearSection(1, 1);
+	}
 	
 	/**
 	 * Renders the menu to the gui object.
 	 */
 	public void render()
 	{
-		gui.clearSection(1, 0);
-		gui.clearSection(1, 1);
+		clear();
 		
 		gui.addToSection(title, 1, 0);
 		

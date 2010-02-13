@@ -22,7 +22,7 @@ public class Screen implements Canvas
 	private JFrame frame;
 	private BufferStrategy bufferStrat;
 	private Color clearColor;
-	private Queue<VisibleElement> drawQueue;
+	private LinkedList<VisibleElement> drawList;
 	
 	/**
 	 * Creates and initializes a window and shows it on the screen.
@@ -33,7 +33,7 @@ public class Screen implements Canvas
 	 */
 	public Screen(JFrame _frame, int width, int height, boolean fullscreen, String title)
 	{
-		drawQueue = new LinkedList<VisibleElement>();
+		drawList = new LinkedList<VisibleElement>();
 		frame = _frame;
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,7 +57,7 @@ public class Screen implements Canvas
 	 */
 	public void addElement(VisibleElement elem)
 	{
-		drawQueue.add(elem);
+		drawList.addLast(elem);
 	}
 
 	/**
@@ -68,7 +68,17 @@ public class Screen implements Canvas
 	 */
 	public void clear()
 	{
-		drawQueue.clear();
+		drawList.clear();
+	}
+	
+	/**
+	 * Clears the top of the drawing queue.
+	 * @param n The number of elements to clear.
+	 */
+	public void clearTop(int n)
+	{
+		for(int i = 0; i < n; i++)
+			drawList.removeLast();
 	}
 
 	/**
@@ -102,7 +112,7 @@ public class Screen implements Canvas
 		g.setColor(clearColor);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
-		for(VisibleElement elem : drawQueue)
+		for(VisibleElement elem : drawList)
 		{
 			//Unwrap the drawable contained in the VisibleElement and draw it to the screen
 			Drawable drawable = elem.getDrawable();

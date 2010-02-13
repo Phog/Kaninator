@@ -42,23 +42,13 @@ public class Main extends GameState
 		
 		menu.addEntry(new Text("Exit!", "Arial", 32, Font.BOLD, Color.WHITE),
 						new Text("Exit!", "Arial", 32, Font.BOLD, Color.RED));
-		
-		try
-		{
-			Drawable image = new Image("/resources/test.png");
-			gui.addToSection(image, 0, 0);
-		}
-		catch(IOException e)
-		{
-			System.out.println("IMAGE NOT FOUND: /resources/test.png");
-		}
-
-
 	}
 		
-	private void renderMenu()
+	private void render()
 	{
+		camera.clearGUI();
 		menu.render();
+		camera.renderGUI();
 	}
 	
 	
@@ -73,8 +63,7 @@ public class Main extends GameState
 		m_x = m_y = 0;
 		while(true)
 		{
-			renderMenu();
-			camera.render();
+			render();
 			
 			if(mouse.moved(m_x, m_y))
 			{
@@ -98,8 +87,8 @@ public class Main extends GameState
 			
 		}
 		
-		gui.clearSection(1, 0);
-		gui.clearSection(1, 1);
+		camera.clearGUI();
+		menu.clear();
 		
 		return (retvalue == 3) ? -1 : retvalue;
 	}

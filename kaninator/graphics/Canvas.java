@@ -16,6 +16,12 @@ public interface Canvas
 	public void clear();
 	
 	/**
+	 * Clears the top of the drawing queue.
+	 * @param n The number of elements to clear.
+	 */
+	public void clearTop(int n);
+	
+	/**
 	 * Adds a new object that implements the VisibleElement interface to the drawing queue.
 	 * @param element The new VisibleElement object to be added to the tail of the queue.
 	 * @see kaninator.graphics.VisibleElement

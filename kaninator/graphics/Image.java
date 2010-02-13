@@ -23,6 +23,13 @@ public class Image implements Drawable
 	private VolatileImage vramImg;
 	private GraphicsConfiguration gfxConf;
 	
+	
+	/**
+	 * Attempts to load an image from a file.
+	 * Throws IOException if unsuccessful.
+	 * @param filepath Path to the image file
+	 * @throws IOException Thrown if the file isn't found or if it is invalid.
+	 */
 	public Image(String filepath) throws IOException
 	{
 		//Obtain the current system graphical settings
@@ -35,6 +42,12 @@ public class Image implements Drawable
 		maintainImg();
 	}
 	
+	/**
+	 * Draws the image to the coordinates in the parameters.
+	 * @param g The graphics context the image will be drawn to.
+	 * @param x The x coordinate for the image
+	 * @param y The y coordinate for the image
+	 */
 	/* (non-Javadoc)
 	 * @see kaninator.graphics.Drawable#draw(java.awt.Graphics2D, int, int)
 	 */
@@ -45,6 +58,10 @@ public class Image implements Drawable
 		g.drawImage(vramImg, x, y, null);
 	}
 
+	/**
+	 * Getter for the height of the image.
+	 * @return The height of the image.
+	 */
 	/* (non-Javadoc)
 	 * @see kaninator.graphics.Drawable#getHeight()
 	 */
@@ -54,6 +71,10 @@ public class Image implements Drawable
 		return buffer.getHeight();
 	}
 
+	/**
+	 * Getter for the width of the image.
+	 * @return The width of the image.
+	 */
 	/* (non-Javadoc)
 	 * @see kaninator.graphics.Drawable#getWidth()
 	 */
@@ -63,6 +84,9 @@ public class Image implements Drawable
 		return buffer.getWidth();
 	}
 
+	/**
+	 * A stub required to implement the drawable interface.
+	 */
 	/* (non-Javadoc)
 	 * @see kaninator.graphics.Drawable#reset()
 	 */
@@ -71,6 +95,12 @@ public class Image implements Drawable
 	{
 	}
 	
+	/**
+	 * Creates a VolatileImage from the BufferedImage.
+	 * Effectively copying the image to vram.
+	 * @see java.awt.image.VolatileImage
+	 * @see java.awt.image.BufferedImage
+	 */
 	private void moveToVram()
 	{
 	    //Create new VolatileImage
@@ -90,6 +120,11 @@ public class Image implements Drawable
 	    g2d.dispose();
 	}
 	
+	/**
+	 * Checks if the VolatileImage is valid, if not it attempts to recreate it.
+	 * @see java.awt.image.VolatileImage
+	 * @see java.awt.image.BufferedImage
+	 */
 	private void maintainImg()
 	{
 		if(vramImg.contentsLost())
