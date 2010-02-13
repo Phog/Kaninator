@@ -5,7 +5,6 @@ package kaninator.graphics;
 
 import java.awt.*;
 import java.awt.font.*;
-import javax.swing.SwingUtilities;
 
 /**
  * A drawable text object.

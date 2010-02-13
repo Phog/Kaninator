@@ -10,6 +10,7 @@ import kaninator.io.*;
 import java.awt.event.*;
 import java.awt.Color;
 import java.awt.Font;
+import java.io.IOException;
 
 /**
  * The main menu state.
@@ -41,6 +42,17 @@ public class Main extends GameState
 		
 		menu.addEntry(new Text("Exit!", "Arial", 32, Font.BOLD, Color.WHITE),
 						new Text("Exit!", "Arial", 32, Font.BOLD, Color.RED));
+		
+		try
+		{
+			Drawable image = new Image("/resources/test.png");
+			gui.addToSection(image, 0, 0);
+		}
+		catch(IOException e)
+		{
+			System.out.println("IMAGE NOT FOUND: /resources/test.png");
+		}
+
 
 	}
 		
@@ -56,7 +68,7 @@ public class Main extends GameState
 	@Override
 	public int doState()
 	{
-		int retvalue = -1;
+		int retvalue = 0;
 		int m_x, m_y;
 		m_x = m_y = 0;
 		while(true)
@@ -81,7 +93,7 @@ public class Main extends GameState
 			if(keyboard.isPressed(KeyEvent.VK_SPACE) || keyboard.isPressed(KeyEvent.VK_ENTER) || mouse.isPressed(0))
 				retvalue = menu.select();
 			
-			if(retvalue == 3 || retvalue == 1)
+			if(retvalue != 0)
 				break;
 			
 		}
