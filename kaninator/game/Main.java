@@ -10,7 +10,6 @@ import kaninator.io.*;
 import java.awt.event.*;
 import java.awt.Color;
 import java.awt.Font;
-import java.io.IOException;
 
 /**
  * The main menu state.

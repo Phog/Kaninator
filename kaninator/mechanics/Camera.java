@@ -21,6 +21,7 @@ public class Camera
 	private Canvas canvas;
 	private GUI gui;
 	private int x, y;
+	private ArrayList<Drawable> elements;
 	
 	/**
 	 * @param _canvas The canvas which actually draws the rendered data.
@@ -30,6 +31,9 @@ public class Camera
 	{
 		canvas = _canvas;
 		gui = _gui;
+		x = y = 0;
+		
+		elements = new ArrayList<Drawable>();
 	}
 	
 	/**
@@ -55,6 +59,16 @@ public class Camera
 		canvas.clearTop(gui.size());
 	}
 	
+	public void addElement(Drawable elem)
+	{
+		elements.add(elem);
+	}
+	
+	public void clearElements()
+	{
+		elements.clear();
+	}
+	
 	/**
 	 * Clears the Canvas object and sends new VisbleElements to it.
 	 * Parses the internal game data and sends it to a Canvas object to be drawn.
@@ -64,6 +78,14 @@ public class Camera
 	public void render()
 	{
 		canvas.clear();
+		
+		x++;
+		if(x > canvas.getWidth())
+			x = 0;
+		
+		for(Drawable elem : elements)
+			canvas.addElement(new VisibleElement(elem, x, y));
+		
 		
 		//TODO: main drawing thing loop... yeah
 	}
