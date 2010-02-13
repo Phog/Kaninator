@@ -79,10 +79,11 @@ public class Main extends GameState
 				menu.moveUp();
 			
 			if(keyboard.isPressed(KeyEvent.VK_SPACE) || keyboard.isPressed(KeyEvent.VK_ENTER) || mouse.isPressed(0))
+			{
 				retvalue = menu.select();
-			
-			if(retvalue != 0)
 				break;
+			}
+
 			
 		}
 		

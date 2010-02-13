@@ -79,7 +79,6 @@ public class Camera
 	{
 		canvas.clear();
 		
-		x++;
 		if(x > canvas.getWidth())
 			x = 0;
 		

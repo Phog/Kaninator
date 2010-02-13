@@ -84,7 +84,7 @@ public class Highscore extends GameState
 		camera.clearGUI();
 		menu.clear();
 
-		return 0;
+		return 3;
 	}
 
 }

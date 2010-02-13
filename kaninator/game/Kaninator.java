@@ -26,7 +26,7 @@ public class Kaninator
 	public static void main(String args[])
 	{
 		//All the possible states of the game
-		GameState states[] = new GameState[3];
+		GameState states[] = new GameState[4];
 		
 		//Creates the depencies used in the different stages
 		JFrame frame = new JFrame();
@@ -43,12 +43,13 @@ public class Kaninator
 		
 		
 		//Initializes the different states
-		states[0] = new Main(camera, gui, keyboard, mouse); //The main menu
+		states[0] = new Game(camera, gui, keyboard, mouse); //The game itself
 		states[1] = new Settings(camera, gui, keyboard, mouse); //The settings menu
 		states[2] = new Highscore(camera, gui, keyboard, mouse); //The high scores menu
+		states[3] = new Main(camera, gui, keyboard, mouse); //The main menu
 		
 		//Loops through the states until one returns the sentinel
-		int stateIndex = 0;
+		int stateIndex = 3;
 		while(stateIndex != SENTINEL)
 		{
 			stateIndex = states[stateIndex].doState();
