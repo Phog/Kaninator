@@ -32,11 +32,10 @@ public class Kaninator
 		JFrame frame = new JFrame();
 		Screen screen = new Screen(frame, 640, 480, false, "Kaninator 0.01");
 		GUI gui = new GUI(screen.getWidth(), screen.getHeight());
-		gui.setPadding(25);
 		Camera camera = new Camera(screen, gui);
 		
 		Keyboard keyboard = new Keyboard();
-		Mouse mouse = new Mouse();
+		Mouse mouse = new Mouse(screen.getInsets());
 		frame.addKeyListener(keyboard);
 		frame.addMouseListener(mouse.getMouseKeys());
 		frame.addMouseMotionListener(mouse.getMouseMotion());

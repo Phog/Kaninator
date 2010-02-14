@@ -17,10 +17,11 @@ public class Player
 	private static final double JUMP_SPEED = 15.0;
 	private static final double GRAVITY = 2.0;
 	
+	private Map map;
 	private DynamicObject playerModel;
 	private double vel_x, vel_y, vel_height;
 	
-	public Player(ArrayList<Drawable> drawables, double x, double y, double radius_constant)
+	public Player(ArrayList<Drawable> drawables, Map _map, double x, double y, double radius_constant)
 	{
 		if(drawables == null || drawables.size() == 0)
 			return;
@@ -29,15 +30,17 @@ public class Player
 		playerModel = new DynamicObject(drawables, radius);
 		playerModel.setPos(x, y);
 		
+		map = _map;
+		
 		vel_x = vel_y = vel_height = 0.0;
 	}
 	
 	public void update(ArrayList<DynamicObject> others)
 	{
-		if(vel_height <= 0.0 && playerModel.getHeight() <= 0.0)
+		if(vel_height <= 0.0 && playerModel.getHeight() <= map.getHeight(playerModel))
 		{
 			vel_height = 0.0;
-			playerModel.setHeight(0.0);
+			playerModel.setHeight(map.getHeight(playerModel));
 		}
 		else
 		{
@@ -51,9 +54,15 @@ public class Player
 		playerModel.move_x(vel_x);
 		playerModel.move_y(vel_y);
 		
+		if(map.getHeight(playerModel) >= playerModel.getHeight() + 16.0)
+		{
+			playerModel.setPos(old_x, old_y);
+			return;
+		}
+		
 		if(others == null)
 			return;
-		
+			
 		for(DynamicObject other : others)
 		{
 			if(other.collide(playerModel))

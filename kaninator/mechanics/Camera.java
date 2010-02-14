@@ -22,6 +22,7 @@ public class Camera
 	private GUI gui;
 	private int x, y;
 	private ArrayList<DynamicObject> objects;
+	private ArrayList<DynamicObject> player;
 	private ArrayList<ArrayList<StaticObject>> tiles;
 	
 	/**
@@ -32,9 +33,11 @@ public class Camera
 	{
 		canvas = _canvas;
 		gui = _gui;
-		x = y = 0;
+		x = -100; 
+		y = 0;
 		
 		objects = new ArrayList<DynamicObject>();
+		player = null;
 	}
 	
 	/**
@@ -60,6 +63,11 @@ public class Camera
 		canvas.clearTop(gui.size());
 	}
 	
+	public void setPlayer(ArrayList<DynamicObject> _player)
+	{
+		player = _player;
+	}
+	
 	public void addObject(DynamicObject object)
 	{
 		objects.add(object);
@@ -68,6 +76,7 @@ public class Camera
 	public void clearObjects()
 	{
 		objects.clear();
+		player = null;
 	}
 	
 	
@@ -94,16 +103,32 @@ public class Camera
 			int j = 0;
 			for(StaticObject object : rowList)
 			{
-				canvas.addElement(new VisibleElement(object.getDrawable(), -64 + j * 64 - i * 64  - x, i * 32 + j * 32  - y));
+				canvas.addElement(new VisibleElement(object.getDrawable(), object.render_x(j, i) - x, object.render_y(j, i) - y));
 				j++;
 			}
 			i++;
 		}
-
 		
 		for(DynamicObject object : objects)
 			canvas.addElement(new VisibleElement(object.getDrawable(), object.render_x() - x, object.render_y() - y));
 		
+		if(player != null)
+			for(DynamicObject object : player)
+				canvas.addElement(new VisibleElement(object.getDrawable(), object.render_x() - x, object.render_y() - y));
+		
+		double d_x = player.get(0).render_x() - x;
+		double d_y = player.get(0).render_y() - y;
+		
+		//MAEK FUNCTION YES!
+		if(d_x < 128.0)
+			x -= (128.0 - d_x)/6.0;
+		else if(d_x > 512.0)
+			x += (d_x - 512.0)/6.0;
+		
+		if(d_y < 128)
+			y -= (128 - d_y)/6.0;
+		else if(d_y > 352.0)
+			y += (d_y - 352.0)/6.0;
 		
 		//TODO: main drawing thing loop... yeah
 	}

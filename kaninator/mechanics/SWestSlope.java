@@ -26,10 +26,10 @@ public class SWestSlope extends StaticObject
 	{
 		double tempHeight = (x - y);
 		
-		if(tempHeight <= TILE_SIZE)
+		if(tempHeight < 0)
 			return height - TILE_HEIGHT;
 
-		return height - TILE_SIZE + tempHeight/2.0;
+		return height - TILE_HEIGHT + tempHeight/2;
 	}
 
 }

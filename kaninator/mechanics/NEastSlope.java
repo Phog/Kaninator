@@ -24,10 +24,10 @@ public class NEastSlope extends StaticObject
 	{
 		double tempHeight = (x - y);
 		
-		if(tempHeight > TILE_SIZE )
+		if(tempHeight > 0 )
 			return height - TILE_HEIGHT;
 		
-		return height - tempHeight/2.0;
+		return height - TILE_HEIGHT - tempHeight/2.0;
 	}
 
 }

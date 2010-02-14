@@ -4,6 +4,7 @@
  */
 package kaninator.io;
 
+import java.awt.Dimension;
 import java.awt.event.*;
 
 /**
@@ -18,6 +19,7 @@ public class Mouse
 	private int x, y;
 	private MouseKeys mouseKeys;
 	private MouseMotion mouseMotion;
+	private Dimension insets;
 	
 	/**
 	 * Extends the MouseAdapter class, stores the keystates in an boolean array.
@@ -119,10 +121,11 @@ public class Mouse
 	/**
 	 * Creates all the member objects and initializes all the variables to 0 and false.
 	 */
-	public Mouse()
+	public Mouse(Dimension _insets)
 	{
 		x = y = 0;
 		keyStates = new boolean[3];
+		insets = _insets;
 		
 		for(int i = 0; i < keyStates.length; i++)
 			keyStates[i] = false;
@@ -150,7 +153,7 @@ public class Mouse
 	 */
 	public int get_x()
 	{
-		return x;
+		return x - insets.width;
 	}
 
 	/**
@@ -159,7 +162,7 @@ public class Mouse
 	 */
 	public int get_y()
 	{
-		return y;
+		return y - insets.height;
 	}
 	
 	/**

@@ -29,10 +29,10 @@ public class Map
 		int tile_x = (int)(obj.get_x()/TILE_SIZE);
 		int tile_y = (int)(obj.get_y()/TILE_SIZE);
 		
-		if(tile_y < 0 || tile_y >= tiles.size())
+		if(tile_y + 1 < 0 || tile_y + 1 >= tiles.size())
 			return 0.0;
 		
-		ArrayList<StaticObject> rowList = tiles.get(tile_y);
+		ArrayList<StaticObject> rowList = tiles.get(tile_y + 1);
 		
 		if(tile_x < 0 || tile_x >= rowList.size())
 			return 0.0;

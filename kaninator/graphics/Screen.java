@@ -21,15 +21,12 @@ import java.util.*;
  */
 public class Screen implements Canvas
 {	
-	/**
-	 * Draws the VisibleElements contained in the drawing queue in order.
-	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Canvas#draw()
-	 */
+
 	private class InternalCanvas extends JPanel
 	{
-		
+		/**
+		 * Draws the VisibleElements contained in the drawing queue in order.
+		 */
 		public void paintComponent(Graphics graphics)
 		{
 			super.paintComponent(graphics);
@@ -68,6 +65,7 @@ public class Screen implements Canvas
 	public Screen(JFrame _frame, int width, int height, boolean fullscreen, String title)
 	{
 		drawList = new LinkedList<VisibleElement>();
+		
 		frame = _frame;
 		canvas = new InternalCanvas();
 		canvas.setIgnoreRepaint(true);
@@ -102,9 +100,6 @@ public class Screen implements Canvas
 	/**
 	 * Empties the drawing queue.
 	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Canvas#clear()
-	 */
 	public void clear()
 	{
 		synchronized(canvas)
@@ -132,7 +127,7 @@ public class Screen implements Canvas
 	 */
 	public int getWidth()
 	{
-		return frame.getWidth();
+		return canvas.getWidth();
 	}
 	
 	/**
@@ -141,7 +136,21 @@ public class Screen implements Canvas
 	 */
 	public int getHeight()
 	{
-		return frame.getHeight();
+		return canvas.getHeight();
+	}
+	
+	/**
+	 * Getter for the window insets
+	 * @return The top/left border size.
+	 */
+	public Dimension getInsets()
+	{
+		Dimension insets = new Dimension();
+		
+		insets.width = (frame.getWidth() - canvas.getWidth()) / 2;
+		insets.height = frame.getHeight() - canvas.getHeight() - insets.width;
+		
+		return insets;
 	}
 	
 	public void draw()

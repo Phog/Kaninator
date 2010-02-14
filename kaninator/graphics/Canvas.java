@@ -3,6 +3,8 @@
  */
 package kaninator.graphics;
 
+import java.awt.Dimension;
+
 /**
  * An interface for a class that initializes a window and can draw to it
  * @author phedman
@@ -29,7 +31,7 @@ public interface Canvas
 	public void addElement(VisibleElement element);
 	
 	/**
-	 * Draws the drawing queue in order to the scren.
+	 * Draws the drawing queue in order to the screen.
 	 */
 	public void draw();
 	
@@ -44,4 +46,11 @@ public interface Canvas
 	 * @return The height of the screen.
 	 */
 	public int getHeight();
+	
+	
+	/**
+	 * Getter for the window insets
+	 * @return The top/left border size.
+	 */
+	public Dimension getInsets();
 }

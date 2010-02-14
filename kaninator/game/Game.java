@@ -32,27 +32,104 @@ public class Game extends GameState
 		
 		try
 		{
+			Drawable flat = new Image("/resources/flat.png");
+			Drawable ne = new Image("/resources/ne.png");
+			Drawable nw = flat;
+			Drawable n = new Image("/resources/n.png");
+			Drawable e = new Image("/resources/e.png");
+			Drawable w = new Image("/resources/w.png");
+			Drawable se = new Image("/resources/se.png");
+			Drawable sw = new Image("/resources/sw.png");
+			Drawable s = new Image("/resources/s.png");
+
+			
+			StaticObject lowFlat = new FlatTile(flat, 0.0);
+			StaticObject highFlat = new FlatTile(flat, 32.0);
+			
+			StaticObject upNe = new NEastSlope(ne, 32.0);
+			StaticObject upNw = new NWestSlope(nw, 32.0);
+			StaticObject upN = new NorthSlope(n, 32.0);
+			StaticObject upE = new EastSlope(e, 32.0);
+			StaticObject upW = new WestSlope(w, 32.0);
+			StaticObject upSe = new SEastSlope(se, 32.0);
+			StaticObject upSw = new SWestSlope(sw, 32.0);
+			StaticObject upS = new SouthSlope(s, 32.0);
+			
+			ArrayList<ArrayList<StaticObject>> mapList = new ArrayList<ArrayList<StaticObject>>();
+			
+			ArrayList<StaticObject> row = new ArrayList<StaticObject>();
+			for(int i = 0; i < 10; i++)
+				row.add(lowFlat);
+			mapList.add(row);
+			
+			row = new ArrayList<StaticObject>();
+			for(int i = 0; i < 10; i++)
+				row.add(lowFlat);
+			mapList.add(row);
+			
+			row = new ArrayList<StaticObject>();
+			for(int i = 0; i < 3; i++)
+				row.add(lowFlat);
+			row.add(upNw);
+			for(int i = 0; i < 2; i++)
+				row.add(upN);
+			row.add(upNe);
+			for(int i = 0; i < 3; i++)
+				row.add(lowFlat);
+			mapList.add(row);
+			
+			row = new ArrayList<StaticObject>();
+			for(int i = 0; i < 3; i++)
+				row.add(lowFlat);
+			row.add(upW);
+			for(int i = 0; i < 2; i++)
+				row.add(highFlat);
+			row.add(upE);
+			for(int i = 0; i < 3; i++)
+				row.add(lowFlat);
+			mapList.add(row);
+			
+			row = new ArrayList<StaticObject>();
+			for(int i = 0; i < 3; i++)
+				row.add(lowFlat);
+			row.add(upW);
+			for(int i = 0; i < 2; i++)
+				row.add(highFlat);
+			row.add(upE);
+			for(int i = 0; i < 3; i++)
+				row.add(lowFlat);
+			mapList.add(row);
+			
+			row = new ArrayList<StaticObject>();
+			for(int i = 0; i < 3; i++)
+				row.add(lowFlat);
+			row.add(upSw);
+			for(int i = 0; i < 2; i++)
+				row.add(upS);
+			row.add(upSe);
+			for(int i = 0; i < 3; i++)
+				row.add(lowFlat);
+			mapList.add(row);
+			
+			row = new ArrayList<StaticObject>();
+			for(int i = 0; i < 10; i++)
+				row.add(lowFlat);
+			mapList.add(row);
+			row = new ArrayList<StaticObject>();
+			for(int i = 0; i < 10; i++)
+				row.add(lowFlat);
+			mapList.add(row);		
+			
+			map = new Map(mapList);
+			
 			Drawable image = new Image("/resources/test.png");
 			ArrayList<Drawable> list = new ArrayList<Drawable>();
 			list.add(image);
-			player = new Player(list, 5.0, 5.0, 4.0);
-			
-			
-			Drawable tile = new Image("/resources/tile.png");
-			StaticObject obj = new FlatTile(tile, 0.0);
-			
-			ArrayList<StaticObject> row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 32; i++)
-				row.add(obj);
-			ArrayList<ArrayList<StaticObject>> mapList = new ArrayList<ArrayList<StaticObject>>();
-			for(int i = 0; i < 32 ; i++)
-				mapList.add(row);
-			
-			map = new Map(mapList);
+			player = new Player(list, map, 5.0, 5.0, 4.0);
 		}
 		catch(IOException e)
 		{
-			System.out.println("IMAGE NOT FOUND: /resources/test.png");
+			System.out.println("IMAGE NOT FOUND: " + e);
 		}
 	}
 	
@@ -65,11 +142,7 @@ public class Game extends GameState
 		
 		gui.addToSection(new Text("Game!!", "Tahoma", 16, Font.BOLD, Color.GREEN), 0, 0);
 		
-		ArrayList<DynamicObject> playerObjects = player.getDynamicObjects();
-		
-		for(DynamicObject obj : playerObjects)
-			camera.addObject(obj);
-		
+		camera.setPlayer(player.getDynamicObjects());
 		camera.setTiles(map.getTiles());
 		
 		while(true)
@@ -84,7 +157,7 @@ public class Game extends GameState
 			
 			movePlayer();
 			
-			try {Thread.sleep(33);} catch(Exception e){}
+			try {Thread.sleep(1000/30);} catch(Exception e){}
 		}
 		
 		gui.clearSection(0, 0);

@@ -14,7 +14,7 @@ public class NWestSlope extends StaticObject
 	
 	public NWestSlope(Drawable _tile, double _height)
 	{
-		super(_tile, _height);
+		super(_tile, _height - TILE_HEIGHT);
 	}
 	
 	/* (non-Javadoc)
@@ -26,9 +26,9 @@ public class NWestSlope extends StaticObject
 		double tempHeight = (x + y)/2.0;
 		
 		if(tempHeight < TILE_HEIGHT)
-			return height - TILE_HEIGHT;
+			return height;
 		
-		return height - TILE_SIZE + tempHeight;
+		return height - TILE_HEIGHT + tempHeight;
 	}
 
 }
