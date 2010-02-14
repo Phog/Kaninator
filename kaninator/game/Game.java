@@ -24,7 +24,7 @@ public class Game extends GameState
 {
 
 	private Player player;
-	private DynamicObject test;
+	private Map map;
 	
 	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse)
 	{
@@ -35,9 +35,20 @@ public class Game extends GameState
 			Drawable image = new Image("/resources/test.png");
 			ArrayList<Drawable> list = new ArrayList<Drawable>();
 			list.add(image);
-			test = new DynamicObject(list, image.getWidth()/4.0);
-			test.setPos(250, 50);
 			player = new Player(list, 5.0, 5.0, 4.0);
+			
+			
+			Drawable tile = new Image("/resources/tile.png");
+			StaticObject obj = new FlatTile(tile, 0.0);
+			
+			ArrayList<StaticObject> row = new ArrayList<StaticObject>();
+			for(int i = 0; i < 32; i++)
+				row.add(obj);
+			ArrayList<ArrayList<StaticObject>> mapList = new ArrayList<ArrayList<StaticObject>>();
+			for(int i = 0; i < 32 ; i++)
+				mapList.add(row);
+			
+			map = new Map(mapList);
 		}
 		catch(IOException e)
 		{
@@ -59,14 +70,11 @@ public class Game extends GameState
 		for(DynamicObject obj : playerObjects)
 			camera.addObject(obj);
 		
-		ArrayList<DynamicObject> gameObjects = new ArrayList<DynamicObject>();
-		gameObjects.add(test);
-		
-		camera.addObject(test);
+		camera.setTiles(map.getTiles());
 		
 		while(true)
 		{
-			player.update(gameObjects);
+			player.update(null);
 			
 			camera.render();
 			camera.renderGUI();

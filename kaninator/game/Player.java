@@ -51,6 +51,9 @@ public class Player
 		playerModel.move_x(vel_x);
 		playerModel.move_y(vel_y);
 		
+		if(others == null)
+			return;
+		
 		for(DynamicObject other : others)
 		{
 			if(other.collide(playerModel))

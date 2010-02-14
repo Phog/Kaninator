@@ -6,6 +6,8 @@ package kaninator.graphics;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.*;
+
+import java.util.List;
 import java.util.*;
 
 /**
@@ -18,11 +20,43 @@ import java.util.*;
  * @author phedman
  */
 public class Screen implements Canvas
-{
+{	
+	/**
+	 * Draws the VisibleElements contained in the drawing queue in order.
+	 */
+	/* (non-Javadoc)
+	 * @see kaninator.graphics.Canvas#draw()
+	 */
+	private class InternalCanvas extends JPanel
+	{
+		
+		public void paintComponent(Graphics graphics)
+		{
+			super.paintComponent(graphics);
+			Graphics2D g = (Graphics2D)graphics;//bufferStrat.getDrawGraphics();
+			
+			g.setColor(clearColor);
+			g.fillRect(0, 0, getWidth(), getHeight());
+			
+			synchronized(canvas)
+			{
+				for(VisibleElement elem : drawList)
+				{
+					//Unwrap the drawable contained in the VisibleElement and draw it to the screen
+					Drawable drawable = elem.getDrawable();
+					drawable.draw(g, elem.get_x(), elem.get_y());
+				}
+			}
+			
+			g.dispose();
+		}
+		
+	}
+	
 	private JFrame frame;
-	private BufferStrategy bufferStrat;
 	private Color clearColor;
 	private LinkedList<VisibleElement> drawList;
+	private InternalCanvas canvas;
 	
 	/**
 	 * Creates and initializes a window and shows it on the screen.
@@ -35,17 +69,19 @@ public class Screen implements Canvas
 	{
 		drawList = new LinkedList<VisibleElement>();
 		frame = _frame;
+		canvas = new InternalCanvas();
+		canvas.setIgnoreRepaint(true);
+		canvas.setDoubleBuffered(true);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(width, height);
 		frame.setTitle(title);
+		frame.add(canvas);
+		
 		frame.setResizable(false);
 		frame.setVisible(true);
-		
-		frame.createBufferStrategy(2);
-		bufferStrat = frame.getBufferStrategy();
+	
 		clearColor = new Color(0, 0, 0);
-
 	}
 
 	/**
@@ -57,7 +93,10 @@ public class Screen implements Canvas
 	 */
 	public void addElement(VisibleElement elem)
 	{
-		drawList.addLast(elem);
+		synchronized(canvas)
+		{
+			drawList.addLast(elem);
+		}
 	}
 
 	/**
@@ -68,7 +107,10 @@ public class Screen implements Canvas
 	 */
 	public void clear()
 	{
-		drawList.clear();
+		synchronized(canvas)
+		{
+			drawList.clear();
+		}
 	}
 	
 	/**
@@ -77,8 +119,11 @@ public class Screen implements Canvas
 	 */
 	public void clearTop(int n)
 	{
-		for(int i = 0; i < n; i++)
-			drawList.removeLast();
+		synchronized(canvas)
+		{
+			for(int i = 0; i < n; i++)
+				drawList.removeLast();
+		}
 	}
 
 	/**
@@ -99,30 +144,9 @@ public class Screen implements Canvas
 		return frame.getHeight();
 	}
 	
-	/**
-	 * Draws the VisibleElements contained in the drawing queue in order.
-	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Canvas#draw()
-	 */
 	public void draw()
 	{
-		Graphics2D g = (Graphics2D)bufferStrat.getDrawGraphics();
-		
-		g.setColor(clearColor);
-		g.fillRect(0, 0, getWidth(), getHeight());
-		
-		for(VisibleElement elem : drawList)
-		{
-			//Unwrap the drawable contained in the VisibleElement and draw it to the screen
-			Drawable drawable = elem.getDrawable();
-			drawable.draw(g, elem.get_x(), elem.get_y());
-
-		}
-		
-		bufferStrat.show();
-		g.dispose();
-
+		canvas.repaint();
 	}
 
 }

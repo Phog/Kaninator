@@ -22,6 +22,7 @@ public class Camera
 	private GUI gui;
 	private int x, y;
 	private ArrayList<DynamicObject> objects;
+	private ArrayList<ArrayList<StaticObject>> tiles;
 	
 	/**
 	 * @param _canvas The canvas which actually draws the rendered data.
@@ -69,15 +70,36 @@ public class Camera
 		objects.clear();
 	}
 	
+	
+	public void setTiles(ArrayList<ArrayList<StaticObject>> _tiles)
+	{
+		tiles = _tiles;
+	}
+	
 	/**
 	 * Clears the Canvas object and sends new VisbleElements to it.
 	 * Parses the internal game data and sends it to a Canvas object to be drawn.
 	 * @see Canvas
 	 * @see VisibleElement
 	 */
+
 	public void render()
 	{
+		
 		canvas.clear();
+		
+		int i = 0;
+		for(ArrayList<StaticObject> rowList : tiles)
+		{
+			int j = 0;
+			for(StaticObject object : rowList)
+			{
+				canvas.addElement(new VisibleElement(object.getDrawable(), -64 + j * 64 - i * 64  - x, i * 32 + j * 32  - y));
+				j++;
+			}
+			i++;
+		}
+
 		
 		for(DynamicObject object : objects)
 			canvas.addElement(new VisibleElement(object.getDrawable(), object.render_x() - x, object.render_y() - y));
