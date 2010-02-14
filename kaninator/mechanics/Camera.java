@@ -21,7 +21,7 @@ public class Camera
 	private Canvas canvas;
 	private GUI gui;
 	private int x, y;
-	private ArrayList<Drawable> elements;
+	private ArrayList<DynamicObject> objects;
 	
 	/**
 	 * @param _canvas The canvas which actually draws the rendered data.
@@ -33,7 +33,7 @@ public class Camera
 		gui = _gui;
 		x = y = 0;
 		
-		elements = new ArrayList<Drawable>();
+		objects = new ArrayList<DynamicObject>();
 	}
 	
 	/**
@@ -59,14 +59,14 @@ public class Camera
 		canvas.clearTop(gui.size());
 	}
 	
-	public void addElement(Drawable elem)
+	public void addObject(DynamicObject object)
 	{
-		elements.add(elem);
+		objects.add(object);
 	}
 	
-	public void clearElements()
+	public void clearObjects()
 	{
-		elements.clear();
+		objects.clear();
 	}
 	
 	/**
@@ -79,11 +79,8 @@ public class Camera
 	{
 		canvas.clear();
 		
-		if(x > canvas.getWidth())
-			x = 0;
-		
-		for(Drawable elem : elements)
-			canvas.addElement(new VisibleElement(elem, x, y));
+		for(DynamicObject object : objects)
+			canvas.addElement(new VisibleElement(object.getDrawable(), object.render_x() - x, object.render_y() - y));
 		
 		
 		//TODO: main drawing thing loop... yeah

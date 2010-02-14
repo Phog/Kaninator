@@ -7,6 +7,8 @@ import kaninator.mechanics.*;
 import kaninator.graphics.*;
 import kaninator.io.*;
 
+import java.util.ArrayList;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
@@ -21,7 +23,8 @@ import java.io.IOException;
 public class Game extends GameState
 {
 
-	private Drawable image;
+	private Player player;
+	private DynamicObject test;
 	
 	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse)
 	{
@@ -29,7 +32,12 @@ public class Game extends GameState
 		
 		try
 		{
-			image = new Image("/resources/test.png");
+			Drawable image = new Image("/resources/test.png");
+			ArrayList<Drawable> list = new ArrayList<Drawable>();
+			list.add(image);
+			test = new DynamicObject(list, image.getWidth()/4.0);
+			test.setPos(250, 50);
+			player = new Player(list, 5.0, 5.0, 4.0);
 		}
 		catch(IOException e)
 		{
@@ -45,23 +53,100 @@ public class Game extends GameState
 	{
 		
 		gui.addToSection(new Text("Game!!", "Tahoma", 16, Font.BOLD, Color.GREEN), 0, 0);
-		camera.addElement(image);
+		
+		ArrayList<DynamicObject> playerObjects = player.getDynamicObjects();
+		
+		for(DynamicObject obj : playerObjects)
+			camera.addObject(obj);
+		
+		ArrayList<DynamicObject> gameObjects = new ArrayList<DynamicObject>();
+		gameObjects.add(test);
+		
+		camera.addObject(test);
 		
 		while(true)
 		{
+			player.update(gameObjects);
+			
 			camera.render();
 			camera.renderGUI();
 			
 			if(keyboard.isPressed(KeyEvent.VK_ESCAPE))
 				break;
 			
-			//try {Thread.sleep(66);} catch(Exception e){}
+			movePlayer();
+			
+			try {Thread.sleep(33);} catch(Exception e){}
 		}
 		
 		gui.clearSection(0, 0);
-		camera.clearElements();
+		camera.clearObjects();
 		
 		return 3;
+	}
+	
+	private void movePlayer()
+	{
+		
+		if(keyboard.isPressed(KeyEvent.VK_W))
+		{
+			if(keyboard.isPressed(KeyEvent.VK_A))
+			{
+				player.move_y(0);
+				player.move_x(-1);
+			}
+			else if(keyboard.isPressed(KeyEvent.VK_D))
+			{
+				player.move_y(-1);
+				player.move_x(0);
+			}
+			else
+			{
+				player.move_y(-1);
+				player.move_x(-1);
+			}
+		}
+		else if(keyboard.isPressed(KeyEvent.VK_S))
+		{
+			if(keyboard.isPressed(KeyEvent.VK_A))
+			{
+				player.move_y(1);
+				player.move_x(0);
+			}
+			else if(keyboard.isPressed(KeyEvent.VK_D))
+			{
+				player.move_y(0);
+				player.move_x(1);
+			}
+			else
+			{
+				player.move_y(1);
+				player.move_x(1);
+			}
+		}
+		else
+		{	
+			if(keyboard.isPressed(KeyEvent.VK_A))
+			{
+				player.move_x(-1);
+				player.move_y(1);
+			}
+			else if(keyboard.isPressed(KeyEvent.VK_D))
+			{
+				player.move_x(1);
+				player.move_y(-1);
+			}
+			else
+			{
+				player.move_y(0);
+				player.move_x(0);
+			}
+		}
+		
+
+		
+		if(keyboard.isPressed(KeyEvent.VK_SPACE))
+			player.jump();
 	}
 
 }
