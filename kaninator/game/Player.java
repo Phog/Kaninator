@@ -72,7 +72,7 @@ public class Player
 	
 	public void jump()
 	{
-		if(vel_height == 0.0)
+		if(vel_height == 0.0 && Math.abs(playerModel.getHeight() - map.getHeight(playerModel)) < 4.0)
 		vel_height = JUMP_SPEED;
 	}
 	

@@ -20,6 +20,10 @@ public class Camera
 {
 	private Canvas canvas;
 	private GUI gui;
+	
+	private static final double FOLLOW_SPEED = 6.0;
+	private static final double FOLLOW_BORDER_SIZE = 1.0/5.0;
+	
 	private int x, y;
 	private ArrayList<DynamicObject> objects;
 	private ArrayList<DynamicObject> player;
@@ -33,8 +37,8 @@ public class Camera
 	{
 		canvas = _canvas;
 		gui = _gui;
-		x = -100; 
-		y = 0;
+		
+		x = y = 0;
 		
 		objects = new ArrayList<DynamicObject>();
 		player = null;
@@ -85,6 +89,22 @@ public class Camera
 		tiles = _tiles;
 	}
 	
+	public void follow(DynamicObject obj)
+	{
+		double d_x = obj.render_x() - x;
+		double d_y = obj.render_y() - y;
+
+		if(d_x < canvas.getWidth() * FOLLOW_BORDER_SIZE)
+			x -= (canvas.getWidth() * FOLLOW_BORDER_SIZE - d_x)/FOLLOW_SPEED;
+		else if(d_x > canvas.getWidth() - canvas.getWidth() * FOLLOW_BORDER_SIZE)
+			x += (d_x - (canvas.getWidth() - canvas.getWidth() * FOLLOW_BORDER_SIZE))/FOLLOW_SPEED;
+		
+		if(d_y < canvas.getHeight() * FOLLOW_BORDER_SIZE)
+			y -= (canvas.getHeight() * FOLLOW_BORDER_SIZE - d_y)/FOLLOW_SPEED;
+		else if(d_y > canvas.getHeight() - canvas.getHeight() * FOLLOW_BORDER_SIZE)
+			y += (d_y - (canvas.getHeight() - canvas.getHeight() * FOLLOW_BORDER_SIZE))/FOLLOW_SPEED;
+	}
+	
 	/**
 	 * Clears the Canvas object and sends new VisbleElements to it.
 	 * Parses the internal game data and sends it to a Canvas object to be drawn.
@@ -115,20 +135,6 @@ public class Camera
 		if(player != null)
 			for(DynamicObject object : player)
 				canvas.addElement(new VisibleElement(object.getDrawable(), object.render_x() - x, object.render_y() - y));
-		
-		double d_x = player.get(0).render_x() - x;
-		double d_y = player.get(0).render_y() - y;
-		
-		//MAEK FUNCTION YES!
-		if(d_x < 128.0)
-			x -= (128.0 - d_x)/6.0;
-		else if(d_x > 512.0)
-			x += (d_x - 512.0)/6.0;
-		
-		if(d_y < 128)
-			y -= (128 - d_y)/6.0;
-		else if(d_y > 352.0)
-			y += (d_y - 352.0)/6.0;
 		
 		//TODO: main drawing thing loop... yeah
 	}

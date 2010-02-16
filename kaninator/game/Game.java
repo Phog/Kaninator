@@ -148,6 +148,7 @@ public class Game extends GameState
 		while(true)
 		{
 			player.update(null);
+			camera.follow(player.getDynamicObjects().get(0));
 			
 			camera.render();
 			camera.renderGUI();

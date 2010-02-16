@@ -26,19 +26,22 @@ public class Map
 
 	public double getHeight(DynamicObject obj)
 	{
-		int tile_x = (int)(obj.get_x()/TILE_SIZE);
-		int tile_y = (int)(obj.get_y()/TILE_SIZE);
+		double obj_x = obj.get_x() + obj.getDrawable().getWidth()/2;
+		double obj_y = obj.get_y() + obj.getDrawable().getHeight();
 		
-		if(tile_y + 1 < 0 || tile_y + 1 >= tiles.size())
+		int tile_x = (int)(obj_x/TILE_SIZE);
+		int tile_y = (int)(obj_y/TILE_SIZE);
+		
+		if(tile_y < 0 || tile_y >= tiles.size())
 			return 0.0;
 		
-		ArrayList<StaticObject> rowList = tiles.get(tile_y + 1);
+		ArrayList<StaticObject> rowList = tiles.get(tile_y);
 		
 		if(tile_x < 0 || tile_x >= rowList.size())
 			return 0.0;
 		
-		double delta_x = obj.get_x() - tile_x * TILE_SIZE;
-		double delta_y = obj.get_y() - tile_y * TILE_SIZE;
+		double delta_x = obj_x - tile_x * TILE_SIZE;
+		double delta_y = obj_y - tile_y * TILE_SIZE;
 		
 		return rowList.get(tile_x).getHeight(delta_x,delta_y);
 		
