@@ -69,7 +69,7 @@ public class Game extends GameState
 			
 			row = new ArrayList<StaticObject>();
 			for(int i = 0; i < 3; i++)
-				row.add(lowFlat);
+				row.add(highFlat);
 			row.add(upNw);
 			for(int i = 0; i < 2; i++)
 				row.add(upN);
@@ -125,7 +125,7 @@ public class Game extends GameState
 			Drawable image = new Image("/resources/test.png");
 			ArrayList<Drawable> list = new ArrayList<Drawable>();
 			list.add(image);
-			player = new Player(list, map, 5.0, 5.0, 4.0);
+			player = new Player(list, map, 0, 0, 4.0);
 		}
 		catch(IOException e)
 		{

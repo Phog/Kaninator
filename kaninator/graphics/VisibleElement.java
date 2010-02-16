@@ -14,7 +14,7 @@ package kaninator.graphics;
 public class VisibleElement
 {
 	private Drawable drawable;
-	private int x, y;
+	private int x, y, height;
 	
 	/**
 	 * Wraps a drawable object with the onscreen coordinates x and y.
@@ -22,10 +22,11 @@ public class VisibleElement
 	 * @param _x The x-coordinate for the element.
 	 * @param _y The y-coordinate for the element.
 	 */
-	public VisibleElement(Drawable _drawable, int _x, int _y)
+	public VisibleElement(Drawable _drawable, int _x, int _y, int _height)
 	{
 		x = _x;
 		y = _y;
+		height = _height;
 		drawable = _drawable;
 	}
 	
@@ -54,5 +55,10 @@ public class VisibleElement
 	public int get_y()
 	{
 		return y;
+	}
+	
+	public int get_height()
+	{
+		return height;
 	}
 }

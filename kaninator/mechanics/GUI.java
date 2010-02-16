@@ -151,7 +151,7 @@ public class GUI
 					int draw_x = getRealX(i, drawable);
 					int draw_y = getRealY(j , offset, drawable);
 					
-					elements.add(new VisibleElement(drawable, draw_x, draw_y));
+					elements.add(new VisibleElement(drawable, draw_x, draw_y, 0));
 					offset += drawable.getHeight() + 1;
 				}
 			}

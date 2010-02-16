@@ -100,12 +100,18 @@ public class DynamicObject
 	
 	public int render_x()
 	{
-		return (int)(x - y);
+		double left_x = (x - y);
+		left_x -= getDrawable().getWidth()/2.0;
+		
+		return (int)left_x;
 	}
 	
 	public int render_y()
 	{
-		return (int)((x + y)/2 - h);
+		double top_y = (x + y)/2;
+		top_y -= getDrawable().getHeight();
+		
+		return (int)top_y;
 	}
 	
 	public Drawable getDrawable()

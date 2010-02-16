@@ -26,6 +26,11 @@ public abstract class StaticObject
 		return tile;
 	}
 	
+	public int renderHeight()
+	{
+		return (int)height;
+	}
+	
 	public int render_x(int x, int y)
 	{
 		return x * (int)TILE_SIZE - y * (int)TILE_SIZE;
@@ -33,7 +38,7 @@ public abstract class StaticObject
 	
 	public int render_y(int x, int y)
 	{
-		return	y * (int)TILE_HEIGHT + x * (int)TILE_HEIGHT - (int)height;
+		return	y * (int)TILE_HEIGHT + x * (int)TILE_HEIGHT;
 	}
 	
 	public abstract double getHeight(double x, double y);

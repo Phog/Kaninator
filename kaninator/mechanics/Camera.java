@@ -123,18 +123,24 @@ public class Camera
 			int j = 0;
 			for(StaticObject object : rowList)
 			{
-				canvas.addElement(new VisibleElement(object.getDrawable(), object.render_x(j, i) - x, object.render_y(j, i) - y));
+				canvas.addElement(new VisibleElement(object.getDrawable(),
+									object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
+									object.renderHeight()));
 				j++;
 			}
 			i++;
 		}
 		
 		for(DynamicObject object : objects)
-			canvas.addElement(new VisibleElement(object.getDrawable(), object.render_x() - x, object.render_y() - y));
+			canvas.addElement(new VisibleElement(object.getDrawable(),
+								object.render_x() - x, object.render_y() - y,
+								(int)object.getHeight()));
 		
 		if(player != null)
 			for(DynamicObject object : player)
-				canvas.addElement(new VisibleElement(object.getDrawable(), object.render_x() - x, object.render_y() - y));
+				canvas.addElement(new VisibleElement(object.getDrawable(),
+									object.render_x() - x, object.render_y() - y,
+									(int)object.getHeight()));
 		
 		//TODO: main drawing thing loop... yeah
 	}

@@ -41,7 +41,7 @@ public class Screen implements Canvas
 				{
 					//Unwrap the drawable contained in the VisibleElement and draw it to the screen
 					Drawable drawable = elem.getDrawable();
-					drawable.draw(g, elem.get_x(), elem.get_y());
+					drawable.draw(g, elem.get_x(), elem.get_y() - elem.get_height());
 				}
 			}
 			

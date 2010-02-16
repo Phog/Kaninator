@@ -26,8 +26,8 @@ public class Map
 
 	public double getHeight(DynamicObject obj)
 	{
-		double obj_x = obj.get_x() + obj.getDrawable().getWidth()/2;
-		double obj_y = obj.get_y() + obj.getDrawable().getHeight();
+		double obj_x = obj.get_x();
+		double obj_y = obj.get_y();
 		
 		int tile_x = (int)(obj_x/TILE_SIZE);
 		int tile_y = (int)(obj_y/TILE_SIZE);
