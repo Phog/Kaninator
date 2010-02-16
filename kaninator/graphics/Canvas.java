@@ -4,6 +4,7 @@
 package kaninator.graphics;
 
 import java.awt.Dimension;
+import java.util.Collection;
 
 /**
  * An interface for a class that initializes a window and can draw to it

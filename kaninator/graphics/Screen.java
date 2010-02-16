@@ -157,5 +157,4 @@ public class Screen implements Canvas
 	{
 		canvas.repaint();
 	}
-
 }

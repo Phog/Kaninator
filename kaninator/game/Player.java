@@ -37,15 +37,12 @@ public class Player
 	
 	public void update(ArrayList<DynamicObject> others)
 	{
+		vel_height -= GRAVITY;
+		playerModel.move_vert(vel_height);
 		if(vel_height <= 0.0 && playerModel.getHeight() <= map.getHeight(playerModel))
 		{
 			vel_height = 0.0;
 			playerModel.setHeight(map.getHeight(playerModel));
-		}
-		else
-		{
-			vel_height -= GRAVITY;
-			playerModel.move_vert(vel_height);
 		}
 		
 		double old_x = playerModel.get_x();

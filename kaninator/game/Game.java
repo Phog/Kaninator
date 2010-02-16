@@ -58,8 +58,10 @@ public class Game extends GameState
 			ArrayList<ArrayList<StaticObject>> mapList = new ArrayList<ArrayList<StaticObject>>();
 			
 			ArrayList<StaticObject> row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 10; i++)
+			for(int i = 0; i < 5; i++)
 				row.add(lowFlat);
+			for(int i = 0; i < 5; i++)
+				row.add(highFlat);
 			mapList.add(row);
 			
 			row = new ArrayList<StaticObject>();

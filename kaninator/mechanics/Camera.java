@@ -4,7 +4,7 @@
  */
 package kaninator.mechanics;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import kaninator.graphics.*;
 
@@ -117,31 +117,62 @@ public class Camera
 		
 		canvas.clear();
 		
-		int i = 0;
-		for(ArrayList<StaticObject> rowList : tiles)
-		{
-			int j = 0;
-			for(StaticObject object : rowList)
-			{
-				canvas.addElement(new VisibleElement(object.getDrawable(),
-									object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
-									object.renderHeight()));
-				j++;
-			}
-			i++;
-		}
-		
-		for(DynamicObject object : objects)
-			canvas.addElement(new VisibleElement(object.getDrawable(),
-								object.render_x() - x, object.render_y() - y,
-								(int)object.getHeight()));
-		
-		if(player != null)
-			for(DynamicObject object : player)
-				canvas.addElement(new VisibleElement(object.getDrawable(),
-									object.render_x() - x, object.render_y() - y,
-									(int)object.getHeight()));
-		
+		TreeMap<Integer, ArrayList<VisibleElement>> orderedObjects = new TreeMap<Integer, ArrayList<VisibleElement>>();
+
+		 int i = 0;
+		 for(ArrayList<StaticObject> rowList : tiles)
+		 {
+			 int j = 0;
+			 for(StaticObject object : rowList)
+			 {
+				 int key = j * 101 + i * 100 + (int)(object.renderHeight() / 32);
+				 ArrayList<VisibleElement> list = orderedObjects.get(key);
+				 if(list == null)
+				 {
+					 list = new ArrayList<VisibleElement>();
+					 list.add(new VisibleElement(object.getDrawable(),
+								 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
+								 object.renderHeight()));
+					 orderedObjects.put(key, list);	 
+				 }
+				 else
+				 {
+					 list.add(new VisibleElement(object.getDrawable(),
+								 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
+								 object.renderHeight()));
+				 }
+				 j++;
+			 }
+			 i++;
+		 }
+		 
+		 for(DynamicObject object : player)
+		 {
+			 int key = (int)object.get_y()/64 * 100 + (int)object.get_x()/64 * 101 + (int)(object.getHeight() / 32) + 1;
+			 ArrayList<VisibleElement> list = orderedObjects.get(key);
+			 
+			 if(list == null)
+			 {
+				 list = new ArrayList<VisibleElement>();
+				 list.add(new VisibleElement(object.getDrawable(),
+						 object.render_x() - x, object.render_y() - y,
+						 (int)object.getHeight()));
+				 orderedObjects.put(key, list);	 
+			 }
+			 else
+			 {
+				 list.add(new VisibleElement(object.getDrawable(),
+						 object.render_x() - x, object.render_y() - y,
+						 (int)object.getHeight()));
+			 }
+		 }
+		 
+		 
+		 for(ArrayList<VisibleElement> list : orderedObjects.values())
+		 {
+			 for(VisibleElement e : list)
+				 canvas.addElement(e);
+		 }	  
 		//TODO: main drawing thing loop... yeah
 	}
 }
