@@ -29,8 +29,6 @@ public class Camera
 	private ArrayList<DynamicObject> player;
 	private ArrayList<ArrayList<StaticObject>> tiles;
 	
-	private Drawable dickers;
-	
 	/**
 	 * @param _canvas The canvas which actually draws the rendered data.
 	 * @param _gui The overlay GUI which will always be on top.
@@ -44,14 +42,6 @@ public class Camera
 		
 		objects = new ArrayList<DynamicObject>();
 		player = null;
-		
-		try
-		{
-		dickers = new Image("/resources/flat.png");
-		}
-		catch(Exception e)
-		{
-		}
 	}
 	
 	/**
@@ -136,7 +126,6 @@ public class Camera
 			 {
 				 int key = j * 101 + i * 100 + (int)(object.renderHeight() / 32);
 				 ArrayList<VisibleElement> list = orderedObjects.get(key);
-				 
 				 if(list == null)
 				 {
 					 list = new ArrayList<VisibleElement>();
@@ -144,7 +133,7 @@ public class Camera
 				 }
 				 
 				 for(int height = 0; height < (int)(object.renderHeight() / 32); height++)
-					 list.add(new VisibleElement(dickers,
+					 list.add(new VisibleElement(object.getLowerDrawable(),
 												 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
 												 height * 32));
 				 

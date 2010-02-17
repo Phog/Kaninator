@@ -12,9 +12,9 @@ import kaninator.graphics.Drawable;
  */
 public class WestSlope extends StaticObject
 {
-	public WestSlope(Drawable _tile, double _height)
+	public WestSlope(Drawable _tile, Drawable _lower, double _height)
 	{
-		super(_tile, _height);
+		super(_tile, _lower, _height);
 	}
 	
 	/* (non-Javadoc)

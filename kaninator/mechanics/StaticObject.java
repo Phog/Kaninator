@@ -13,17 +13,23 @@ public abstract class StaticObject
 	protected static final double TILE_SIZE = 64.0;
 	protected static final double TILE_HEIGHT = 32.0;
 	protected double height;
-	private Drawable tile;
+	private Drawable tile, lower;
 
-	public StaticObject(Drawable _tile, double _height)
+	public StaticObject(Drawable _tile, Drawable _lower, double _height)
 	{
 		tile = _tile;
+		lower = _lower;
 		height = _height;
 	}
 	
 	public Drawable getDrawable()
 	{
 		return tile;
+	}
+	
+	public Drawable getLowerDrawable()
+	{
+		return lower;
 	}
 	
 	public int renderHeight()

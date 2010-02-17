@@ -42,16 +42,24 @@ public class Image implements Drawable
 		maintainImg();
 	}
 	
+	public Image(BufferedImage _buffer)
+	{
+		//Obtain the current system graphical settings
+		gfxConf = GraphicsEnvironment.
+	    getLocalGraphicsEnvironment().getDefaultScreenDevice().
+	    getDefaultConfiguration();
+	
+		buffer = _buffer;
+		moveToVram();
+		maintainImg();
+	}
+	
 	/**
 	 * Draws the image to the coordinates in the parameters.
 	 * @param g The graphics context the image will be drawn to.
 	 * @param x The x coordinate for the image
 	 * @param y The y coordinate for the image
 	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Drawable#draw(java.awt.Graphics2D, int, int)
-	 */
-	@Override
 	public void draw(Graphics2D g, int x, int y)
 	{
 		maintainImg();
@@ -62,10 +70,6 @@ public class Image implements Drawable
 	 * Getter for the height of the image.
 	 * @return The height of the image.
 	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Drawable#getHeight()
-	 */
-	@Override
 	public int getHeight()
 	{
 		return buffer.getHeight();
@@ -75,10 +79,6 @@ public class Image implements Drawable
 	 * Getter for the width of the image.
 	 * @return The width of the image.
 	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Drawable#getWidth()
-	 */
-	@Override
 	public int getWidth()
 	{
 		return buffer.getWidth();
@@ -87,10 +87,6 @@ public class Image implements Drawable
 	/**
 	 * A stub required to implement the drawable interface.
 	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Drawable#reset()
-	 */
-	@Override
 	public void reset()
 	{
 	}

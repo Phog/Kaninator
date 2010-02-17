@@ -41,36 +41,28 @@ public class Game extends GameState
 			Drawable se = new Image("/resources/se.png");
 			Drawable sw = new Image("/resources/sw.png");
 			Drawable s = new Image("/resources/s.png");
-
 			
-			StaticObject lowFlat = new FlatTile(flat, 0.0);
-			StaticObject highFlat = new FlatTile(flat, 32.0);
-			StaticObject higherFlat = new FlatTile(flat, 64.0);
-			
-			StaticObject upNe = new NEastSlope(ne, 32.0);
-			StaticObject upNw = new NWestSlope(nw, 32.0);
-			StaticObject upN = new NorthSlope(n, 32.0);
-			StaticObject upE = new EastSlope(e, 32.0);
-			StaticObject upW = new WestSlope(w, 32.0);
-			StaticObject upSe = new SEastSlope(se, 32.0);
-			StaticObject upSw = new SWestSlope(sw, 32.0);
-			StaticObject upS = new SouthSlope(s, 32.0);
-			
-			ArrayList<ArrayList<StaticObject>> mapList = new ArrayList<ArrayList<StaticObject>>();
+			/*ArrayList<ArrayList<StaticObject>> mapList = new ArrayList<ArrayList<StaticObject>>();
 			ArrayList<StaticObject> row;
-			int intArray[][] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0,17, 9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0,36,53,45,45,45,45,45,20, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0,36,72,89,81,81,81,56,18, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0,36,72,108,125,117,92,54,18, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0,36,72,114,117,117,90,54,18, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0,36,78,99,99,103,90,54,18, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0,42,63,63,63,63,67,54,18, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0,27,27,27,27,27,27,31,18, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-								{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+			int intArray[][] = {{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0, 17,  9,  9,  9,  9,  9,  9,  9,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0, 36, 53, 45, 45, 45, 45, 45, 20,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0, 36, 72, 89, 81, 81, 81, 56, 18,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0, 36, 72,108,125,117, 92, 54, 18,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0, 36, 72,114,117,117, 90, 54, 18,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0, 36, 78, 99, 99,103, 90, 54, 18,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0, 42, 63, 63, 63, 63, 67, 54, 18,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0, 27, 27, 27, 27, 27, 27, 31, 18,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0,  0,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26, 35, 27, 27, 27, 27, 27,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0, 56,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0, 83,  0,  0,  0},
+								{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,110,  0,  0,  0}};
 			for(int rowArray[] : intArray)
 			{
 				row = new ArrayList<StaticObject>();
@@ -80,42 +72,40 @@ public class Game extends GameState
 					switch(tile % 9)
 					{
 						case 0:
-							row.add(new FlatTile(flat, height));
+							row.add(new FlatTile(flat, flat, height));
 							break;
 						case 1:
-							row.add(new NWestSlope(nw, height));
+							row.add(new NWestSlope(nw, flat, height));
 							break;
 						case 2:
-							row.add(new NorthSlope(n, height));
+							row.add(new NorthSlope(n, flat, height));
 							break;
 						case 3:
-							row.add(new NEastSlope(ne, height));
+							row.add(new NEastSlope(ne, flat, height));
 							break;
 						case 4:
-							row.add(new EastSlope(e, height));
+							row.add(new EastSlope(e, flat, height));
 							break;
 						case 5:
-							row.add(new SEastSlope(se, height));
+							row.add(new SEastSlope(se, flat, height));
 							break;
 						case 6:
-							row.add(new SouthSlope(s, height));
+							row.add(new SouthSlope(s, flat, height));
 							break;
 						case 7:
-							row.add(new SWestSlope(sw, height));
+							row.add(new SWestSlope(sw, flat, height));
 							break;
 						case 8:
-							row.add(new WestSlope(w, height));
+							row.add(new WestSlope(w, flat, height));
 							break;
 					}
 				}
 				mapList.add(row);
-			}
+			}*/
 			
-			map = new Map(mapList);
-			
-			Drawable image = new Image("/resources/test.png");
-			ArrayList<Drawable> list = new ArrayList<Drawable>();
-			list.add(image);
+			map = MapLoader.readMap("/resources/testmap.map");
+			ArrayList<Drawable> list = AnimationFactory.createAnimations("/resources/theSheet.png", true, 64, 64, 0.25);
+
 			player = new Player(list, map, 0, 0, 4.0);
 		}
 		catch(IOException e)
@@ -123,11 +113,7 @@ public class Game extends GameState
 			System.out.println("IMAGE NOT FOUND: " + e);
 		}
 	}
-	
-	/* (non-Javadoc)
-	 * @see kaninator.game.GameState#doState()
-	 */
-	@Override
+
 	public int doState()
 	{
 		
@@ -167,16 +153,19 @@ public class Game extends GameState
 			{
 				player.move_y(0);
 				player.move_x(-1);
+				player.setState(6);
 			}
 			else if(keyboard.isPressed(KeyEvent.VK_D))
 			{
 				player.move_y(-1);
 				player.move_x(0);
+				player.setState(3);
 			}
 			else
 			{
 				player.move_y(-1);
 				player.move_x(-1);
+				player.setState(1);
 			}
 		}
 		else if(keyboard.isPressed(KeyEvent.VK_S))
@@ -185,16 +174,19 @@ public class Game extends GameState
 			{
 				player.move_y(1);
 				player.move_x(0);
+				player.setState(7);
 			}
 			else if(keyboard.isPressed(KeyEvent.VK_D))
 			{
 				player.move_y(0);
 				player.move_x(1);
+				player.setState(4);
 			}
 			else
 			{
 				player.move_y(1);
 				player.move_x(1);
+				player.setState(0);
 			}
 		}
 		else
@@ -203,11 +195,13 @@ public class Game extends GameState
 			{
 				player.move_x(-1);
 				player.move_y(1);
+				player.setState(5);
 			}
 			else if(keyboard.isPressed(KeyEvent.VK_D))
 			{
 				player.move_x(1);
 				player.move_y(-1);
+				player.setState(2);
 			}
 			else
 			{

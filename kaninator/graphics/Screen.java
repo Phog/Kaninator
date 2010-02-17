@@ -5,9 +5,6 @@ package kaninator.graphics;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.*;
-
-import java.util.List;
 import java.util.*;
 
 /**

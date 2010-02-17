@@ -37,6 +37,9 @@ public class Player
 	
 	public void update(ArrayList<DynamicObject> others)
 	{
+		if(Math.abs(vel_x) <= 0.01 && Math.abs(vel_y) <= 0.01)
+			playerModel.reset();
+		
 		vel_height -= GRAVITY;
 		playerModel.move_vert(vel_height);
 		if(vel_height <= 0.0 && playerModel.getHeight() <= map.getHeight(playerModel))
@@ -97,6 +100,11 @@ public class Player
 			vel_x = DIAGONAL_SPEED * Math.signum(vel_x);
 			vel_y = DIAGONAL_SPEED * direction;
 		}
+	}
+	
+	public void setState(int state)
+	{
+		playerModel.setState(state);
 	}
 	
 	public ArrayList<DynamicObject> getDynamicObjects()

@@ -5,7 +5,6 @@
 package kaninator.mechanics;
 
 import java.util.*;
-import java.awt.Rectangle;
 import kaninator.graphics.*;
 
 /**

@@ -6,8 +6,6 @@ package kaninator.game;
 import kaninator.graphics.Screen;
 import kaninator.mechanics.*;
 import kaninator.io.*;
-
-import java.awt.*;
 import javax.swing.JFrame;
 
 /**

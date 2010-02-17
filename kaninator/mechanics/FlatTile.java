@@ -12,9 +12,9 @@ import kaninator.graphics.Drawable;
 public class FlatTile extends StaticObject
 {
 	
-	public FlatTile(Drawable _tile, double _height)
+	public FlatTile(Drawable _tile, Drawable _lower, double _height)
 	{
-		super(_tile, _height);
+		super(_tile, _lower, _height);
 	}
 
 	/* (non-Javadoc)
