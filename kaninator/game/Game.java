@@ -45,6 +45,7 @@ public class Game extends GameState
 			
 			StaticObject lowFlat = new FlatTile(flat, 0.0);
 			StaticObject highFlat = new FlatTile(flat, 32.0);
+			StaticObject higherFlat = new FlatTile(flat, 64.0);
 			
 			StaticObject upNe = new NEastSlope(ne, 32.0);
 			StaticObject upNw = new NWestSlope(nw, 32.0);
@@ -56,71 +57,59 @@ public class Game extends GameState
 			StaticObject upS = new SouthSlope(s, 32.0);
 			
 			ArrayList<ArrayList<StaticObject>> mapList = new ArrayList<ArrayList<StaticObject>>();
-			
-			ArrayList<StaticObject> row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 5; i++)
-				row.add(lowFlat);
-			for(int i = 0; i < 5; i++)
-				row.add(highFlat);
-			mapList.add(row);
-			
-			row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 10; i++)
-				row.add(lowFlat);
-			mapList.add(row);
-			
-			row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 3; i++)
-				row.add(highFlat);
-			row.add(upNw);
-			for(int i = 0; i < 2; i++)
-				row.add(upN);
-			row.add(upNe);
-			for(int i = 0; i < 3; i++)
-				row.add(lowFlat);
-			mapList.add(row);
-			
-			row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 3; i++)
-				row.add(lowFlat);
-			row.add(upW);
-			for(int i = 0; i < 2; i++)
-				row.add(highFlat);
-			row.add(upE);
-			for(int i = 0; i < 3; i++)
-				row.add(lowFlat);
-			mapList.add(row);
-			
-			row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 3; i++)
-				row.add(lowFlat);
-			row.add(upW);
-			for(int i = 0; i < 2; i++)
-				row.add(highFlat);
-			row.add(upE);
-			for(int i = 0; i < 3; i++)
-				row.add(lowFlat);
-			mapList.add(row);
-			
-			row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 3; i++)
-				row.add(lowFlat);
-			row.add(upSw);
-			for(int i = 0; i < 2; i++)
-				row.add(upS);
-			row.add(upSe);
-			for(int i = 0; i < 3; i++)
-				row.add(lowFlat);
-			mapList.add(row);
-			
-			row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 10; i++)
-				row.add(lowFlat);
-			mapList.add(row);
-			row = new ArrayList<StaticObject>();
-			for(int i = 0; i < 10; i++)
-				row.add(lowFlat);
-			mapList.add(row);		
+			ArrayList<StaticObject> row;
+			int intArray[][] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0,17, 9, 9, 9, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0,36,53,45,45,45,45,45,20, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0,36,72,89,81,81,81,56,18, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0,36,72,108,125,117,92,54,18, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0,36,72,114,117,117,90,54,18, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0,36,78,99,99,103,90,54,18, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0,42,63,63,63,63,67,54,18, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0,27,27,27,27,27,27,31,18, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+								{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+			for(int rowArray[] : intArray)
+			{
+				row = new ArrayList<StaticObject>();
+				for(int tile : rowArray)
+				{
+					double height = tile / 9 * 32;
+					switch(tile % 9)
+					{
+						case 0:
+							row.add(new FlatTile(flat, height));
+							break;
+						case 1:
+							row.add(new NWestSlope(nw, height));
+							break;
+						case 2:
+							row.add(new NorthSlope(n, height));
+							break;
+						case 3:
+							row.add(new NEastSlope(ne, height));
+							break;
+						case 4:
+							row.add(new EastSlope(e, height));
+							break;
+						case 5:
+							row.add(new SEastSlope(se, height));
+							break;
+						case 6:
+							row.add(new SouthSlope(s, height));
+							break;
+						case 7:
+							row.add(new SWestSlope(sw, height));
+							break;
+						case 8:
+							row.add(new WestSlope(w, height));
+							break;
+					}
+				}
+				mapList.add(row);
+			}
 			
 			map = new Map(mapList);
 			

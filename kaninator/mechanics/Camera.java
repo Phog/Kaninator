@@ -92,7 +92,7 @@ public class Camera
 	public void follow(DynamicObject obj)
 	{
 		double d_x = obj.render_x() - x;
-		double d_y = obj.render_y() - y;
+		double d_y = obj.render_y() - obj.getHeight() - y;
 
 		if(d_x < canvas.getWidth() * FOLLOW_BORDER_SIZE)
 			x -= (canvas.getWidth() * FOLLOW_BORDER_SIZE - d_x)/FOLLOW_SPEED;
