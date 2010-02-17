@@ -135,51 +135,22 @@ public class Camera
 			 for(StaticObject object : rowList)
 			 {
 				 int key = j * 101 + i * 100 + (int)(object.renderHeight() / 32);
-
-				 for(int height = 0; height < (int)(object.renderHeight() / 32); height++)
-				 {
-					 //key = j * 101 + i * 100 - height ;
-					 ArrayList<VisibleElement> dicks = orderedObjects.get(key);
-					 if(dicks == null)
-					 {
-						 dicks = new ArrayList<VisibleElement>();
-						 dicks.add(new VisibleElement(dickers,
-									 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
-									 height * 32));
-						 orderedObjects.put(key, dicks);	 
-					 }
-					 else
-					 {
-						 dicks.add(new VisibleElement(dickers,
-									 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
-									 height * 32));
-					 }
-/*					 try
-					 {
-						 dicks.add(new VisibleElement(dickers, object.render_x(j, i) - x - 64, object.render_y(j, i) - y, height * 32));
-					 }
-					 catch(Exception e)
-					 {
-						 
-					 }*/
-				 }
 				 ArrayList<VisibleElement> list = orderedObjects.get(key);
+				 
 				 if(list == null)
 				 {
 					 list = new ArrayList<VisibleElement>();
-					 list.add(new VisibleElement(object.getDrawable(),
-								 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
-								 object.renderHeight()));
 					 orderedObjects.put(key, list);	 
 				 }
-				 else
-				 {
-					 list.add(new VisibleElement(object.getDrawable(),
-								 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
-								 object.renderHeight()));
-				 }
 				 
+				 for(int height = 0; height < (int)(object.renderHeight() / 32); height++)
+					 list.add(new VisibleElement(dickers,
+												 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
+												 height * 32));
 				 
+				 list.add(new VisibleElement(object.getDrawable(),
+							 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
+							 object.renderHeight()));
 				 j++;
 			 }
 			 i++;
