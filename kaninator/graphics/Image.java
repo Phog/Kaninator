@@ -94,7 +94,7 @@ public class Image implements Drawable
 	{
 	    //Create new VolatileImage
 	    vramImg = gfxConf.createCompatibleVolatileImage(buffer.getWidth(),
-	    			buffer.getHeight(), Transparency.BITMASK);
+	    			buffer.getHeight(), buffer.getTransparency());//Transparency.BITMASK);
 
 	    //Get drawing context into the image
 	    Graphics2D g2d = (Graphics2D) vramImg.getGraphics();
