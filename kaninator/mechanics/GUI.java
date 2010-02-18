@@ -22,7 +22,7 @@ import kaninator.graphics.*;
  */
 public class GUI
 {
-	private Queue<Drawable> drawables[][];
+	private ArrayList<ArrayList<Queue<Drawable>>> drawables;
 	private int padding;
 	private int width, height;
 	
@@ -34,15 +34,17 @@ public class GUI
 	public GUI(int _width, int _height)
 	{
 		padding = 0;
-		drawables = new Queue[3][3];
+		drawables = new ArrayList<ArrayList<Queue<Drawable>>>();
 		
 		width = _width;
 		height = _height;
 		
-		
 		for(int i = 0; i < 3; i++)
+		{
+			drawables.add(new ArrayList<Queue<Drawable>>());
 			for(int j = 0; j < 3; j++)
-				drawables[i][j] = new LinkedList<Drawable>();
+				drawables.get(i).add(new LinkedList<Drawable>());
+		}
 	}
 	
 	/**
@@ -74,7 +76,7 @@ public class GUI
 		int size = 0;
 		for(int i = 0; i < 3; i++)
 			for(int j = 0; j < 3; j++)
-				size += drawables[i][j].size();
+				size += drawables.get(i).get(j).size();
 		
 		return size;
 	}
@@ -87,7 +89,7 @@ public class GUI
 	 */
 	public void clearSection(int x, int y)
 	{
-		drawables[x][y].clear();
+		drawables.get(x).get(y).clear();
 	}
 	
 	/**
@@ -98,7 +100,7 @@ public class GUI
 	 */
 	public void addToSection(Drawable drawable, int x, int y)
 	{
-		drawables[x][y].add(drawable);
+		drawables.get(x).get(y).add(drawable);
 	}
 	
 	/**
@@ -113,7 +115,7 @@ public class GUI
 		int num = 0;
 		int offset = 0;
 		
-		for(Drawable drawable : drawables[i][j])
+		for(Drawable drawable : drawables.get(i).get(j))
 		{	
 			int draw_x = getRealX(i, drawable);
 			int draw_y = getRealY(j, offset, drawable);
@@ -144,7 +146,7 @@ public class GUI
 				//Loops through each element in the subsection
 				//and positions them underneath each other
 				int offset = 0;
-				for(Drawable drawable : drawables[i][j])
+				for(Drawable drawable : drawables.get(i).get(j))
 				{	
 					//Estimates a screen position for the elements
 					int draw_x = getRealX(i, drawable);

@@ -28,7 +28,7 @@ public class Kaninator
 		
 		//Creates the depencies used in the different stages
 		JFrame frame = new JFrame();
-		Screen screen = new Screen(frame, 640, 480, false, "Kaninator 0.01");
+		Screen screen = new Screen(frame, 1024, 600, false, "Kaninator 0.01");
 		GUI gui = new GUI(screen.getWidth(), screen.getHeight());
 		Camera camera = new Camera(screen, gui);
 		

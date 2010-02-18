@@ -39,7 +39,7 @@ public class Game extends GameState
 		}
 		catch(IOException e)
 		{
-			System.out.println("IMAGE NOT FOUND: " + e);
+			System.out.println("FILE ERROR: " + e);
 		}
 	}
 
@@ -66,7 +66,7 @@ public class Game extends GameState
 			
 			movePlayer();
 			
-			try {Thread.sleep(1000/40);} catch(Exception e){}
+			try {Thread.sleep(1000/60);} catch(Exception e){}
 		}
 		
 		gui.clearSection(0, 0);

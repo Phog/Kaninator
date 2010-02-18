@@ -14,8 +14,8 @@ public class Player
 {
 	private static final double NORMAL_SPEED = 4.0;
 	private static final double DIAGONAL_SPEED = Math.sqrt(NORMAL_SPEED*NORMAL_SPEED/2.0);
-	private static final double JUMP_SPEED = 15.0;
-	private static final double GRAVITY = 2.0;
+	private static final double JUMP_SPEED = 13;
+	private static final double GRAVITY = 1.5;
 	
 	private Map map;
 	private DynamicObject playerModel, shadow;

@@ -39,7 +39,7 @@ public abstract class StaticObject
 	
 	public int render_x(int x, int y)
 	{
-		return x * (int)TILE_SIZE - y * (int)TILE_SIZE;
+		return (x - 1) * (int)TILE_SIZE - y * (int)TILE_SIZE;
 	}
 	
 	public int render_y(int x, int y)

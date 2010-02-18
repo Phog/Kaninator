@@ -21,8 +21,8 @@ public class Camera
 	private Canvas canvas;
 	private GUI gui;
 	
-	private static final double FOLLOW_SPEED = 6.0;
-	private static final double FOLLOW_BORDER_SIZE = 1.0/5.0;
+	private static final double FOLLOW_SPEED = 4.0;
+	private static final double FOLLOW_BORDER_SIZE = 1.0/4.0;
 	
 	private int x, y;
 	private ArrayList<DynamicObject> objects;
@@ -40,6 +40,7 @@ public class Camera
 		x = y = 0;
 		
 		objects = new ArrayList<DynamicObject>();
+		tiles = null;
 	}
 	
 	/**
@@ -78,7 +79,7 @@ public class Camera
 	
 	public void setTiles(ArrayList<ArrayList<StaticObject>> _tiles)
 	{
-		tiles = _tiles;
+		 tiles = _tiles;
 	}
 	
 	public void follow(DynamicObject obj)
@@ -105,7 +106,6 @@ public class Camera
 	 */
 	public void render()
 	{
-		
 		canvas.clear();
 		
 		TreeMap<Integer, ArrayList<VisibleElement>> orderedObjects = new TreeMap<Integer, ArrayList<VisibleElement>>();
@@ -124,13 +124,16 @@ public class Camera
 					 orderedObjects.put(key, list);	 
 				 }
 				 
+				 int obj_x = object.render_x(j, i) - x;
+				 int obj_y =  object.render_y(j, i) - y;
 				 for(int height = 0; height < (int)(object.renderHeight() / 32); height++)
+				 {
 					 list.add(new VisibleElement(object.getLowerDrawable(),
-												 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
+												 obj_x, obj_y,
 												 height * 32));
-				 
+				 }
 				 list.add(new VisibleElement(object.getDrawable(),
-							 object.render_x(j, i) - x - 64, object.render_y(j, i) - y,
+							 obj_x, obj_y,
 							 object.renderHeight()));
 				 j++;
 			 }
@@ -158,12 +161,10 @@ public class Camera
 			 }
 		 }
 		 
-		 
 		 for(ArrayList<VisibleElement> list : orderedObjects.values())
 		 {
 			 for(VisibleElement e : list)
 				 canvas.addElement(e);
 		 }	  
-		//TODO: main drawing thing loop... yeah
 	}
 }

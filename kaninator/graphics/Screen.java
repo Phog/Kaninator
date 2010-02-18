@@ -22,6 +22,11 @@ public class Screen implements Canvas
 	private class InternalCanvas extends JPanel
 	{
 		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		/**
 		 * Draws the VisibleElements contained in the drawing queue in order.
 		 */
 		public void paintComponent(Graphics graphics)
