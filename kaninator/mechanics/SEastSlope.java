@@ -4,6 +4,7 @@
  */
 package kaninator.mechanics;
 
+import kaninator.io.MapLoader;
 import kaninator.graphics.Drawable;
 
 /**
@@ -26,8 +27,8 @@ public class SEastSlope extends StaticObject
 	{
 		double tempHeight = (x + y)/2.0;
 		
-		if(tempHeight > TILE_HEIGHT)
-			return height - TILE_HEIGHT;
+		if(tempHeight > MapLoader.getTileHeight())
+			return height - MapLoader.getTileHeight();
 		
 		return height - tempHeight;
 	}

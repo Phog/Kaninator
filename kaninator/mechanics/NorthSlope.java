@@ -4,6 +4,7 @@
  */
 package kaninator.mechanics;
 
+import kaninator.io.MapLoader;
 import kaninator.graphics.Drawable;
 
 /**
@@ -24,7 +25,7 @@ public class NorthSlope extends StaticObject
 	@Override
 	public double getHeight(double x, double y)
 	{
-		return height - TILE_HEIGHT +  y / 2.0;
+		return height - MapLoader.getTileHeight() +  y / 2.0;
 	}
 
 }

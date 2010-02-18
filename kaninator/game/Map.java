@@ -4,6 +4,7 @@
 package kaninator.game;
 
 import kaninator.mechanics.*;
+import kaninator.io.MapLoader;
 import java.util.ArrayList;
 
 /**
@@ -11,7 +12,6 @@ import java.util.ArrayList;
  */
 public class Map
 {
-	private static final double TILE_SIZE = 64.0;
 	private ArrayList<ArrayList<StaticObject>> tiles;
 	
 	public Map(ArrayList<ArrayList<StaticObject>> _tiles)
@@ -29,8 +29,8 @@ public class Map
 		double obj_x = obj.get_x();
 		double obj_y = obj.get_y();
 		
-		int tile_x = (int)(obj_x/TILE_SIZE);
-		int tile_y = (int)(obj_y/TILE_SIZE);
+		int tile_x = (int)(obj_x/MapLoader.getTileSize());
+		int tile_y = (int)(obj_y/MapLoader.getTileSize());
 		
 		if(tile_y < 0 || tile_y >= tiles.size())
 			return 0.0;
@@ -40,8 +40,8 @@ public class Map
 		if(tile_x < 0 || tile_x >= rowList.size())
 			return 0.0;
 		
-		double delta_x = obj_x - tile_x * TILE_SIZE;
-		double delta_y = obj_y - tile_y * TILE_SIZE;
+		double delta_x = obj_x - tile_x * MapLoader.getTileSize();
+		double delta_y = obj_y - tile_y * MapLoader.getTileSize();
 		
 		return rowList.get(tile_x).getHeight(delta_x,delta_y);
 		

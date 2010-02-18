@@ -3,15 +3,17 @@
  * Implements all the generic services needed for a 2d game. 
  */
 package kaninator.mechanics;
+
 import kaninator.graphics.Drawable;
+import kaninator.io.MapLoader;
 
 /**
  * @author phedman
  */
 public abstract class StaticObject
 {
-	protected static final double TILE_SIZE = 64.0;
-	protected static final double TILE_HEIGHT = 32.0;
+	private static final int DEPTH_OFFSET_X = 101;
+	private static final int DEPTH_OFFSET_Y = 100;
 	protected double height;
 	private Drawable tile, lower;
 
@@ -37,14 +39,19 @@ public abstract class StaticObject
 		return (int)height;
 	}
 	
+	public int getDepth(int x, int y)
+	{
+		return x * DEPTH_OFFSET_X + y * DEPTH_OFFSET_Y + (int)(height / MapLoader.getTileHeight());
+	}
+	
 	public int render_x(int x, int y)
 	{
-		return (x - 1) * (int)TILE_SIZE - y * (int)TILE_SIZE;
+		return (x - 1) * (int)MapLoader.getTileSize() - y * (int)MapLoader.getTileSize();
 	}
 	
 	public int render_y(int x, int y)
 	{
-		return	y * (int)TILE_HEIGHT + x * (int)TILE_HEIGHT;
+		return	y * (int)MapLoader.getTileHeight() + x * (int)MapLoader.getTileHeight();
 	}
 	
 	public abstract double getHeight(double x, double y);

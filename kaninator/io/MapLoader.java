@@ -19,7 +19,19 @@ import kaninator.mechanics.*;
  */
 public final class MapLoader
 {
-
+	private static final double TILE_SIZE = 64.0;
+	private static final double TILE_HEIGHT = 32.0;
+	
+	public static double getTileSize()
+	{
+		return TILE_SIZE;
+	}
+	
+	public static double getTileHeight()
+	{
+		return TILE_HEIGHT;
+	}
+	
 	public static Map readMap(String filepath) throws IOException
 	{	
 		Drawable flat = new Image("/resources/flat.png");
@@ -50,7 +62,7 @@ public final class MapLoader
 			Scanner lineScr = new Scanner(line);
 			while(lineScr.hasNextInt())
 			{
-				int height = lineScr.nextInt() * 32;
+				double height = lineScr.nextInt() * TILE_HEIGHT;
 
 				if(!lineScr.hasNextInt())
 				{

@@ -27,6 +27,7 @@ public class Camera
 	private int x, y;
 	private ArrayList<DynamicObject> objects;
 	private ArrayList<ArrayList<StaticObject>> tiles;
+	private TreeMap<Integer, ArrayList<VisibleElement>> orderedObjects;
 	
 	/**
 	 * @param _canvas The canvas which actually draws the rendered data.
@@ -40,6 +41,7 @@ public class Camera
 		x = y = 0;
 		
 		objects = new ArrayList<DynamicObject>();
+		orderedObjects = new TreeMap<Integer, ArrayList<VisibleElement>>();
 		tiles = null;
 	}
 	
@@ -107,16 +109,15 @@ public class Camera
 	public void render()
 	{
 		canvas.clear();
+		orderedObjects.clear();
 		
-		TreeMap<Integer, ArrayList<VisibleElement>> orderedObjects = new TreeMap<Integer, ArrayList<VisibleElement>>();
-
 		 int i = 0;
 		 for(ArrayList<StaticObject> rowList : tiles)
 		 {
 			 int j = 0;
 			 for(StaticObject object : rowList)
 			 {
-				 int key = j * 101 + i * 100 + (int)(object.renderHeight() / 32);
+				 int key = object.getDepth(j, i);
 				 ArrayList<VisibleElement> list = orderedObjects.get(key);
 				 if(list == null)
 				 {
@@ -142,7 +143,7 @@ public class Camera
 		 
 		 for(DynamicObject object : objects)
 		 {
-			 int key = (int)object.get_y()/64 * 100 + (int)object.get_x()/64 * 101 + (int)(object.getHeight() / 32) + 1;
+			 int key = object.getDepth();
 			 ArrayList<VisibleElement> list = orderedObjects.get(key);
 			 
 			 if(list == null)
