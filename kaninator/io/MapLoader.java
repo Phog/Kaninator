@@ -64,7 +64,7 @@ public final class MapLoader
 						tileList.add(new FlatTile(flat, flat, height));
 						break;
 					case 1:
-						tileList.add(new NWestSlope(nw, flat, height - 32));
+						tileList.add(new NWestSlope(nw, flat, height));
 						break;
 					case 2:
 						tileList.add(new NorthSlope(n, flat, height));

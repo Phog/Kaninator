@@ -47,9 +47,6 @@ public class Text implements Drawable
 	 * @param x The x coordinate for the string
 	 * @param y The y coordinate for the string
 	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Drawable#draw(java.awt.Graphics2D, int, int)
-	 */
 	public void draw(Graphics2D g, int x, int y)
 	{
 		g.setFont(font);
@@ -61,9 +58,6 @@ public class Text implements Drawable
 	 * Getter for the height of the text string.
 	 * @return The height of the string.
 	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Drawable#getHeight()
-	 */
 	public int getHeight()
 	{
 		return (int)layout.getBounds().getHeight();//(int)metrics.getHeight();
@@ -73,24 +67,8 @@ public class Text implements Drawable
 	 * Getter for the width of the text string.
 	 * @return The width of the string.
 	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Drawable#getWidth()
-	 */
 	public int getWidth()
 	{
 		return (int)layout.getBounds().getWidth();//SwingUtilities.computeStringWidth(metrics, text);  
 	}
-
-	/**
-	 * A stub required to implement the drawable interface.
-	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Drawable#reset()
-	 */
-	public void reset()
-	{
-		// TODO Auto-generated method stub
-
-	}
-
 }

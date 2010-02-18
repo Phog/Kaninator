@@ -33,7 +33,7 @@ public class Game extends GameState
 		try
 		{
 			map = MapLoader.readMap("/resources/testmap.map");
-			ArrayList<Drawable> list = AnimationFactory.createAnimations("/resources/theSheet.png", true, 64, 64, 0.35);
+			ArrayList<Animation> list = AnimationFactory.createAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
 
 			player = new Player(list, map, 0, 0, 4.0);
 		}
@@ -48,13 +48,15 @@ public class Game extends GameState
 		
 		gui.addToSection(new Text("Game!!", "Tahoma", 16, Font.BOLD, Color.GREEN), 0, 0);
 		
-		camera.setPlayer(player.getDynamicObjects());
+		for(DynamicObject object : player.getDynamicObjects())
+			camera.addObject(object);
+		
 		camera.setTiles(map.getTiles());
 		
 		while(true)
 		{
 			player.update(null);
-			camera.follow(player.getDynamicObjects().get(0));
+			camera.follow(player.getDynamicObjects().get(1));
 			
 			camera.render();
 			camera.renderGUI();
@@ -64,7 +66,7 @@ public class Game extends GameState
 			
 			movePlayer();
 			
-			try {Thread.sleep(1000/30);} catch(Exception e){}
+			try {Thread.sleep(1000/40);} catch(Exception e){}
 		}
 		
 		gui.clearSection(0, 0);
@@ -136,6 +138,7 @@ public class Game extends GameState
 			{
 				player.move_y(0);
 				player.move_x(0);
+				player.stop();
 			}
 		}
 		

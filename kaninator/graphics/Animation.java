@@ -11,12 +11,13 @@ import java.util.ArrayList;
  */
 public class Animation implements Drawable
 {
-
+	private boolean lock;
 	private double currentFrame, speed;
-	ArrayList<Image> frames;
+	ArrayList<Drawable> frames;
 	
-	public Animation(ArrayList<Image> _frames, double _speed)
+	public Animation(ArrayList<Drawable> _frames, double _speed)
 	{
+		lock = false;
 		frames = _frames;
 		currentFrame = 0;
 		speed = _speed;
@@ -25,10 +26,6 @@ public class Animation implements Drawable
 	public void draw(Graphics2D g, int x, int y)
 	{
 		frames.get((int)currentFrame).draw(g, x, y);
-		
-		currentFrame += speed;
-		if(currentFrame >= frames.size())
-			currentFrame = 0;
 	}
 
 	public int getHeight()
@@ -41,6 +38,26 @@ public class Animation implements Drawable
 		return (frames == null || frames.size() == 0) ? 0 : frames.get((int)currentFrame).getWidth();
 	}
 
+	public void advance()
+	{
+		currentFrame += speed;
+		
+		if(currentFrame >= frames.size() && lock)
+			currentFrame -= speed;
+		else if(currentFrame >= frames.size())
+			currentFrame = 0;
+	}
+	
+	public void setLock(boolean _lock)
+	{
+		lock = _lock;
+	}
+	
+	public void setSpeed(double _speed)
+	{
+		speed = _speed;
+	}
+	
 	public void reset()
 	{
 		currentFrame = 0.0;

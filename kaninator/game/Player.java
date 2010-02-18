@@ -4,7 +4,7 @@
 package kaninator.game;
 
 import java.util.ArrayList;
-import kaninator.graphics.Drawable;
+import kaninator.graphics.*;
 import kaninator.mechanics.DynamicObject;
 
 /**
@@ -18,17 +18,26 @@ public class Player
 	private static final double GRAVITY = 2.0;
 	
 	private Map map;
-	private DynamicObject playerModel;
+	private DynamicObject playerModel, shadow;
 	private double vel_x, vel_y, vel_height;
 	
-	public Player(ArrayList<Drawable> drawables, Map _map, double x, double y, double radius_constant)
+	public Player(ArrayList<Animation> animations, Map _map, double x, double y, double radius_constant)
 	{
-		if(drawables == null || drawables.size() == 0)
+		if(animations == null || animations.size() == 0)
 			return;
 		
-		double radius = drawables.get(0).getWidth()/radius_constant;
-		playerModel = new DynamicObject(drawables, radius);
+		double radius = animations.get(0).getWidth()/radius_constant;
+		playerModel = new DynamicObject(animations, radius);
 		playerModel.setPos(x, y);
+		
+		ArrayList<Drawable> shadowList = new ArrayList<Drawable>();
+		shadowList.add(new Shadow(radius * 2));
+		Animation shadowAnim = new Animation(shadowList, 0.0);
+		ArrayList<Animation> shadowAnimList = new ArrayList<Animation>();
+		shadowAnimList.add(shadowAnim);
+		
+		shadow = new DynamicObject(shadowAnimList, radius);
+		shadow.setPos(x, y);
 		
 		map = _map;
 		
@@ -37,8 +46,8 @@ public class Player
 	
 	public void update(ArrayList<DynamicObject> others)
 	{
-		if(Math.abs(vel_x) <= 0.01 && Math.abs(vel_y) <= 0.01)
-			playerModel.reset();
+		if(Math.abs(vel_x) >= 0.01 || Math.abs(vel_y) >= 0.01)
+			playerModel.getAnimation().advance();
 		
 		vel_height -= GRAVITY;
 		playerModel.move_vert(vel_height);
@@ -50,13 +59,17 @@ public class Player
 		
 		double old_x = playerModel.get_x();
 		double old_y = playerModel.get_y();
+
+		shadow.setHeight(map.getHeight(playerModel));
 		
 		playerModel.move_x(vel_x);
 		playerModel.move_y(vel_y);
+		shadow.setPos(playerModel.get_x(), playerModel.get_y());
 		
 		if(map.getHeight(playerModel) >= playerModel.getHeight() + 16.0)
 		{
 			playerModel.setPos(old_x, old_y);
+			shadow.setPos(old_x, old_y);
 			return;
 		}
 		
@@ -102,6 +115,11 @@ public class Player
 		}
 	}
 	
+	public void stop()
+	{
+		playerModel.reset();
+	}
+	
 	public void setState(int state)
 	{
 		playerModel.setState(state);
@@ -110,6 +128,7 @@ public class Player
 	public ArrayList<DynamicObject> getDynamicObjects()
 	{
 		ArrayList<DynamicObject> objects = new ArrayList<DynamicObject>();
+		objects.add(shadow);
 		objects.add(playerModel);
 		return objects;
 	}

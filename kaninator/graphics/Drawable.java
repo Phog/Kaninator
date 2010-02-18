@@ -15,11 +15,6 @@ public interface Drawable
 	 * Performs the drawing. If the element is an animation it will also advance the animation.
 	 */
 	public void draw(Graphics2D g, int x, int y);
-
-	/**
-	 * Resets the element, used mainly for reseting animations.
-	 */
-	public void reset();
 	
 	/**
 	 * Getter for the width of the drawable

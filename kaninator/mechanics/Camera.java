@@ -26,7 +26,6 @@ public class Camera
 	
 	private int x, y;
 	private ArrayList<DynamicObject> objects;
-	private ArrayList<DynamicObject> player;
 	private ArrayList<ArrayList<StaticObject>> tiles;
 	
 	/**
@@ -41,7 +40,6 @@ public class Camera
 		x = y = 0;
 		
 		objects = new ArrayList<DynamicObject>();
-		player = null;
 	}
 	
 	/**
@@ -66,12 +64,7 @@ public class Camera
 	{
 		canvas.clearTop(gui.size());
 	}
-	
-	public void setPlayer(ArrayList<DynamicObject> _player)
-	{
-		player = _player;
-	}
-	
+
 	public void addObject(DynamicObject object)
 	{
 		objects.add(object);
@@ -80,7 +73,6 @@ public class Camera
 	public void clearObjects()
 	{
 		objects.clear();
-		player = null;
 	}
 	
 	
@@ -145,7 +137,7 @@ public class Camera
 			 i++;
 		 }
 		 
-		 for(DynamicObject object : player)
+		 for(DynamicObject object : objects)
 		 {
 			 int key = (int)object.get_y()/64 * 100 + (int)object.get_x()/64 * 101 + (int)(object.getHeight() / 32) + 1;
 			 ArrayList<VisibleElement> list = orderedObjects.get(key);
@@ -153,14 +145,14 @@ public class Camera
 			 if(list == null)
 			 {
 				 list = new ArrayList<VisibleElement>();
-				 list.add(new VisibleElement(object.getDrawable(),
+				 list.add(new VisibleElement(object.getAnimation(),
 						 object.render_x() - x, object.render_y() - y,
 						 (int)object.getHeight()));
 				 orderedObjects.put(key, list);	 
 			 }
 			 else
 			 {
-				 list.add(new VisibleElement(object.getDrawable(),
+				 list.add(new VisibleElement(object.getAnimation(),
 						 object.render_x() - x, object.render_y() - y,
 						 (int)object.getHeight()));
 			 }

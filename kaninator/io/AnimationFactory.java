@@ -21,7 +21,7 @@ public final class AnimationFactory
 {
 	private static Animation createAnimation(BufferedImage buffer, boolean mirror, int height, int width, int column, double speed)
 	{
-		ArrayList<Image> drawList = new ArrayList<Image>();
+		ArrayList<Drawable> drawList = new ArrayList<Drawable>();
 		AffineTransform at = AffineTransform.getScaleInstance(-1, 1); 
 		at.translate(-width, 0);
 		AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
@@ -37,9 +37,9 @@ public final class AnimationFactory
 	}
 
 	
-	public static ArrayList<Drawable> createAnimations(String filepath, boolean mirror, int height, int width, double speed) throws IOException 
+	public static ArrayList<Animation> createAnimations(String filepath, boolean mirror, int height, int width, double speed) throws IOException 
 	{
-		ArrayList<Drawable> returnList = new ArrayList<Drawable>();
+		ArrayList<Animation> returnList = new ArrayList<Animation>();
 		BufferedImage buffer = ImageIO.read(returnList.getClass().getResource(filepath));
 		
 		int numCol = buffer.getWidth()/width;

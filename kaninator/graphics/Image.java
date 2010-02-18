@@ -83,13 +83,6 @@ public class Image implements Drawable
 	{
 		return buffer.getWidth();
 	}
-
-	/**
-	 * A stub required to implement the drawable interface.
-	 */
-	public void reset()
-	{
-	}
 	
 	/**
 	 * Creates a VolatileImage from the BufferedImage.

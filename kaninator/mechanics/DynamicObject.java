@@ -5,7 +5,7 @@
 package kaninator.mechanics;
 
 import java.util.ArrayList;
-import kaninator.graphics.Drawable;
+import kaninator.graphics.Animation;
 
 /**
  * @author phedman
@@ -14,11 +14,11 @@ public class DynamicObject
 {	
 	private int state;
 	private double x, y, h, radius;
-	private ArrayList<Drawable> drawables;
+	private ArrayList<Animation> animations;
 	
-	public DynamicObject(ArrayList<Drawable> _drawables, double _radius)
+	public DynamicObject(ArrayList<Animation> _animations, double _radius)
 	{
-		drawables = _drawables;
+		animations = _animations;
 		radius = _radius;
 		
 		x = y = h = 0.0;
@@ -27,34 +27,34 @@ public class DynamicObject
 	
 	public boolean collide(DynamicObject other)
 	{
-		double middle_x = x + getDrawable().getWidth()/2.0;
-		double middle_y = y + getDrawable().getHeight() - radius;
+		double middle_x = x + getAnimation().getWidth()/2.0;
+		double middle_y = y + getAnimation().getHeight() - radius;
 		
-		double other_x = other.x + other.getDrawable().getWidth()/2.0;
-		double other_y = other.y + other.getDrawable().getHeight() - other.radius;
+		double other_x = other.x + other.getAnimation().getWidth()/2.0;
+		double other_y = other.y + other.getAnimation().getHeight() - other.radius;
 		
 		double distance = Math.pow((middle_x - other_x), 2) + Math.pow((middle_y - other_y), 2);
 		distance = Math.sqrt(distance);
 		
 		return (distance <= (radius + other.radius) 
-				&& Math.abs(h - other.h) <= other.getDrawable().getHeight());
+				&& Math.abs(h - other.h) <= other.getAnimation().getHeight());
 	}
 	
 	public void setState(int _state)
 	{
-		if(_state < 0 || _state >= drawables.size())
+		if(_state < 0 || _state >= animations.size())
 			return;
 		
 		if(state != _state)
 		{
 			state = _state;
-			drawables.get(state).reset();
+			animations.get(state).reset();
 		}
 	}
 	
 	public void reset()
 	{
-		drawables.get(state).reset();
+		animations.get(state).reset();
 	}
 	
 	public void setPos(double _x, double _y)
@@ -101,7 +101,7 @@ public class DynamicObject
 	public int render_x()
 	{
 		double left_x = (x - y);
-		left_x -= getDrawable().getWidth()/2.0;
+		left_x -= getAnimation().getWidth()/2.0;
 		
 		return (int)left_x;
 	}
@@ -109,13 +109,13 @@ public class DynamicObject
 	public int render_y()
 	{
 		double top_y = (x + y)/2;
-		top_y -= getDrawable().getHeight();
+		top_y -= getAnimation().getHeight();
 		
 		return (int)top_y;
 	}
 	
-	public Drawable getDrawable()
+	public Animation getAnimation()
 	{
-		return drawables.get(state);
+		return animations.get(state);
 	}
 }
