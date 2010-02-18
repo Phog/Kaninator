@@ -32,79 +32,8 @@ public class Game extends GameState
 		
 		try
 		{
-			Drawable flat = new Image("/resources/flat.png");
-			Drawable ne = new Image("/resources/ne.png");
-			Drawable nw = flat;
-			Drawable n = new Image("/resources/n.png");
-			Drawable e = new Image("/resources/e.png");
-			Drawable w = new Image("/resources/w.png");
-			Drawable se = new Image("/resources/se.png");
-			Drawable sw = new Image("/resources/sw.png");
-			Drawable s = new Image("/resources/s.png");
-			
-			/*ArrayList<ArrayList<StaticObject>> mapList = new ArrayList<ArrayList<StaticObject>>();
-			ArrayList<StaticObject> row;
-			int intArray[][] = {{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0, 17,  9,  9,  9,  9,  9,  9,  9,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0, 36, 53, 45, 45, 45, 45, 45, 20,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0, 36, 72, 89, 81, 81, 81, 56, 18,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0, 36, 72,108,125,117, 92, 54, 18,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0, 36, 72,114,117,117, 90, 54, 18,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0, 36, 78, 99, 99,103, 90, 54, 18,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0, 42, 63, 63, 63, 63, 67, 54, 18,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0, 27, 27, 27, 27, 27, 27, 31, 18,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0,  0,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26, 35, 27, 27, 27, 27, 27,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0, 56,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0, 17, 26,  0,  0,  0,  0,  0, 83,  0,  0,  0},
-								{0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,110,  0,  0,  0}};
-			for(int rowArray[] : intArray)
-			{
-				row = new ArrayList<StaticObject>();
-				for(int tile : rowArray)
-				{
-					double height = tile / 9 * 32;
-					switch(tile % 9)
-					{
-						case 0:
-							row.add(new FlatTile(flat, flat, height));
-							break;
-						case 1:
-							row.add(new NWestSlope(nw, flat, height));
-							break;
-						case 2:
-							row.add(new NorthSlope(n, flat, height));
-							break;
-						case 3:
-							row.add(new NEastSlope(ne, flat, height));
-							break;
-						case 4:
-							row.add(new EastSlope(e, flat, height));
-							break;
-						case 5:
-							row.add(new SEastSlope(se, flat, height));
-							break;
-						case 6:
-							row.add(new SouthSlope(s, flat, height));
-							break;
-						case 7:
-							row.add(new SWestSlope(sw, flat, height));
-							break;
-						case 8:
-							row.add(new WestSlope(w, flat, height));
-							break;
-					}
-				}
-				mapList.add(row);
-			}*/
-			
 			map = MapLoader.readMap("/resources/testmap.map");
-			ArrayList<Drawable> list = AnimationFactory.createAnimations("/resources/theSheet.png", true, 64, 64, 0.25);
+			ArrayList<Drawable> list = AnimationFactory.createAnimations("/resources/theSheet.png", true, 64, 64, 0.35);
 
 			player = new Player(list, map, 0, 0, 4.0);
 		}

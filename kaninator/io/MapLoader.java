@@ -50,7 +50,7 @@ public final class MapLoader
 			Scanner lineScr = new Scanner(line);
 			while(lineScr.hasNextInt())
 			{
-				int height = lineScr.nextInt();
+				int height = lineScr.nextInt() * 32;
 
 				if(!lineScr.hasNextInt())
 				{
@@ -64,7 +64,7 @@ public final class MapLoader
 						tileList.add(new FlatTile(flat, flat, height));
 						break;
 					case 1:
-						tileList.add(new NWestSlope(nw, flat, height));
+						tileList.add(new NWestSlope(nw, flat, height - 32));
 						break;
 					case 2:
 						tileList.add(new NorthSlope(n, flat, height));
