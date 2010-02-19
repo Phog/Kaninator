@@ -65,8 +65,9 @@ public class Game extends GameState
 				break;
 			
 			movePlayer();
+			player.move();
 			
-			try {Thread.sleep(1000/60);} catch(Exception e){}
+			try {Thread.sleep(1000/40);} catch(Exception e){}
 		}
 		
 		gui.clearSection(0, 0);
@@ -77,75 +78,11 @@ public class Game extends GameState
 	
 	private void movePlayer()
 	{
-		
-		if(keyboard.isPressed(KeyEvent.VK_W))
-		{
-			if(keyboard.isPressed(KeyEvent.VK_A))
-			{
-				player.move_y(0);
-				player.move_x(-1);
-				player.setState(6);
-			}
-			else if(keyboard.isPressed(KeyEvent.VK_D))
-			{
-				player.move_y(-1);
-				player.move_x(0);
-				player.setState(3);
-			}
-			else
-			{
-				player.move_y(-1);
-				player.move_x(-1);
-				player.setState(1);
-			}
-		}
-		else if(keyboard.isPressed(KeyEvent.VK_S))
-		{
-			if(keyboard.isPressed(KeyEvent.VK_A))
-			{
-				player.move_y(1);
-				player.move_x(0);
-				player.setState(7);
-			}
-			else if(keyboard.isPressed(KeyEvent.VK_D))
-			{
-				player.move_y(0);
-				player.move_x(1);
-				player.setState(4);
-			}
-			else
-			{
-				player.move_y(1);
-				player.move_x(1);
-				player.setState(0);
-			}
-		}
-		else
-		{	
-			if(keyboard.isPressed(KeyEvent.VK_A))
-			{
-				player.move_x(-1);
-				player.move_y(1);
-				player.setState(5);
-			}
-			else if(keyboard.isPressed(KeyEvent.VK_D))
-			{
-				player.move_x(1);
-				player.move_y(-1);
-				player.setState(2);
-			}
-			else
-			{
-				player.move_y(0);
-				player.move_x(0);
-				player.stop();
-			}
-		}
-		
-
-		
-		if(keyboard.isPressed(KeyEvent.VK_SPACE))
-			player.jump();
+		player.setMove(keyboard.isPressed(KeyEvent.VK_W), Player.MOVE_UP);
+		player.setMove(keyboard.isPressed(KeyEvent.VK_S), Player.MOVE_DOWN);
+		player.setMove(keyboard.isPressed(KeyEvent.VK_A), Player.MOVE_LEFT);
+		player.setMove(keyboard.isPressed(KeyEvent.VK_D), Player.MOVE_RIGHT);
+		player.setMove(keyboard.isPressed(KeyEvent.VK_SPACE), Player.MOVE_JUMP);
 	}
 
 }

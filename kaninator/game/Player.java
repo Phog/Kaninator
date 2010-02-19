@@ -3,8 +3,11 @@
  */
 package kaninator.game;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import kaninator.graphics.*;
+import kaninator.io.Keyboard;
+import kaninator.io.MapLoader;
 import kaninator.mechanics.DynamicObject;
 
 /**
@@ -12,22 +15,21 @@ import kaninator.mechanics.DynamicObject;
  */
 public class Player
 {
-	private static final double NORMAL_SPEED = 4.0;
-	private static final double DIAGONAL_SPEED = Math.sqrt(NORMAL_SPEED*NORMAL_SPEED/2.0);
-	private static final double JUMP_SPEED = 13;
-	private static final double GRAVITY = 1.5;
+	public static final int MOVE_UP = 1, MOVE_DOWN = 2, MOVE_LEFT = 4, MOVE_RIGHT = 8, MOVE_JUMP = 16;
 	
 	private Map map;
 	private DynamicObject playerModel, shadow;
-	private double vel_x, vel_y, vel_height;
+	private int moveState;
 	
 	public Player(ArrayList<Animation> animations, Map _map, double x, double y, double radius_constant)
 	{
 		if(animations == null || animations.size() == 0)
 			return;
 		
+		map = _map;
+		
 		double radius = animations.get(0).getWidth()/radius_constant;
-		playerModel = new DynamicObject(animations, radius);
+		playerModel = new DynamicObject(animations, radius, map);
 		playerModel.setPos(x, y);
 		
 		ArrayList<Drawable> shadowList = new ArrayList<Drawable>();
@@ -36,42 +38,21 @@ public class Player
 		ArrayList<Animation> shadowAnimList = new ArrayList<Animation>();
 		shadowAnimList.add(shadowAnim);
 		
-		shadow = new DynamicObject(shadowAnimList, radius);
+		shadow = new DynamicObject(shadowAnimList, radius, map);
 		shadow.setPos(x, y);
 		
-		map = _map;
-		
-		vel_x = vel_y = vel_height = 0.0;
+		moveState = 0;
 	}
 	
 	public void update(ArrayList<DynamicObject> others)
 	{
-		if(Math.abs(vel_x) >= 0.01 || Math.abs(vel_y) >= 0.01)
+		if(moveState > 0)
 			playerModel.getAnimation().advance();
 		
-		vel_height -= GRAVITY;
-		playerModel.move_vert(vel_height);
-		if(vel_height <= 0.0 && playerModel.getHeight() <= map.getHeight(playerModel))
-		{
-			vel_height = 0.0;
-			playerModel.setHeight(map.getHeight(playerModel));
-		}
+		playerModel.update();	
 		
-		double old_x = playerModel.get_x();
-		double old_y = playerModel.get_y();
-
 		shadow.setHeight(map.getHeight(playerModel));
-		
-		playerModel.move_x(vel_x);
-		playerModel.move_y(vel_y);
 		shadow.setPos(playerModel.get_x(), playerModel.get_y());
-		
-		if(map.getHeight(playerModel) >= playerModel.getHeight() + 16.0)
-		{
-			playerModel.setPos(old_x, old_y);
-			shadow.setPos(old_x, old_y);
-			return;
-		}
 		
 		if(others == null)
 			return;
@@ -79,50 +60,88 @@ public class Player
 		for(DynamicObject other : others)
 		{
 			if(other.collide(playerModel))
-				playerModel.setPos(old_x, old_y);
+			{
+				System.out.println("PUM!");
+			}
 		}	
 	}
 	
-	public void jump()
+	public void move()
 	{
-		if(vel_height == 0.0 && Math.abs(playerModel.getHeight() - map.getHeight(playerModel)) < 4.0)
-		vel_height = JUMP_SPEED;
-	}
-	
-	public void move_x(int direction)
-	{
-		if(Math.abs(vel_x) <= 0.001 || Math.abs(vel_y) <= 0.001)
+		if((moveState & MOVE_UP) > 0)
 		{
-			vel_x = NORMAL_SPEED * direction;
+			if((moveState & MOVE_LEFT) > 0)
+			{
+				playerModel.move_y(0);
+				playerModel.move_x(-1);
+				playerModel.setState(6);
+			}
+			else if((moveState & MOVE_RIGHT) > 0)
+			{
+				playerModel.move_y(-1);
+				playerModel.move_x(0);
+				playerModel.setState(3);
+			}
+			else
+			{
+				playerModel.move_y(-1);
+				playerModel.move_x(-1);
+				playerModel.setState(1);
+			}
+		}
+		else if((moveState & MOVE_DOWN) > 0)
+		{
+			if((moveState & MOVE_LEFT) > 0)
+			{
+				playerModel.move_y(1);
+				playerModel.move_x(0);
+				playerModel.setState(7);
+			}
+			else if((moveState & MOVE_RIGHT) > 0)
+			{
+				playerModel.move_y(0);
+				playerModel.move_x(1);
+				playerModel.setState(4);
+			}
+			else
+			{
+				playerModel.move_y(1);
+				playerModel.move_x(1);
+				playerModel.setState(0);
+			}
 		}
 		else
-		{
-			vel_y = DIAGONAL_SPEED * Math.signum(vel_y);
-			vel_x = DIAGONAL_SPEED * direction;
+		{	
+			if((moveState & MOVE_LEFT) > 0)
+			{
+				playerModel.move_x(-1);
+				playerModel.move_y(1);
+				playerModel.setState(5);
+			}
+			else if((moveState & MOVE_RIGHT) > 0)
+			{
+				playerModel.move_x(1);
+				playerModel.move_y(-1);
+				playerModel.setState(2);
+			}
+			else
+			{
+				playerModel.move_y(0);
+				playerModel.move_x(0);
+				playerModel.reset();
+			}
 		}
-	}
 	
-	public void move_y(int direction)
+		if((moveState & MOVE_JUMP) > 0)
+			playerModel.jump();
+	}	
+	
+	public void setMove(boolean on, int flag)
 	{
-		if(Math.abs(vel_x) <= 0.001 || Math.abs(vel_y) <= 0.001)
-		{
-			vel_y = NORMAL_SPEED * direction;
-		}
+		if(on)
+			moveState |= flag;
 		else
-		{
-			vel_x = DIAGONAL_SPEED * Math.signum(vel_x);
-			vel_y = DIAGONAL_SPEED * direction;
-		}
-	}
-	
-	public void stop()
-	{
-		playerModel.reset();
-	}
-	
-	public void setState(int state)
-	{
-		playerModel.setState(state);
+			moveState &= ~flag;
 	}
 	
 	public ArrayList<DynamicObject> getDynamicObjects()

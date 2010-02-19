@@ -29,16 +29,19 @@ public class Map
 		double obj_x = obj.get_x();
 		double obj_y = obj.get_y();
 		
+		if(obj_x < 0 || obj_y < 0)
+			return Double.MAX_VALUE;
+		
 		int tile_x = (int)(obj_x/MapLoader.getTileSize());
 		int tile_y = (int)(obj_y/MapLoader.getTileSize());
 		
 		if(tile_y < 0 || tile_y >= tiles.size())
-			return 0.0;
+			return Double.MAX_VALUE;
 		
 		ArrayList<StaticObject> rowList = tiles.get(tile_y);
 		
 		if(tile_x < 0 || tile_x >= rowList.size())
-			return 0.0;
+			return Double.MAX_VALUE;
 		
 		double delta_x = obj_x - tile_x * MapLoader.getTileSize();
 		double delta_y = obj_y - tile_y * MapLoader.getTileSize();

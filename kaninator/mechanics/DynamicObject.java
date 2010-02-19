@@ -7,6 +7,7 @@ package kaninator.mechanics;
 import java.util.ArrayList;
 
 import kaninator.io.MapLoader;
+import kaninator.game.Map;
 import kaninator.graphics.Animation;
 
 /**
@@ -14,19 +15,27 @@ import kaninator.graphics.Animation;
  */
 public class DynamicObject
 {	
+	private static final double NORMAL_SPEED = 4.0;
+	private static final double DIAGONAL_SPEED = Math.sqrt(NORMAL_SPEED*NORMAL_SPEED/2.0);
+	private static final double JUMP_SPEED = 13;
+	private static final double GRAVITY = 1.5;
+	
 	private static final int DEPTH_OFFSET_X = 101;
 	private static final int DEPTH_OFFSET_Y = 100;
+	
+	private double x, y, h, radius, vel_x, vel_y, vel_height;
+	
 	private int state;
-	private double x, y, h, radius;
+	private Map map;
 	private ArrayList<Animation> animations;
 	
-	public DynamicObject(ArrayList<Animation> _animations, double _radius)
+	public DynamicObject(ArrayList<Animation> _animations, double _radius, Map _map)
 	{
 		animations = _animations;
 		radius = _radius;
+		map = _map;
 		
-		x = y = h = 0.0;
-		state = 0;
+		x = y = h = vel_x = vel_y = vel_height = state = 0;
 	}
 	
 	public boolean collide(DynamicObject other)
@@ -44,21 +53,31 @@ public class DynamicObject
 				&& Math.abs(h - other.h) <= other.getAnimation().getHeight());
 	}
 	
-	public void setState(int _state)
+	public void update()
 	{
-		if(_state < 0 || _state >= animations.size())
-			return;
-		
-		if(state != _state)
+		vel_height -= GRAVITY;
+		h += vel_height;
+		double mapHeight = map.getHeight(this);
+		if(vel_height <= 0.0 && h <= mapHeight)
 		{
-			state = _state;
-			animations.get(state).reset();
+			vel_height = 0.0;
+			h = mapHeight;
 		}
+
+		double old_x = x;
+		double old_y = y;
+		x += vel_x;
+		if(map.getHeight(this) >= h + MapLoader.getTileHeight()/2.0)
+			x = old_x;
+		
+		y += vel_y;
+		if(map.getHeight(this) >= h + MapLoader.getTileHeight()/2.0)
+			y = old_y;
 	}
 	
-	public void reset()
+	public void setHeight(double height)
 	{
-		animations.get(state).reset();
+		h = height;
 	}
 	
 	public void setPos(double _x, double _y)
@@ -67,24 +86,36 @@ public class DynamicObject
 		y = _y;
 	}
 	
-	public void setHeight(double _h)
+	public void move_x(int direction)
 	{
-		h = _h;
+		if(Math.abs(vel_x) <= 0.001 || Math.abs(vel_y) <= 0.001)
+		{
+			vel_x = NORMAL_SPEED * direction;
+		}
+		else
+		{
+			vel_y = DIAGONAL_SPEED * Math.signum(vel_y);
+			vel_x = DIAGONAL_SPEED * direction;
+		}
 	}
 	
-	public void move_y(double amount)
+	public void move_y(int direction)
 	{
-		y += amount;
+		if(Math.abs(vel_x) <= 0.001 || Math.abs(vel_y) <= 0.001)
+		{
+			vel_y = NORMAL_SPEED * direction;
+		}
+		else
+		{
+			vel_x = DIAGONAL_SPEED * Math.signum(vel_x);
+			vel_y = DIAGONAL_SPEED * direction;
+		}
 	}
 	
-	public void move_x(double amount)
+	public void jump()
 	{
-		x += amount;
-	}
-	
-	public void move_vert(double amount)
-	{
-		h += amount;
+		if(vel_height == 0.0 && Math.abs(h - map.getHeight(this)) < NORMAL_SPEED)
+			vel_height = JUMP_SPEED;
 	}
 	
 	public double getHeight()
@@ -124,6 +155,23 @@ public class DynamicObject
 		depth = depth + (int)x / (int)MapLoader.getTileSize() * DEPTH_OFFSET_X;
 		depth = depth + (int)h / (int)MapLoader.getTileHeight() + 1; 
 		return depth;
+	}
+	
+	public void setState(int _state)
+	{
+		if(_state < 0 || _state >= animations.size())
+			return;
+		
+		if(state != _state)
+		{
+			state = _state;
+			animations.get(state).reset();
+		}
+	}
+	
+	public void reset()
+	{
+		animations.get(state).reset();
 	}
 	
 	public Animation getAnimation()
