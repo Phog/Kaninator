@@ -68,7 +68,7 @@ public class Settings extends GameState
 	
 			m_x = mouse.get_x();
 			m_y = mouse.get_y();
-			try {Thread.sleep(66);} catch(Exception e){}
+			try {Thread.sleep(16);} catch(Exception e){}
 			
 			menu.setPosition(m_x, m_y);
 			
@@ -88,7 +88,7 @@ public class Settings extends GameState
 		camera.clearGUI();
 		menu.clear();
 
-		return 3;
+		return 4;
 	}
 
 }

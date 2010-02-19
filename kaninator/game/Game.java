@@ -94,7 +94,7 @@ public class Game extends GameState
 		gui.clearSection(0, 0);
 		camera.clearObjects();
 		
-		return 3;
+		return 4;
 	}
 	
 	private void movePlayer()

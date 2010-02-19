@@ -33,6 +33,9 @@ public class Main extends GameState
 		menu.addEntry(new Text("New Game!", "Arial", 32, Font.BOLD, Color.WHITE),
 						new Text("New Game!", "Arial", 32, Font.BOLD, Color.RED));
 		
+		menu.addEntry(new Text("Resume Game!", "Arial", 32, Font.BOLD, Color.WHITE),
+						new Text("Resume Game!", "Arial", 32, Font.BOLD, Color.RED));
+		
 		menu.addEntry(new Text("Settings!", "Arial", 32, Font.BOLD, Color.WHITE),
 						new Text("Settings!", "Arial", 32, Font.BOLD, Color.RED));
 		
@@ -69,7 +72,7 @@ public class Main extends GameState
 				m_x = mouse.get_x();
 				m_y = mouse.get_y();
 			}
-			try {Thread.sleep(66);} catch(Exception e){}
+			try {Thread.sleep(16);} catch(Exception e){}
 			
 			menu.setPosition(m_x, m_y);
 			
@@ -90,7 +93,7 @@ public class Main extends GameState
 		camera.clearGUI();
 		menu.clear();
 		
-		return (retvalue == 3) ? -1 : retvalue;
+		return (retvalue == 4) ? -1 : retvalue;
 	}
 
 }
