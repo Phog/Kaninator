@@ -18,7 +18,7 @@ public class Player
 	public static final int MOVE_UP = 1, MOVE_DOWN = 2, MOVE_LEFT = 4, MOVE_RIGHT = 8, MOVE_JUMP = 16;
 	
 	private Map map;
-	private DynamicObject playerModel, shadow;
+	private DynamicObject model, shadow;
 	private int moveState;
 	
 	public Player(ArrayList<Animation> animations, Map _map, double x, double y, double radius_constant)
@@ -29,8 +29,8 @@ public class Player
 		map = _map;
 		
 		double radius = animations.get(0).getWidth()/radius_constant;
-		playerModel = new DynamicObject(animations, radius, map);
-		playerModel.setPos(x, y);
+		model = new DynamicObject(animations, radius, map);
+		model.setPos(x, y);
 		
 		ArrayList<Drawable> shadowList = new ArrayList<Drawable>();
 		shadowList.add(new Shadow(radius * 2));
@@ -47,19 +47,19 @@ public class Player
 	public void update(ArrayList<DynamicObject> others)
 	{
 		if(moveState > 0)
-			playerModel.getAnimation().advance();
+			model.getAnimation().advance();
 		
-		playerModel.update();	
+		model.update();	
 		
-		shadow.setHeight(map.getHeight(playerModel));
-		shadow.setPos(playerModel.get_x(), playerModel.get_y());
+		shadow.setHeight(map.getHeight(model));
+		shadow.setPos(model.get_x(), model.get_y());
 		
 		if(others == null)
 			return;
 			
 		for(DynamicObject other : others)
 		{
-			if(other.collide(playerModel))
+			if(other.collide(model))
 			{
 				System.out.println("PUM!");
 			}
@@ -72,68 +72,68 @@ public class Player
 		{
 			if((moveState & MOVE_LEFT) > 0)
 			{
-				playerModel.move_y(0);
-				playerModel.move_x(-1);
-				playerModel.setState(6);
+				model.move_y(0);
+				model.move_x(-1);
+				model.setState(6);
 			}
 			else if((moveState & MOVE_RIGHT) > 0)
 			{
-				playerModel.move_y(-1);
-				playerModel.move_x(0);
-				playerModel.setState(3);
+				model.move_y(-1);
+				model.move_x(0);
+				model.setState(3);
 			}
 			else
 			{
-				playerModel.move_y(-1);
-				playerModel.move_x(-1);
-				playerModel.setState(1);
+				model.move_y(-1);
+				model.move_x(-1);
+				model.setState(1);
 			}
 		}
 		else if((moveState & MOVE_DOWN) > 0)
 		{
 			if((moveState & MOVE_LEFT) > 0)
 			{
-				playerModel.move_y(1);
-				playerModel.move_x(0);
-				playerModel.setState(7);
+				model.move_y(1);
+				model.move_x(0);
+				model.setState(7);
 			}
 			else if((moveState & MOVE_RIGHT) > 0)
 			{
-				playerModel.move_y(0);
-				playerModel.move_x(1);
-				playerModel.setState(4);
+				model.move_y(0);
+				model.move_x(1);
+				model.setState(4);
 			}
 			else
 			{
-				playerModel.move_y(1);
-				playerModel.move_x(1);
-				playerModel.setState(0);
+				model.move_y(1);
+				model.move_x(1);
+				model.setState(0);
 			}
 		}
 		else
 		{	
 			if((moveState & MOVE_LEFT) > 0)
 			{
-				playerModel.move_x(-1);
-				playerModel.move_y(1);
-				playerModel.setState(5);
+				model.move_x(-1);
+				model.move_y(1);
+				model.setState(5);
 			}
 			else if((moveState & MOVE_RIGHT) > 0)
 			{
-				playerModel.move_x(1);
-				playerModel.move_y(-1);
-				playerModel.setState(2);
+				model.move_x(1);
+				model.move_y(-1);
+				model.setState(2);
 			}
 			else
 			{
-				playerModel.move_y(0);
-				playerModel.move_x(0);
-				playerModel.reset();
+				model.move_y(0);
+				model.move_x(0);
+				model.reset();
 			}
 		}
 	
 		if((moveState & MOVE_JUMP) > 0)
-			playerModel.jump();
+			model.jump();
 	}	
 	
 	public void setMove(boolean on, int flag)
@@ -148,7 +148,7 @@ public class Player
 	{
 		ArrayList<DynamicObject> objects = new ArrayList<DynamicObject>();
 		objects.add(shadow);
-		objects.add(playerModel);
+		objects.add(model);
 		return objects;
 	}
 }

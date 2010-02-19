@@ -54,4 +54,14 @@ public final class AnimationFactory
 		
 		return returnList;
 	}
+	
+	public static ArrayList<Animation> cloneAnimations(ArrayList<Animation> anims)
+	{
+		ArrayList<Animation> retAnims = new ArrayList<Animation>();
+		
+		for(Animation anim : anims)
+			retAnims.add(anim.clone());
+		
+		return retAnims;
+	}
 }

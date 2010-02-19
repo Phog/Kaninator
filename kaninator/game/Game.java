@@ -24,7 +24,10 @@ public class Game extends GameState
 {
 
 	private Player player;
+	private ArrayList<NonPlayerObject> enemies;
+	private ArrayList<DynamicObject> enemyList;
 	private Map map;
+	
 	
 	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse)
 	{
@@ -36,6 +39,15 @@ public class Game extends GameState
 			ArrayList<Animation> list = AnimationFactory.createAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
 
 			player = new Player(list, map, 0, 0, 4.0);
+			enemies = new ArrayList<NonPlayerObject>();
+			enemyList = new ArrayList<DynamicObject>();
+			for(int i = 0; i < 5; i++)
+			{
+				ArrayList<Animation> newList = AnimationFactory.cloneAnimations(list);
+				NonPlayerObject enemy = new NonPlayerObject(newList, map, player.getDynamicObjects().get(1), Math.random()*400 + 128, Math.random()*400 + 128, 4.0);
+				enemies.add(enemy);
+				enemyList.add(enemy.getDynamicObjects().get(1));
+			}
 		}
 		catch(IOException e)
 		{
@@ -51,11 +63,20 @@ public class Game extends GameState
 		for(DynamicObject object : player.getDynamicObjects())
 			camera.addObject(object);
 		
+		for(NonPlayerObject npo : enemies)
+			for(DynamicObject object : npo.getDynamicObjects())
+				camera.addObject(object);
+		
 		camera.setTiles(map.getTiles());
 		
 		while(true)
 		{
-			player.update(null);
+			for(NonPlayerObject npo : enemies)
+			{
+				npo.observe();
+				npo.act();
+			}
+			player.update(enemyList);
 			camera.follow(player.getDynamicObjects().get(1));
 			
 			camera.render();

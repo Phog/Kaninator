@@ -63,4 +63,8 @@ public class Animation implements Drawable
 		currentFrame = 0.0;
 	}
 
+	public Animation clone()
+	{
+		return new Animation(frames, speed);
+	}
 }
