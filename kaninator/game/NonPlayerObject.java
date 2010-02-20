@@ -15,11 +15,16 @@ import kaninator.mechanics.DynamicObject;
  */
 public class NonPlayerObject
 {
+	private static final int MAX_ACTIVE_DISTANCE = 196;
+	private static final int MIN_DISTANCE_BETWEEN = 48;
+	private static final int MAX_STRAFE_DIFFERENCE = 8;
+	
 	private Map map;
 	private DynamicObject model, shadow;
-	private DynamicObject target;
+	private DynamicObject player;
+	private double distance;
 	
-	public NonPlayerObject(ArrayList<Animation> animations, Map _map, DynamicObject _target, double x, double y, double radius_constant)
+	public NonPlayerObject(ArrayList<Animation> animations, Map _map, DynamicObject _player, double x, double y, double radius_constant)
 	{
 		if(animations == null || animations.size() == 0)
 			return;
@@ -39,40 +44,116 @@ public class NonPlayerObject
 		shadow = new DynamicObject(shadowAnimList, radius, map);
 		shadow.setPos(x, y);
 		
-		target = _target;
+		player = _player;
+		distance = Double.MAX_VALUE;
+	}
+	
+	private double distanceTo(DynamicObject other)
+	{
+		double distTo = Math.pow((other.get_x() - model.get_x()),2) + Math.pow((other.get_y() - model.get_y()),2);
+		return Math.sqrt(distTo);
+	}
+	
+	private void follow(DynamicObject target)
+	{
+		double delta_x = target.get_x() - model.get_x();
+		double delta_y = target.get_y() - model.get_y();
+		if(Math.abs(Math.abs(delta_x) - Math.abs(delta_y)) < MAX_STRAFE_DIFFERENCE)
+		{
+			if(delta_x > 0 && delta_y > 0)
+			{
+				model.move_y(1);
+				model.move_x(1);
+				model.setState(0);
+			}
+			else if(delta_x < 0 && delta_y > 0)
+			{
+				model.move_y(1);
+				model.move_x(-1);
+				model.setState(5);
+			}
+			else if(delta_x > 0 && delta_y < 0)
+			{
+				model.move_y(-1);
+				model.move_x(1);
+				model.setState(2);
+			}
+			else
+			{
+				model.move_y(-1);	
+				model.move_x(-1);
+				model.setState(1);
+			}
+		}
+		else if(Math.abs(delta_x) > Math.abs(delta_y))
+		{
+			if(delta_x > 0)
+			{
+				model.move_x(1);
+				model.move_y(0);
+				model.setState(4);
+			}
+			else
+			{
+				model.move_x(-1);
+				model.move_y(0);
+				model.setState(6);
+			}
+		}
+		else
+		{
+			if(delta_y > 0)
+			{
+				model.move_y(1);
+				model.move_x(0);
+				model.setState(7);
+			}
+			else
+			{
+				model.move_y(-1);
+				model.move_x(0);
+				model.setState(3);
+			}
+		}
 	}
 	
 	public void observe()
 	{
-		if(target.get_x() > model.get_x() && target.get_y() > model.get_y())
+		distance = distanceTo(player);
+	}
+	
+	public void act(ArrayList<NonPlayerObject> others)
+	{
+		NonPlayerObject leader = null;
+		for(NonPlayerObject otherone : others)
 		{
-			model.move_y(1);
-			model.move_x(1);
-			model.setState(0);
+			if(distanceTo(otherone.getDynamicObjects().get(1)) < MIN_DISTANCE_BETWEEN)
+				if(distance > otherone.distance)
+					leader = otherone;
 		}
-		else if(target.get_x() < model.get_x() && target.get_y() > model.get_y())
+		
+		if(distance < MAX_ACTIVE_DISTANCE)
 		{
-			model.move_y(1);
-			model.move_x(-1);
-			model.setState(5);
-		}
-		else if(target.get_x() > model.get_x() && target.get_y() < model.get_y())
-		{
-			model.move_y(-1);
-			model.move_x(1);
-			model.setState(2);
+			if(leader != null)
+			{
+				model.setVel_x(leader.getDynamicObjects().get(1).getVel_x());
+				model.setVel_y(leader.getDynamicObjects().get(1).getVel_y());
+				model.setState(leader.getDynamicObjects().get(1).getState());
+				model.getAnimation().advance();
+			}
+			else
+			{
+				follow(player);
+				model.getAnimation().advance();
+			}
 		}
 		else
 		{
-			model.move_y(-1);	
-			model.move_x(-1);
-			model.setState(1);
+			model.move_x(0);
+			model.move_y(0);
+			model.reset();
 		}
-	}
-	
-	public void act()
-	{
-		model.getAnimation().advance();
+		
 		model.update();
 		
 		shadow.setHeight(map.getHeight(model));

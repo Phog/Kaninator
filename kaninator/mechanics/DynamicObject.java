@@ -112,6 +112,26 @@ public class DynamicObject
 		}
 	}
 	
+	public void setVel_x(double _vel_x)
+	{
+		vel_x = _vel_x;
+	}
+	
+	public void setVel_y(double _vel_y)
+	{
+		vel_y = _vel_y;
+	}
+	
+	public double getVel_x()
+	{
+		return vel_x;
+	}
+	
+	public double getVel_y()
+	{
+		return vel_y;
+	}
+	
 	public void jump()
 	{
 		if(vel_height == 0.0 && Math.abs(h - map.getHeight(this)) < NORMAL_SPEED)
@@ -155,6 +175,11 @@ public class DynamicObject
 		depth = depth + (int)x / (int)MapLoader.getTileSize() * DEPTH_OFFSET_X;
 		depth = depth + (int)h / (int)MapLoader.getTileHeight() + 1; 
 		return depth;
+	}
+	
+	public int getState()
+	{
+		return state;
 	}
 	
 	public void setState(int _state)

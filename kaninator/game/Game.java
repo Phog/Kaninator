@@ -95,7 +95,7 @@ public class Game extends GameState
 			for(NonPlayerObject npo : enemies)
 			{
 				npo.observe();
-				npo.act();
+				npo.act(enemies);
 			}
 			player.update(enemyList);
 			camera.follow(player.getDynamicObjects().get(1));
