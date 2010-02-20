@@ -47,11 +47,10 @@ public class Highscore extends GameState
 	}
 	
 	
-	
-	/* (non-Javadoc)
-	 * @see kaninator.game.GameState#doState()
+	/**
+	 * High scores menu, implemented using the Menu class.
+	 * @see kaninator.mechanics.menu 
 	 */
-	@Override
 	public int doState()
 	{
 		int retvalue = 0;
