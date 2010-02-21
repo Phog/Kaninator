@@ -36,6 +36,17 @@ public final class AnimationFactory
 		return new Animation(drawList, speed);
 	}
 
+	public static ArrayList<Animation> createAnimations(Drawable drawable)
+	{
+		ArrayList<Drawable> drawList = new ArrayList<Drawable>();
+		drawList.add(drawable);
+		
+		Animation anim = new Animation(drawList, 0.0);
+		ArrayList<Animation> animList = new ArrayList<Animation>();
+		animList.add(anim);
+		
+		return animList;
+	}
 	
 	public static ArrayList<Animation> createAnimations(String filepath, boolean mirror, int height, int width, double speed) throws IOException 
 	{

@@ -23,30 +23,39 @@ public class Camera
 	private GUI gui;
 
 	private static final double FOLLOW_SPEED = 4.0;
-	private static final double FOLLOW_BORDER_SIZE = 1.0/4.0;
+	private static final double FOLLOW_BORDER_SIZE = 1.0/2.2;
 	private static final int OFF_TOP = 1, OFF_BOTTOM = 2, OFF_LEFT = 4, OFF_RIGHT = 8;
+	private static final int CAMERA_MARGIN = 3;
 
-	private int x, y, numHorizontalTiles;;
-	private ArrayList<DynamicObject> objects;
+	private int x, y, numHorizontalTiles;
+	
+	private LinkedList<DynamicObject> playerObjects;
+	private LinkedList<DynamicObject> bulletObjects;
+	private LinkedList<DynamicObject> enemyObjects;
 	private ArrayList<ArrayList<StaticObject>> tiles;
+	
 	private TreeMap<Integer, ArrayList<VisibleElement>> orderedObjects;
+	private VisibleElement background;
 
 
 	/**
 	 * @param _canvas The canvas which actually draws the rendered data.
 	 * @param _gui The overlay GUI which will always be on top.
 	 */
-	public Camera(Canvas _canvas, GUI _gui)
+	public Camera(Canvas _canvas, GUI _gui, Drawable _background)
 	{
 		canvas = _canvas;
 		gui = _gui;
-
+		background = new VisibleElement(_background, 0, 0, 0);
+		
 		x = y = 0;
-		numHorizontalTiles = (int)(canvas.getWidth()/(MapLoader.getTileSize() * 2));
+		numHorizontalTiles = 1 + (int)(canvas.getWidth()/(MapLoader.getTileSize() * 2));
 
-		objects = new ArrayList<DynamicObject>();
-		orderedObjects = new TreeMap<Integer, ArrayList<VisibleElement>>();
+		playerObjects = null;
+		bulletObjects = null;
+		enemyObjects = null;
 		tiles = null;
+		orderedObjects = new TreeMap<Integer, ArrayList<VisibleElement>>();
 	}
 
 	/**
@@ -73,20 +82,54 @@ public class Camera
 	}
 	
 	/**
-	 * Adds a DynamicObject for the camera to handle.
-	 * @param object The DynamicObject you want to show on screen.
+	 * Sets the DynamicObjects belonging to the player the  camera should be aware of.
+	 * @param _playerObjects The DynamicObjects you want to show on screen.
 	 */
-	public void addObject(DynamicObject object)
+	public void setPlayerObjects(LinkedList<DynamicObject> _playerObjects)
 	{
-		objects.add(object);
+		playerObjects = _playerObjects;
 	}
 
 	/**
-	 * Clears the DynamicObjects the camera is aware of.
+	 * Clears the DynamicObjects belonging to the player from the camera.
 	 */
-	public void clearObjects()
+	public void clearPlayerObjects()
 	{
-		objects.clear();
+		playerObjects = null;
+	}
+	
+	/**
+	 * Sets the DynamicObjects that are projectiles.
+	 * @param _bulletObjects The DynamicObjects you want to show on screen.
+	 */
+	public void setBulletObjects(LinkedList<DynamicObject> _bulletObjects)
+	{
+		bulletObjects = _bulletObjects;
+	}
+
+	/**
+	 * Clears the DynamicObjects that are projectiles from the camera.
+	 */
+	public void clearBulletObjects()
+	{
+		enemyObjects = null;
+	}
+	
+	/**
+	 * Sets the DynamicObjects belonging to the enemies the  camera should be aware of.
+	 * @param object The DynamicObjects you want to show on screen.
+	 */
+	public void setEnemyObjects(LinkedList<DynamicObject> _enemyObjects)
+	{
+		enemyObjects = _enemyObjects;
+	}
+
+	/**
+	 * Clears the DynamicObjects belonging to the enemies from the camera.
+	 */
+	public void clearEnemyObjects()
+	{
+		enemyObjects = null;
 	}
 
 	/**
@@ -97,7 +140,17 @@ public class Camera
 	{
 		tiles = _tiles;
 	}
+	
+	public int get_x()
+	{
+		return x;
+	}
 
+	public int get_y()
+	{
+		return y;
+	}
+	
 	/**
 	 * Makes the camera smoothly follow a dynamic object. Should be called every frame.
 	 * @param obj The object you want the camera to follow.
@@ -128,9 +181,12 @@ public class Camera
 	{
 		canvas.clear();
 		orderedObjects.clear();
+		canvas.addElement(background);
 
 		orderStatics();
-		orderDynamics();
+		orderDynamics(enemyObjects);
+		orderDynamics(playerObjects);
+		orderDynamics(bulletObjects);
 
 		for(ArrayList<VisibleElement> list : orderedObjects.values())
 		{
@@ -151,13 +207,13 @@ public class Camera
 	{
 		int retValue = 0;
 		
-		if(y + imgHeight - h < 0)
+		if(y + imgHeight - h + CAMERA_MARGIN * MapLoader.getTileHeight() < 0)
 			retValue |= OFF_TOP;
-		if(y - h > canvas.getHeight())
+		if(y - h > canvas.getHeight() + CAMERA_MARGIN * MapLoader.getTileHeight())
 			retValue |= OFF_BOTTOM;
-		if(x + imgWidth < 0)
+		if(x + imgWidth + CAMERA_MARGIN * MapLoader.getTileSize() < 0)
 			retValue |= OFF_LEFT;
-		if(x > canvas.getWidth())
+		if(x > canvas.getWidth() + CAMERA_MARGIN * MapLoader.getTileSize())
 			retValue |= OFF_RIGHT;
 		
 		return retValue;
@@ -167,8 +223,11 @@ public class Camera
 	 * Loops through the DynamicObjects, creates VisibleElements from them
 	 * and orders them according to their depth.
 	 */
-	private void orderDynamics()
+	private void orderDynamics(LinkedList<DynamicObject> objects)
 	{
+		if(objects == null)
+			return;
+		
 		for(DynamicObject object : objects)
 		{
 			int key = object.getDepth();
@@ -188,6 +247,7 @@ public class Camera
 					obj_x, obj_y,
 					(int)object.getHeight()));	
 		}
+		
 	}
 	
 	/**
@@ -200,12 +260,12 @@ public class Camera
 		int camIndex_y = y / (int)MapLoader.getTileHeight();
 		
 		//Minimum internal y coordinate for the tiles
-		int min_y = (camIndex_y + camIndex_x - 1)/2;
+		int min_y = (camIndex_y + camIndex_x - 1)/2 - CAMERA_MARGIN;
 		if(min_y < 0)
 			min_y = 0;
 		
 		//Minimum internal x coordinate for the tiles
-		int min_x = (camIndex_y - camIndex_x + 1)/2 - numHorizontalTiles;
+		int min_x = (camIndex_y - camIndex_x + 1)/2 - numHorizontalTiles - CAMERA_MARGIN;
 		if(min_x < 0)
 			min_x = 0;
 

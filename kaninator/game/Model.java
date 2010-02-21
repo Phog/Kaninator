@@ -4,8 +4,10 @@
 package kaninator.game;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import kaninator.graphics.*;
+import kaninator.io.AnimationFactory;
 import kaninator.io.MapLoader;
 import kaninator.mechanics.DynamicObject;
 
@@ -32,13 +34,9 @@ public class Model
 		double radius = animations.get(0).getWidth()/radius_constant;
 		model = new DynamicObject(animations, radius);
 		model.setPos(x, y);
-		
-		ArrayList<Drawable> shadowList = new ArrayList<Drawable>();
-		shadowList.add(new Shadow(radius * 2));
-		Animation shadowAnim = new Animation(shadowList, 0.0);
-		ArrayList<Animation> shadowAnimList = new ArrayList<Animation>();
-		shadowAnimList.add(shadowAnim);
-		
+
+		ArrayList<Animation> shadowAnimList = AnimationFactory.createAnimations(new Shadow(radius * 2));
+	
 		shadow = new DynamicObject(shadowAnimList, radius);
 		shadow.setPos(x, y);
 		
@@ -148,9 +146,9 @@ public class Model
 		return model;
 	}
 	
-	public ArrayList<DynamicObject> getDynamicObjects()
+	public LinkedList<DynamicObject> getDynamicObjects()
 	{
-		ArrayList<DynamicObject> objects = new ArrayList<DynamicObject>();
+		LinkedList<DynamicObject> objects = new LinkedList<DynamicObject>();
 		objects.add(shadow);
 		objects.add(model);
 		return objects;

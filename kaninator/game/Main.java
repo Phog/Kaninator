@@ -28,22 +28,22 @@ public class Main extends GameState
 		
 		menu = new Menu(_gui);
 		
-		menu.setTitle(new Text("Kaninator!", "Arial", 32, Font.BOLD, Color.WHITE));
+		menu.setTitle(new Text("Kaninator!", "Impact", 32, Font.BOLD, Color.WHITE));
 		
-		menu.addEntry(new Text("New Game!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("New Game!", "Arial", 32, Font.BOLD, Color.RED));
+		menu.addEntry(new Text("New Game!", "Impact", 32, Font.BOLD, Color.WHITE),
+						new Text("New Game!", "Impact", 32, Font.BOLD, Color.RED));
 		
-		menu.addEntry(new Text("Resume Game!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Resume Game!", "Arial", 32, Font.BOLD, Color.RED));
+		menu.addEntry(new Text("Resume Game!", "Impact", 32, Font.BOLD, Color.WHITE),
+						new Text("Resume Game!", "Impact", 32, Font.BOLD, Color.RED));
 		
-		menu.addEntry(new Text("Settings!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Settings!", "Arial", 32, Font.BOLD, Color.RED));
+		menu.addEntry(new Text("Settings!", "Impact", 32, Font.BOLD, Color.WHITE),
+						new Text("Settings!", "Impact", 32, Font.BOLD, Color.RED));
 		
-		menu.addEntry(new Text("High Scores!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("High Scores!", "Arial", 32, Font.BOLD, Color.RED));
+		menu.addEntry(new Text("High Scores!", "Impact", 32, Font.BOLD, Color.WHITE),
+						new Text("High Scores!", "Impact", 32, Font.BOLD, Color.RED));
 		
-		menu.addEntry(new Text("Exit!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Exit!", "Arial", 32, Font.BOLD, Color.RED));
+		menu.addEntry(new Text("Exit!", "Impact", 32, Font.BOLD, Color.WHITE),
+						new Text("Exit!", "Impact", 32, Font.BOLD, Color.RED));
 	}
 		
 	private void render()
@@ -53,11 +53,6 @@ public class Main extends GameState
 		camera.renderGUI();
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see kaninator.game.GameState#doState()
-	 */
-	@Override
 	public int doState()
 	{
 		int retvalue = 0;
@@ -76,14 +71,10 @@ public class Main extends GameState
 			
 			menu.setPosition(m_x, m_y);
 			
-			if(keyboard.isPressed(KeyEvent.VK_DOWN))
-				menu.moveDown();
-			if(keyboard.isPressed(KeyEvent.VK_UP))
-				menu.moveUp();
-			
-			if(keyboard.isPressed(KeyEvent.VK_SPACE) || keyboard.isPressed(KeyEvent.VK_ENTER) || mouse.isPressed(0))
+			if(mouse.isPressed(0))
 			{
 				retvalue = menu.select();
+				try {Thread.sleep(Kaninator.DEBOUNCE_DELAY);} catch(Exception e){}
 				break;
 			}
 
@@ -93,7 +84,7 @@ public class Main extends GameState
 		camera.clearGUI();
 		menu.clear();
 		
-		return (retvalue == 4) ? -1 : retvalue;
+		return (retvalue == Kaninator.MAIN_MENU) ? Kaninator.SENTINEL : retvalue;
 	}
 
 }

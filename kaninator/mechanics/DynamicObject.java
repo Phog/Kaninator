@@ -18,7 +18,7 @@ public class DynamicObject
 	private static final int DEPTH_OFFSET_X = 101;
 	private static final int DEPTH_OFFSET_Y = 100;
 	
-	private double x, y, h, radius;
+	private double x, y, h, radius, offsetHeight, offset_x, offset_y;
 	
 	private int state;
 	private ArrayList<Animation> animations;
@@ -28,22 +28,26 @@ public class DynamicObject
 		animations = _animations;
 		radius = _radius;;
 		
-		x = y = h = state = 0;
+		x = y = h = offsetHeight = offset_x = offset_y = state = 0;
 	}
 	
 	public boolean collide(DynamicObject other)
 	{
-		double middle_x = x + getAnimation().getWidth()/2.0;
-		double middle_y = y + getAnimation().getHeight() - radius;
+		double middle_x = render_x() + getAnimation().getWidth()/2;
+		double middle_y = render_y() + getAnimation().getHeight();
 		
-		double other_x = other.x + other.getAnimation().getWidth()/2.0;
-		double other_y = other.y + other.getAnimation().getHeight() - other.radius;
+		double other_x = other.render_x() + other.getAnimation().getWidth()/2;
+		double other_y = other.render_y() + getAnimation().getHeight();
 		
-		double distance = Math.pow((middle_x - other_x), 2) + Math.pow((middle_y - other_y), 2);
-		distance = Math.sqrt(distance);
+		double distance = Math.sqrt((middle_x - other_x) * (middle_x - other_x) + (middle_y - other_y) * (middle_y - other_y));
 		
-		return (distance <= (radius + other.radius) 
+		return (distance <= (radius + other.radius)
 				&& Math.abs(h - other.h) <= other.getAnimation().getHeight());
+	}
+	
+	public void setHeightOffset(double _offset)
+	{
+		offsetHeight = _offset;
 	}
 	
 	public void setHeight(double height)
@@ -55,6 +59,12 @@ public class DynamicObject
 	{
 		x = _x;
 		y = _y;
+	}
+	
+	public void setPosOffset(double _offset_x, double _offset_y)
+	{
+		offset_x = _offset_x;
+		offset_y = _offset_y;
 	}
 	
 	public void move_vert(double vel_vert)
@@ -74,22 +84,22 @@ public class DynamicObject
 	
 	public double getHeight()
 	{
-		return h;
+		return h + offsetHeight;
 	}
 	
 	public double get_x()
 	{
-		return x;
+		return x + offset_x;
 	}
 	
 	public double get_y()
 	{
-		return y;
+		return y + offset_y;
 	}
 	
 	public int render_x()
 	{
-		double left_x = (x - y);
+		double left_x = (get_x() - get_y());
 		left_x -= getAnimation().getWidth()/2.0;
 		
 		return (int)left_x;
@@ -97,7 +107,7 @@ public class DynamicObject
 	
 	public int render_y()
 	{
-		double top_y = (x + y)/2;
+		double top_y = (get_x() + get_y())/2;
 		top_y -= getAnimation().getHeight();
 		
 		return (int)top_y;

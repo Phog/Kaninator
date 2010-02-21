@@ -24,16 +24,13 @@ public class Map
 		return tiles;
 	}
 
-	public double getHeight(DynamicObject obj)
+	public double getHeightAt(double x, double y)
 	{
-		double obj_x = obj.get_x();
-		double obj_y = obj.get_y();
-		
-		if(obj_x < 0 || obj_y < 0)
+		if(x < 0 || y < 0)
 			return Double.MAX_VALUE;
 		
-		int tile_x = (int)(obj_x/MapLoader.getTileSize());
-		int tile_y = (int)(obj_y/MapLoader.getTileSize());
+		int tile_x = (int)(x/MapLoader.getTileSize());
+		int tile_y = (int)(y/MapLoader.getTileSize());
 		
 		if(tile_y < 0 || tile_y >= tiles.size())
 			return Double.MAX_VALUE;
@@ -43,11 +40,15 @@ public class Map
 		if(tile_x < 0 || tile_x >= rowList.size())
 			return Double.MAX_VALUE;
 		
-		double delta_x = obj_x - tile_x * MapLoader.getTileSize();
-		double delta_y = obj_y - tile_y * MapLoader.getTileSize();
+		double delta_x = x - tile_x * MapLoader.getTileSize();
+		double delta_y = y - tile_y * MapLoader.getTileSize();
 		
 		return rowList.get(tile_x).getHeight(delta_x,delta_y);
-		
+	}
+	
+	public double getHeight(DynamicObject obj)
+	{
+		return getHeightAt(obj.get_x(), obj.get_y());
 	}
 
 }

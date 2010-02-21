@@ -4,6 +4,7 @@
 package kaninator.game;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import kaninator.graphics.Animation;
 import kaninator.mechanics.DynamicObject;
@@ -16,12 +17,13 @@ public class NonPlayerObject
 	private static final int MAX_ACTIVE_DISTANCE = 256;
 	private static final int MIN_DISTANCE_BETWEEN = 48;
 	private static final int MAX_STRAFE_DIFFERENCE = 8;
-	private static final double ZOMBIE_SPEED = 3.3;
+	private static final double ZOMBIE_SPEED = 5.0;
 	
 	private Map map;
 	private Model model;
 	private DynamicObject player;
 	private double distance;
+	private boolean dead;
 	
 	public NonPlayerObject(ArrayList<Animation> animations, Map _map, DynamicObject _player, double x, double y, double radius_constant)
 	{
@@ -33,6 +35,7 @@ public class NonPlayerObject
 		
 		player = _player;
 		distance = Double.MAX_VALUE;
+		dead = false;
 	}
 	
 	private double distanceTo(DynamicObject other)
@@ -109,12 +112,20 @@ public class NonPlayerObject
 		distance = distanceTo(player);
 	}
 	
-	public void act(ArrayList<NonPlayerObject> others)
+	public void kill()
 	{
+		dead = true;
+	}
+	
+	public boolean act(LinkedList<NonPlayerObject> others)
+	{
+		if(dead)
+			return true;
+		
 		NonPlayerObject leader = null;
 		for(NonPlayerObject otherone : others)
 		{
-			if(distanceTo(otherone.getDynamicObjects().get(1)) < MIN_DISTANCE_BETWEEN)
+			if(distanceTo(otherone.getMainObject()) < MIN_DISTANCE_BETWEEN)
 				if(distance > otherone.distance)
 					leader = otherone;
 		}
@@ -142,9 +153,15 @@ public class NonPlayerObject
 		}
 		
 		model.update();
+		return false;
 	}
 	
-	public ArrayList<DynamicObject> getDynamicObjects()
+	public DynamicObject getMainObject()
+	{
+		return model.getModel();
+	}
+	
+	public LinkedList<DynamicObject> getDynamicObjects()
 	{
 		return model.getDynamicObjects();
 	}

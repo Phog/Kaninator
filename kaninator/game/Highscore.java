@@ -26,16 +26,16 @@ public class Highscore extends GameState
 		
 		menu = new Menu(_gui);
 		
-		menu.setTitle(new Text("High Scores!", "Arial", 32, Font.BOLD, Color.WHITE));
+		menu.setTitle(new Text("High Scores!", "Impact", 32, Font.BOLD, Color.WHITE));
 		
-		menu.addEntry(new Text("Peter - 1337!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Peter - 1337!", "Arial", 32, Font.BOLD, Color.WHITE));
+		menu.addEntry(new Text("Peter - 1337!", "Impact", 32, Font.BOLD, Color.WHITE),
+						new Text("Peter - 1337!", "Impact", 32, Font.BOLD, Color.WHITE));
 		
-		menu.addEntry(new Text("Arno - 6!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Arno - 6!", "Arial", 32, Font.BOLD, Color.WHITE));
+		menu.addEntry(new Text("Arno - 6!", "Impact", 32, Font.BOLD, Color.WHITE),
+						new Text("Arno - 6!", "Impact", 32, Font.BOLD, Color.WHITE));
 		
-		menu.addEntry(new Text("Menu!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Menu!", "Arial", 32, Font.BOLD, Color.RED));
+		menu.addEntry(new Text("Menu!", "Impact", 32, Font.BOLD, Color.WHITE),
+						new Text("Menu!", "Impact", 32, Font.BOLD, Color.RED));
 
 	}
 		
@@ -67,13 +67,11 @@ public class Highscore extends GameState
 			
 			menu.setPosition(m_x, m_y);
 			
-			if(keyboard.isPressed(KeyEvent.VK_DOWN))
-				menu.moveDown();
-			if(keyboard.isPressed(KeyEvent.VK_UP))
-				menu.moveUp();
-			
-			if(keyboard.isPressed(KeyEvent.VK_SPACE) || keyboard.isPressed(KeyEvent.VK_ENTER) || mouse.isPressed(0))
+			if(mouse.isPressed(0))
+			{
 				retvalue = menu.select();
+				try {Thread.sleep(Kaninator.DEBOUNCE_DELAY);} catch(Exception e){}
+			}
 			
 			if(retvalue == 2)
 				break;
@@ -83,7 +81,7 @@ public class Highscore extends GameState
 		camera.clearGUI();
 		menu.clear();
 
-		return 4;
+		return Kaninator.MAIN_MENU;
 	}
 
 }

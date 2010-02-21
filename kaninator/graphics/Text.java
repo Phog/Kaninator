@@ -71,4 +71,13 @@ public class Text implements Drawable
 	{
 		return (int)layout.getBounds().getWidth();//SwingUtilities.computeStringWidth(metrics, text);  
 	}
+	
+	/**
+	 * Setter for the text to be displayed.
+	 * @param text The text you want the Text object to draw.
+	 */
+	public void setText(String _text)
+	{
+		text = _text;
+	}
 }

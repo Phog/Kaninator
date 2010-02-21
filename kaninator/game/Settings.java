@@ -19,27 +19,39 @@ import java.awt.event.*;
  */
 public class Settings extends GameState
 {
+	public static int forceTransparency = Transparency.BITMASK;
+	public static Dimension resolutions[]  = {new Dimension(640, 480),
+										new Dimension(800, 480),
+										new Dimension(800, 600),
+										new Dimension(1024, 600),
+										new Dimension(1024, 768)};
+	private Screen screen;
 	private Menu menu;
+	private Text resolutionOn, resolutionOff, transparencyOn, transparencyOff;
+	private int resIndex;
 	
-	public Settings(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse)
+	public Settings(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse, Screen _screen)
 	{
 		super(_camera, _gui, _keyboard, _mouse);
 		
 		menu = new Menu(_gui);
+		screen = _screen;
 		
-		menu.setTitle(new Text("Settings!", "Arial", 32, Font.BOLD, Color.WHITE));
+		menu.setTitle(new Text("Settings!", "Impact", 32, Font.BOLD, Color.WHITE));
 		
-		menu.addEntry(new Text("Resolution!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Resolution!", "Arial", 32, Font.BOLD, Color.RED));
+		resolutionOff = new Text("Resolution: " + screen.getResWidth() + "x" + screen.getResHeight(), "Impact", 32, Font.BOLD, Color.WHITE);
+		resolutionOn = new Text("Resolution: " + screen.getResWidth() + "x" + screen.getResHeight(), "Impact", 32, Font.BOLD, Color.RED);
 		
-		menu.addEntry(new Text("Fullscreen!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Fullscreen!", "Arial", 32, Font.BOLD, Color.RED));
+		transparencyOff = new Text("Transparency: " + ((forceTransparency == Transparency.BITMASK) ? 
+										"BITMASK" : "ALPHA"), "Impact", 32, Font.BOLD, Color.WHITE);
+		transparencyOn = new Text("Transparency: " + ((forceTransparency == Transparency.BITMASK) ? 
+										"BITMASK" : "ALPHA"), "Impact", 32, Font.BOLD, Color.RED);
 		
-		menu.addEntry(new Text("Töttöröö!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Töttöröö!", "Arial", 32, Font.BOLD, Color.RED));
-		
-		menu.addEntry(new Text("Menu!", "Arial", 32, Font.BOLD, Color.WHITE),
-						new Text("Menu!", "Arial", 32, Font.BOLD, Color.RED));
+		menu.addEntry(resolutionOff, resolutionOn);
+		menu.addEntry(transparencyOff, transparencyOn);
+		menu.addEntry(new Text("Menu!", "Impact", 32, Font.BOLD, Color.WHITE),
+						new Text("Menu!", "Impact", 32, Font.BOLD, Color.RED));
+		resIndex = 0;
 
 	}
 		
@@ -51,14 +63,9 @@ public class Settings extends GameState
 	}
 	
 	
-	
-	/* (non-Javadoc)
-	 * @see kaninator.game.GameState#doState()
-	 */
-	@Override
 	public int doState()
 	{
-		int retvalue = 0;
+		int retValue = 0;
 		int m_x = 0;
 		int m_y = 0;
 		
@@ -72,23 +79,46 @@ public class Settings extends GameState
 			
 			menu.setPosition(m_x, m_y);
 			
-			if(keyboard.isPressed(KeyEvent.VK_DOWN))
-				menu.moveDown();
-			if(keyboard.isPressed(KeyEvent.VK_UP))
-				menu.moveUp();
-			
-			if(keyboard.isPressed(KeyEvent.VK_SPACE) || keyboard.isPressed(KeyEvent.VK_ENTER) || mouse.isPressed(0))
-				retvalue = menu.select();
-			
-			if(retvalue == 3)
-				break;
+			if(mouse.isPressed(0))
+			{
+				retValue = menu.select();
+				try {Thread.sleep(Kaninator.DEBOUNCE_DELAY);} catch(Exception e){}
+				
+				if(retValue == 0)
+				{
+					resIndex++;
+					if(resIndex >= resolutions.length)
+						resIndex = 0;
+					
+					screen.setSize(resolutions[resIndex]);
+					
+					resolutionOff.setText("Resolution: " + screen.getResWidth() + "x" + screen.getResHeight());
+					resolutionOn.setText("Resolution: " + screen.getResWidth() + "x" + screen.getResHeight());
+				}
+				else if(retValue == 1)
+				{
+					if(forceTransparency == Transparency.BITMASK)
+						forceTransparency = Transparency.TRANSLUCENT;
+					else
+						forceTransparency = Transparency.BITMASK;
+					
+					transparencyOff.setText("Transparency: " + ((forceTransparency == Transparency.BITMASK) ? 
+											"BITMASK" : "ALPHA"));
+					transparencyOn.setText("Transparency: " + ((forceTransparency == Transparency.BITMASK) ? 
+											"BITMASK" : "ALPHA"));	
+				}
+				else
+				{
+					break;
+				}
+			}
 			
 		}
 		
 		camera.clearGUI();
 		menu.clear();
 
-		return 4;
+		return Kaninator.MAIN_MENU;
 	}
 
 }

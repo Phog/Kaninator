@@ -24,20 +24,17 @@ public class GUI
 {
 	private ArrayList<ArrayList<Queue<Drawable>>> drawables;
 	private int padding;
-	private int width, height;
-	
+	private Canvas canvas;
 	/**
 	 * Creates a two dimensional array of Queues in order to store the drawables for each screen section.
 	 * @see kaninator.graphics.Drawable
 	 * @see java.util.Queue
 	 */
-	public GUI(int _width, int _height)
+	public GUI(Canvas _canvas)
 	{
 		padding = 0;
+		canvas = _canvas;
 		drawables = new ArrayList<ArrayList<Queue<Drawable>>>();
-		
-		width = _width;
-		height = _height;
 		
 		for(int i = 0; i < 3; i++)
 		{
@@ -167,7 +164,7 @@ public class GUI
 	 */
 	private int getRealX(int i, Drawable drawable)	
 	{
-		int draw_x = i * width/2;
+		int draw_x = i * canvas.getWidth()/2;
 		switch(i)
 		{
 			case 0:
@@ -192,7 +189,7 @@ public class GUI
 	 */
 	private int getRealY(int j, int offset, Drawable drawable)
 	{
-		int draw_y = j * height/2;
+		int draw_y = j * canvas.getHeight()/2;
 		switch(j)
 		{
 			case 0:

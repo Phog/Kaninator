@@ -53,4 +53,10 @@ public interface Canvas
 	 * @return The top/left border size.
 	 */
 	public Dimension getInsets();
+	
+	/**
+	 * Hides alternatively shows the mouse cursor when above the window.
+	 * @param hide True to hide, false to show the cursor.
+	 */
+	public void hideCursor(boolean hide);
 }

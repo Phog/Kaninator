@@ -9,6 +9,8 @@ import java.awt.image.*;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
+import kaninator.game.Settings;
+
 /**
  * A drawable image object.
  * Makes it possible to draw images with the drawable interface.
@@ -93,8 +95,9 @@ public class Image implements Drawable
 	private void moveToVram()
 	{
 	    //Create new VolatileImage
+		int transparency = (buffer.getTransparency() == Transparency.OPAQUE) ? Transparency.OPAQUE : Settings.forceTransparency;
 	    vramImg = gfxConf.createCompatibleVolatileImage(buffer.getWidth(),
-	    			buffer.getHeight(), Transparency.BITMASK);
+	    			buffer.getHeight(), transparency);
 
 	    //Get drawing context into the image
 	    Graphics2D g2d = (Graphics2D) vramImg.getGraphics();

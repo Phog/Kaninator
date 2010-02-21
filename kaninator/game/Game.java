@@ -8,6 +8,8 @@ import kaninator.graphics.*;
 import kaninator.io.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -22,11 +24,24 @@ import java.io.IOException;
  */
 public class Game extends GameState
 {
+	private static final int MAX_ZOMBIES = 66;
+	private static final int TIME_POINTS_RATIO = 25;
+	private static final double ZOMBIE_SPAWN_PROBABILITY = 0.85;
+	
+	private ArrayList<Animation> zombAnim;
 
+	private LinkedList<NonPlayerObject> enemies;
+	private LinkedList<DynamicObject> enemyList;
+	private LinkedList<DynamicObject> bullets;
+	
 	private Player player;
-	private ArrayList<NonPlayerObject> enemies;
-	private ArrayList<DynamicObject> enemyList;
+	private Canvas canvas;
 	private Map map;
+	private Gun gun;
+	private Text hud;
+	
+	private int score;
+	private long framesAlive;
 	
 	/**
 	 * Initializes the game.
@@ -39,30 +54,31 @@ public class Game extends GameState
 	 * @see kaninator.io.AnimationFactory
 	 * @see kaninator.io.MapLoader
 	 */
-	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse)
+	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse, Canvas _canvas)
 	{
 		super(_camera, _gui, _keyboard, _mouse);
-		
+		canvas = _canvas;
+		score = 0;
+		framesAlive = 0;
 		try
 		{
 			//load files
 			map = MapLoader.readMap("/resources/testmap.map");
-			ArrayList<Animation> list = AnimationFactory.createAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
-			
-			player = new Player(list, map, 0, 0, 4.0);
+			ArrayList<Animation> playerAnim = AnimationFactory.createAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
+			ArrayList<Animation> gunAnim = AnimationFactory.createAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
+			ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(new Image("/resources/crosshair.png"));
+			Drawable bullet = new Image("/resources/bullet.png");
+
+				
+			bullets = new LinkedList<DynamicObject>();
+			gun = new Gun(null, map, bullet, bullets, 25.0);
+			player = new Player(playerAnim, gunAnim, crosshairAnim, map, gun, 0, 0, 5.0);
+			hud = new Text("HP: " + player.getHp() + " Score: " + score, "Impact", 16, Font.PLAIN, Color.RED);
 			
 			//create enemies
-			ArrayList<Animation> enemyAnim = AnimationFactory.createAnimations("/resources/zombSheet.png", true, 64, 64, 0.30);
-			enemies = new ArrayList<NonPlayerObject>();
-			enemyList = new ArrayList<DynamicObject>();
-			ArrayList<Animation> newList = enemyAnim;
-			for(int i = 0; i < 5; i++)
-			{
-				NonPlayerObject enemy = new NonPlayerObject(newList, map, player.getDynamicObjects().get(1), Math.random()*400 + 128, Math.random()*400 + 128, 4.0);
-				enemies.add(enemy);
-				enemyList.add(enemy.getDynamicObjects().get(1));
-				newList = AnimationFactory.cloneAnimations(enemyAnim);
-			}
+			zombAnim = AnimationFactory.createAnimations("/resources/zombSheet.png", true, 64, 64, 0.25);
+			enemies = new LinkedList<NonPlayerObject>();
+			enemyList = new LinkedList<DynamicObject>();
 		}
 		catch(IOException e)
 		{
@@ -78,46 +94,97 @@ public class Game extends GameState
 	 */
 	public int doState()
 	{
+		int retValue = Kaninator.MAIN_MENU;
+		canvas.hideCursor(true);
+		gui.addToSection(hud, 0, 0);
 		
-		gui.addToSection(new Text("Game!!", "Tahoma", 16, Font.BOLD, Color.GREEN), 0, 0);
-		
-		for(DynamicObject object : player.getDynamicObjects())
-			camera.addObject(object);
-		
-		for(NonPlayerObject npo : enemies)
-			for(DynamicObject object : npo.getDynamicObjects())
-				camera.addObject(object);
-		
+		camera.setPlayerObjects(player.getDynamicObjects());
+		camera.setEnemyObjects(enemyList);
+		camera.setBulletObjects(bullets);
 		camera.setTiles(map.getTiles());
 		
+		long oldTime = System.currentTimeMillis();
 		while(true)
 		{
-			for(NonPlayerObject npo : enemies)
-			{
-				npo.observe();
-				npo.act(enemies);
-			}
-			player.update(enemyList);
-			camera.follow(player.getDynamicObjects().get(1));
-			
-			camera.render();
-			camera.renderGUI();
-			
 			if(keyboard.isPressed(KeyEvent.VK_ESCAPE))
 				break;
 			
+			spawnZombies();
+			
+			gun.observeBullets(enemies);
+			for(Iterator<NonPlayerObject> i = enemies.iterator(); i.hasNext();)
+			{
+				NonPlayerObject npo = i.next();
+				npo.observe();
+			}
+			
+			camera.follow(player.getMainObject());
+			camera.render();
+			camera.renderGUI();
+			
+			gun.updateBullets();
+			for(Iterator<NonPlayerObject> i = enemies.iterator(); i.hasNext();)
+			{
+				NonPlayerObject npo = i.next();
+				if(npo.act(enemies))
+				{
+					score += framesAlive / TIME_POINTS_RATIO;
+					i.remove();
+					for(DynamicObject obj : npo.getDynamicObjects())
+						enemyList.remove(obj);
+				}
+
+			}
+			
+			if(player.update(enemies))
+			{
+				retValue = Kaninator.GAME_OVER;
+				break;
+			}
 			movePlayer();
 			player.move();
+			framesAlive++;
+			hud.setText("HP: " + player.getHp() + " Score: " + score);
 			
-			try {Thread.sleep(Kaninator.FRAME_DELAY);} catch(Exception e){}
+			try 
+			{
+				Thread.sleep(Kaninator.FRAME_DELAY - (System.currentTimeMillis() - oldTime));
+			} catch(Exception e)
+			{
+				
+			}
+			oldTime = System.currentTimeMillis();
 		}
 		
 		gui.clearSection(0, 0);
-		camera.clearObjects();
+		camera.clearPlayerObjects();
+		camera.clearEnemyObjects();
+		camera.clearBulletObjects();
+		canvas.hideCursor(false);
 		
-		return 4;
+		return retValue;
 	}
 	
+	
+	private void spawnZombies()
+	{
+		if(enemies.size() < MAX_ZOMBIES && Math.random() > ZOMBIE_SPAWN_PROBABILITY)
+		{
+			int numZombies = (int)(Math.random() * (MAX_ZOMBIES - enemies.size()));
+			ArrayList<Animation> newList = AnimationFactory.cloneAnimations(zombAnim);
+			
+			for(int i = 0; i < numZombies; i++)
+			{
+				double pos_y = Math.random() * map.getTiles().size() * MapLoader.getTileSize();
+				double pos_x = Math.random() * map.getTiles().get(0).size() * MapLoader.getTileSize();
+				NonPlayerObject enemy = new NonPlayerObject(newList, map, player.getMainObject(), pos_x, pos_y, 5.0);
+				enemies.add(enemy);
+				for(DynamicObject obj: enemy.getDynamicObjects())
+					enemyList.add(obj);
+				newList = AnimationFactory.cloneAnimations(zombAnim);
+			}
+		}
+	}
 	
 	/**
 	 * Passes the keyboard input to the player.
@@ -129,6 +196,10 @@ public class Game extends GameState
 		player.setMove(keyboard.isPressed(KeyEvent.VK_A), Player.MOVE_LEFT);
 		player.setMove(keyboard.isPressed(KeyEvent.VK_D), Player.MOVE_RIGHT);
 		player.setMove(keyboard.isPressed(KeyEvent.VK_SPACE), Player.MOVE_JUMP);
+
+		player.aimGun(mouse.get_x() + camera.get_x(), mouse.get_y() + camera.get_y());
+		if(mouse.isPressed(0))
+			player.fire();
 	}
 
 }

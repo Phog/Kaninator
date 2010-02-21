@@ -5,6 +5,8 @@ package kaninator.graphics;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Image;
+import java.awt.image.MemoryImageSource;
 import java.util.*;
 
 /**
@@ -52,10 +54,17 @@ public class Screen implements Canvas
 		
 	}
 	
+	private static final Cursor HIDDEN_CURSOR = Toolkit.getDefaultToolkit().createCustomCursor(
+												Toolkit.getDefaultToolkit().createImage(new MemoryImageSource(16, 16, new int[16 * 16], 0, 16)),
+												new Point(0, 0),
+												"HIDDEN_CURSOR");
+	private static final Cursor DEFAULT_CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
+	
 	private JFrame frame;
 	private Color clearColor;
 	private LinkedList<VisibleElement> drawList;
 	private InternalCanvas canvas;
+
 	
 	/**
 	 * Creates and initializes a window and shows it on the screen.
@@ -64,7 +73,7 @@ public class Screen implements Canvas
 	 * @param fullscreen Fullscreen mode? true/false
 	 * @param title The window title
 	 */
-	public Screen(JFrame _frame, int width, int height, boolean fullscreen, String title)
+	public Screen(JFrame _frame, Dimension size, boolean fullscreen, String title)
 	{
 		drawList = new LinkedList<VisibleElement>();
 		
@@ -74,7 +83,7 @@ public class Screen implements Canvas
 		canvas.setDoubleBuffered(true);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(width, height);
+		frame.setSize(size);
 		frame.setTitle(title);
 		frame.add(canvas);
 		
@@ -124,7 +133,7 @@ public class Screen implements Canvas
 	}
 
 	/**
-	 * Wraps the getWidth() method in JFrame.
+	 * Wraps the getWidth() method in JPanel.
 	 * @return The width of the actual drawable area.
 	 */
 	public int getWidth()
@@ -133,12 +142,39 @@ public class Screen implements Canvas
 	}
 	
 	/**
-	 * Wraps the getHeight() method in JFrame.
+	 * Wraps the getHeight() method in JPanel.
 	 * @return The height of the actual drawable area.
 	 */
 	public int getHeight()
 	{
 		return canvas.getHeight();
+	}
+	
+	/**
+	 * Wraps the getHeight() method in JFrame.
+	 * @return The height of the window.
+	 */
+	public int getResHeight()
+	{
+		return frame.getHeight();
+	}
+	
+	/**
+	 * Wraps the getHeight() method in JFrame.
+	 * @return The width of the window.
+	 */
+	public int getResWidth()
+	{
+		return frame.getWidth();
+	}
+	
+	/**
+	 * Sets the size of the window. Effectively the resolution.
+	 * @param size The dimension object containing the new size of the window.
+	 */
+	public void setSize(Dimension size)
+	{
+		frame.setSize(size);
 	}
 	
 	/**
@@ -155,6 +191,17 @@ public class Screen implements Canvas
 		return insets;
 	}
 	
+	public void hideCursor(boolean hide)
+	{
+		if(hide)
+			canvas.setCursor(HIDDEN_CURSOR);
+		else
+			canvas.setCursor(DEFAULT_CURSOR);
+	}
+	
+	/**
+	 * Sends the repaint signal to the JPanel, effectively drawing the game.
+	 */
 	public void draw()
 	{
 		canvas.repaint();
