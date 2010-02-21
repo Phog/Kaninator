@@ -14,28 +14,21 @@ import kaninator.graphics.Animation;
  * @author phedman
  */
 public class DynamicObject
-{	
-	private static final double NORMAL_SPEED = 4.0;
-	private static final double DIAGONAL_SPEED = Math.sqrt(NORMAL_SPEED*NORMAL_SPEED/2.0);
-	private static final double JUMP_SPEED = 13;
-	private static final double GRAVITY = 1.5;
-	
+{		
 	private static final int DEPTH_OFFSET_X = 101;
 	private static final int DEPTH_OFFSET_Y = 100;
 	
-	private double x, y, h, radius, vel_x, vel_y, vel_height;
+	private double x, y, h, radius;
 	
 	private int state;
-	private Map map;
 	private ArrayList<Animation> animations;
 	
-	public DynamicObject(ArrayList<Animation> _animations, double _radius, Map _map)
+	public DynamicObject(ArrayList<Animation> _animations, double _radius)
 	{
 		animations = _animations;
-		radius = _radius;
-		map = _map;
+		radius = _radius;;
 		
-		x = y = h = vel_x = vel_y = vel_height = state = 0;
+		x = y = h = state = 0;
 	}
 	
 	public boolean collide(DynamicObject other)
@@ -53,28 +46,6 @@ public class DynamicObject
 				&& Math.abs(h - other.h) <= other.getAnimation().getHeight());
 	}
 	
-	public void update()
-	{
-		vel_height -= GRAVITY;
-		h += vel_height;
-		double mapHeight = map.getHeight(this);
-		if(vel_height <= 0.0 && h <= mapHeight)
-		{
-			vel_height = 0.0;
-			h = mapHeight;
-		}
-
-		double old_x = x;
-		double old_y = y;
-		x += vel_x;
-		if(map.getHeight(this) >= h + MapLoader.getTileHeight()/2.0)
-			x = old_x;
-		
-		y += vel_y;
-		if(map.getHeight(this) >= h + MapLoader.getTileHeight()/2.0)
-			y = old_y;
-	}
-	
 	public void setHeight(double height)
 	{
 		h = height;
@@ -86,56 +57,19 @@ public class DynamicObject
 		y = _y;
 	}
 	
-	public void move_x(int direction)
+	public void move_vert(double vel_vert)
 	{
-		if(Math.abs(vel_x) <= 0.001 || Math.abs(vel_y) <= 0.001)
-		{
-			vel_x = NORMAL_SPEED * direction;
-		}
-		else
-		{
-			vel_y = DIAGONAL_SPEED * Math.signum(vel_y);
-			vel_x = DIAGONAL_SPEED * direction;
-		}
+		h += vel_vert;
 	}
 	
-	public void move_y(int direction)
+	public void move_x(double vel_x)
 	{
-		if(Math.abs(vel_x) <= 0.001 || Math.abs(vel_y) <= 0.001)
-		{
-			vel_y = NORMAL_SPEED * direction;
-		}
-		else
-		{
-			vel_x = DIAGONAL_SPEED * Math.signum(vel_x);
-			vel_y = DIAGONAL_SPEED * direction;
-		}
+		x += vel_x;
 	}
 	
-	public void setVel_x(double _vel_x)
+	public void move_y(double vel_y)
 	{
-		vel_x = _vel_x;
-	}
-	
-	public void setVel_y(double _vel_y)
-	{
-		vel_y = _vel_y;
-	}
-	
-	public double getVel_x()
-	{
-		return vel_x;
-	}
-	
-	public double getVel_y()
-	{
-		return vel_y;
-	}
-	
-	public void jump()
-	{
-		if(vel_height == 0.0 && Math.abs(h - map.getHeight(this)) < NORMAL_SPEED)
-			vel_height = JUMP_SPEED;
+		y += vel_y;
 	}
 	
 	public double getHeight()

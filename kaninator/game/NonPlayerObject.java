@@ -6,8 +6,6 @@ package kaninator.game;
 import java.util.ArrayList;
 
 import kaninator.graphics.Animation;
-import kaninator.graphics.Drawable;
-import kaninator.graphics.Shadow;
 import kaninator.mechanics.DynamicObject;
 
 /**
@@ -15,12 +13,13 @@ import kaninator.mechanics.DynamicObject;
  */
 public class NonPlayerObject
 {
-	private static final int MAX_ACTIVE_DISTANCE = 196;
+	private static final int MAX_ACTIVE_DISTANCE = 256;
 	private static final int MIN_DISTANCE_BETWEEN = 48;
 	private static final int MAX_STRAFE_DIFFERENCE = 8;
+	private static final double ZOMBIE_SPEED = 3.3;
 	
 	private Map map;
-	private DynamicObject model, shadow;
+	private Model model;
 	private DynamicObject player;
 	private double distance;
 	
@@ -30,19 +29,7 @@ public class NonPlayerObject
 			return;
 		
 		map = _map;
-		
-		double radius = animations.get(0).getWidth()/radius_constant;
-		model = new DynamicObject(animations, radius, map);
-		model.setPos(x, y);
-		
-		ArrayList<Drawable> shadowList = new ArrayList<Drawable>();
-		shadowList.add(new Shadow(radius * 2));
-		Animation shadowAnim = new Animation(shadowList, 0.0);
-		ArrayList<Animation> shadowAnimList = new ArrayList<Animation>();
-		shadowAnimList.add(shadowAnim);
-		
-		shadow = new DynamicObject(shadowAnimList, radius, map);
-		shadow.setPos(x, y);
+		model = new Model(animations, map, x, y, radius_constant, ZOMBIE_SPEED);
 		
 		player = _player;
 		distance = Double.MAX_VALUE;
@@ -50,14 +37,14 @@ public class NonPlayerObject
 	
 	private double distanceTo(DynamicObject other)
 	{
-		double distTo = Math.pow((other.get_x() - model.get_x()),2) + Math.pow((other.get_y() - model.get_y()),2);
+		double distTo = Math.pow((other.get_x() - model.getModel().get_x()),2) + Math.pow((other.get_y() - model.getModel().get_y()),2);
 		return Math.sqrt(distTo);
 	}
 	
 	private void follow(DynamicObject target)
 	{
-		double delta_x = target.get_x() - model.get_x();
-		double delta_y = target.get_y() - model.get_y();
+		double delta_x = target.get_x() - model.getModel().get_x();
+		double delta_y = target.get_y() - model.getModel().get_y();
 		if(Math.abs(Math.abs(delta_x) - Math.abs(delta_y)) < MAX_STRAFE_DIFFERENCE)
 		{
 			if(delta_x > 0 && delta_y > 0)
@@ -136,15 +123,15 @@ public class NonPlayerObject
 		{
 			if(leader != null)
 			{
-				model.setVel_x(leader.getDynamicObjects().get(1).getVel_x());
-				model.setVel_y(leader.getDynamicObjects().get(1).getVel_y());
-				model.setState(leader.getDynamicObjects().get(1).getState());
-				model.getAnimation().advance();
+				model.setVelX(leader.model.getVelX());
+				model.setVelY(leader.model.getVelY());
+				model.setState(leader.model.getModel().getState());
+				model.advanceAnimation();
 			}
 			else
 			{
 				follow(player);
-				model.getAnimation().advance();
+				model.advanceAnimation();
 			}
 		}
 		else
@@ -155,16 +142,10 @@ public class NonPlayerObject
 		}
 		
 		model.update();
-		
-		shadow.setHeight(map.getHeight(model));
-		shadow.setPos(model.get_x(), model.get_y());
 	}
 	
 	public ArrayList<DynamicObject> getDynamicObjects()
 	{
-		ArrayList<DynamicObject> objects = new ArrayList<DynamicObject>();
-		objects.add(shadow);
-		objects.add(model);
-		return objects;
+		return model.getDynamicObjects();
 	}
 }

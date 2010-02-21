@@ -3,11 +3,8 @@
  */
 package kaninator.game;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import kaninator.graphics.*;
-import kaninator.io.Keyboard;
-import kaninator.io.MapLoader;
 import kaninator.mechanics.DynamicObject;
 
 /**
@@ -16,9 +13,10 @@ import kaninator.mechanics.DynamicObject;
 public class Player
 {
 	public static final int MOVE_UP = 1, MOVE_DOWN = 2, MOVE_LEFT = 4, MOVE_RIGHT = 8, MOVE_JUMP = 16;
+	private static double PLAYER_SPEED = 4.0;
 	
 	private Map map;
-	private DynamicObject model, shadow;
+	private Model model;
 	private int moveState;
 	
 	public Player(ArrayList<Animation> animations, Map _map, double x, double y, double radius_constant)
@@ -27,19 +25,7 @@ public class Player
 			return;
 		
 		map = _map;
-		
-		double radius = animations.get(0).getWidth()/radius_constant;
-		model = new DynamicObject(animations, radius, map);
-		model.setPos(x, y);
-		
-		ArrayList<Drawable> shadowList = new ArrayList<Drawable>();
-		shadowList.add(new Shadow(radius * 2));
-		Animation shadowAnim = new Animation(shadowList, 0.0);
-		ArrayList<Animation> shadowAnimList = new ArrayList<Animation>();
-		shadowAnimList.add(shadowAnim);
-		
-		shadow = new DynamicObject(shadowAnimList, radius, map);
-		shadow.setPos(x, y);
+		model = new Model(animations, map, x, y, radius_constant, PLAYER_SPEED);
 		
 		moveState = 0;
 	}
@@ -47,21 +33,17 @@ public class Player
 	public void update(ArrayList<DynamicObject> others)
 	{
 		if(moveState > 0)
-			model.getAnimation().advance();
+			model.advanceAnimation();
 		
 		model.update();	
-		
-		shadow.setHeight(map.getHeight(model));
-		shadow.setPos(model.get_x(), model.get_y());
 		
 		if(others == null)
 			return;
 			
 		for(DynamicObject other : others)
 		{
-			if(other.collide(model))
+			if(other.collide(model.getModel()))
 			{
-				System.out.println("PUM!");
 			}
 		}	
 	}
@@ -146,9 +128,6 @@ public class Player
 	
 	public ArrayList<DynamicObject> getDynamicObjects()
 	{
-		ArrayList<DynamicObject> objects = new ArrayList<DynamicObject>();
-		objects.add(shadow);
-		objects.add(model);
-		return objects;
+		return model.getDynamicObjects();
 	}
 }

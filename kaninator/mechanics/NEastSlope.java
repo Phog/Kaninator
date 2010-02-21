@@ -12,9 +12,9 @@ import kaninator.graphics.Drawable;
  */
 public class NEastSlope extends StaticObject
 {
-	public NEastSlope(Drawable _tile, Drawable _lower, double _height)
+	public NEastSlope(Drawable _tile, Drawable _lower, double _height, int x, int y)
 	{
-		super(_tile, _lower, _height);
+		super(_tile, _lower, _height, x , y);
 	}
 	
 	/* (non-Javadoc)

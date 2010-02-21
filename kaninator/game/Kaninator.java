@@ -16,7 +16,7 @@ import javax.swing.JFrame;
 public class Kaninator
 {
 	private static final int SENTINEL = -1;
-
+	public static final int FRAME_DELAY = 1000/40;
 	/**
 	 * The main function 
 	 * @param args The command line parameters passed to the program  

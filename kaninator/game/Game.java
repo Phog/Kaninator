@@ -109,7 +109,7 @@ public class Game extends GameState
 			movePlayer();
 			player.move();
 			
-			try {Thread.sleep(1000/40);} catch(Exception e){}
+			try {Thread.sleep(Kaninator.FRAME_DELAY);} catch(Exception e){}
 		}
 		
 		gui.clearSection(0, 0);

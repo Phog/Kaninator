@@ -16,12 +16,15 @@ public abstract class StaticObject
 	private static final int DEPTH_OFFSET_Y = 100;
 	protected double height;
 	private Drawable tile, lower;
-
-	public StaticObject(Drawable _tile, Drawable _lower, double _height)
+	private int x, y;
+	
+	public StaticObject(Drawable _tile, Drawable _lower, double _height, int _x, int _y)
 	{
 		tile = _tile;
 		lower = _lower;
 		height = _height;
+		x = _x;
+		y = _y;
 	}
 	
 	public Drawable getDrawable()
@@ -39,17 +42,17 @@ public abstract class StaticObject
 		return (int)height;
 	}
 	
-	public int getDepth(int x, int y)
+	public int getDepth()
 	{
 		return x * DEPTH_OFFSET_X + y * DEPTH_OFFSET_Y + (int)(height / MapLoader.getTileHeight());
 	}
 	
-	public int render_x(int x, int y)
+	public int render_x()
 	{
 		return (x - 1) * (int)MapLoader.getTileSize() - y * (int)MapLoader.getTileSize();
 	}
 	
-	public int render_y(int x, int y)
+	public int render_y()
 	{
 		return	y * (int)MapLoader.getTileHeight() + x * (int)MapLoader.getTileHeight();
 	}

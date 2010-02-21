@@ -47,6 +47,7 @@ public final class MapLoader
 		ArrayList<ArrayList<StaticObject>> objects = new ArrayList<ArrayList<StaticObject>>();
 		Scanner parser = new Scanner(new File(objects.getClass().getResource(filepath).getPath()));
 		
+		int y = 0;
 		while(parser.hasNext())
 		{
 			String line = parser.nextLine();
@@ -56,10 +57,10 @@ public final class MapLoader
 			
 			ArrayList<StaticObject> tileList = new ArrayList<StaticObject>();
 
-			
 			objects.add(tileList);
 			
 			Scanner lineScr = new Scanner(line);
+			int x = 0;
 			while(lineScr.hasNextInt())
 			{
 				double height = lineScr.nextInt() * TILE_HEIGHT;
@@ -73,34 +74,36 @@ public final class MapLoader
 				switch(lineScr.nextInt())
 				{
 					case 0:
-						tileList.add(new FlatTile(flat, flat, height));
+						tileList.add(new FlatTile(flat, flat, height, x, y));
 						break;
 					case 1:
-						tileList.add(new NWestSlope(nw, flat, height));
+						tileList.add(new NWestSlope(nw, flat, height, x, y));
 						break;
 					case 2:
-						tileList.add(new NorthSlope(n, flat, height));
+						tileList.add(new NorthSlope(n, flat, height, x, y));
 						break;
 					case 3:
-						tileList.add(new NEastSlope(ne, flat, height));
+						tileList.add(new NEastSlope(ne, flat, height, x, y));
 						break;
 					case 4:
-						tileList.add(new EastSlope(e, flat, height));
+						tileList.add(new EastSlope(e, flat, height, x, y));
 						break;
 					case 5:
-						tileList.add(new SEastSlope(se, flat, height));
+						tileList.add(new SEastSlope(se, flat, height, x, y));
 						break;
 					case 6:
-						tileList.add(new SouthSlope(s, flat, height));
+						tileList.add(new SouthSlope(s, flat, height, x, y));
 						break;
 					case 7:
-						tileList.add(new SWestSlope(sw, flat, height));
+						tileList.add(new SWestSlope(sw, flat, height, x, y));
 						break;
 					case 8:
-						tileList.add(new WestSlope(w, flat, height));
+						tileList.add(new WestSlope(w, flat, height, x, y));
 						break;
 				}
+				x++;
 			}
+			y++;
 		}
 		
 		parser.close();

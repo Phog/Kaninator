@@ -63,7 +63,7 @@ public class Highscore extends GameState
 			
 			m_x = mouse.get_x();
 			m_y = mouse.get_y();
-			try {Thread.sleep(16);} catch(Exception e){}
+			try {Thread.sleep(Kaninator.FRAME_DELAY);} catch(Exception e){}
 			
 			menu.setPosition(m_x, m_y);
 			

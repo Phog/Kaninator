@@ -15,9 +15,9 @@ import kaninator.io.MapLoader;
 public class SWestSlope extends StaticObject
 {
 
-	public SWestSlope(Drawable _tile, Drawable _lower, double _height)
+	public SWestSlope(Drawable _tile, Drawable _lower, double _height, int x, int y)
 	{
-		super(_tile, _lower, _height);
+		super(_tile, _lower, _height, x , y);
 	}
 	
 	/* (non-Javadoc)

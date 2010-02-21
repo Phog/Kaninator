@@ -14,9 +14,9 @@ import kaninator.graphics.Drawable;
 public class SouthSlope extends StaticObject
 {
 
-	public SouthSlope(Drawable _tile, Drawable _lower, double _height)
+	public SouthSlope(Drawable _tile, Drawable _lower, double _height, int x, int y)
 	{
-		super(_tile, _lower, _height);
+		super(_tile, _lower, _height, x , y);
 	}
 	
 	/* (non-Javadoc)
