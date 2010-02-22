@@ -22,6 +22,16 @@ public final class MapLoader
 	private static final double TILE_SIZE = 64.0;
 	private static final double TILE_HEIGHT = 32.0;
 	
+	private static Drawable flat = null;
+	private static Drawable ne = null;
+	private static Drawable nw  = null;
+	private static Drawable n  = null;
+	private static Drawable e  = null;
+	private static Drawable w  = null;
+	private static Drawable se  = null;
+	private static Drawable sw  = null;
+	private static Drawable s  = null;
+	
 	public static double getTileSize()
 	{
 		return TILE_SIZE;
@@ -34,15 +44,24 @@ public final class MapLoader
 	
 	public static Map readMap(String filepath) throws IOException
 	{	
-		Drawable flat = new Image("/resources/flat.png");
-		Drawable ne = new Image("/resources/ne.png");
-		Drawable nw = flat;
-		Drawable n = new Image("/resources/n.png");
-		Drawable e = new Image("/resources/e.png");
-		Drawable w = new Image("/resources/w.png");
-		Drawable se = new Image("/resources/se.png");
-		Drawable sw = new Image("/resources/sw.png");
-		Drawable s = new Image("/resources/s.png");
+		if(flat == null)
+			flat = new Image("/resources/flat.png");
+		if(ne == null)
+			ne = new Image("/resources/ne.png");
+		if(nw == null)
+			nw = flat;
+		if(n == null)
+			n = new Image("/resources/n.png");
+		if(e == null)
+			e = new Image("/resources/e.png");
+		if(w == null)
+			w = new Image("/resources/w.png");
+		if(se == null)
+			se = new Image("/resources/se.png");
+		if(sw == null)
+			sw = new Image("/resources/sw.png");
+		if(s == null)
+			s = new Image("/resources/s.png");
 		
 		ArrayList<ArrayList<StaticObject>> objects = new ArrayList<ArrayList<StaticObject>>();
 		Scanner parser = new Scanner(new File(objects.getClass().getResource(filepath).getPath()));
