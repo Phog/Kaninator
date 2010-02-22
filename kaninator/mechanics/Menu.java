@@ -70,6 +70,16 @@ public class Menu
 		gui.clearSection(1, 0);
 		gui.clearSection(1, 1);
 	}
+
+	/**
+	 * Clears the menu entries completely leaving the menu blank.
+	 */
+	public void clearEntries()
+	{
+		passiveEntries.clear();
+		activeEntries.clear();
+		
+	}
 	
 	/**
 	 * Renders the menu to the gui object.

@@ -16,15 +16,18 @@ public class Bullet
 {
 	private static final int BULLET_RESOLUTION = 6;
 	private Map map;
-	private DynamicObject model;
+	private DynamicObject model, shadow;
 	private double vel_x, vel_y, vel_height;
 	private boolean done;
 	
-	public Bullet(DynamicObject _model, Map _map, DynamicObject wielder, double _vel_x, double _vel_y,  double _vel_height)
+	public Bullet(DynamicObject _model, DynamicObject _shadow, Map _map, DynamicObject wielder, double _vel_x, double _vel_y,  double _vel_height)
 	{
 		model = _model;
 		map = _map;
 		
+		shadow = _shadow;
+		shadow.setPos(wielder.get_x(), wielder.get_y());
+		shadow.setHeight(wielder.getHeight());
 		model.setPos(wielder.get_x(), wielder.get_y());
 		model.setHeight(wielder.getHeight());
 		
@@ -35,7 +38,7 @@ public class Bullet
 		done = false;
 	}
 	
-	public void observe(LinkedList<NonPlayerObject> targets)
+	public void observe(LinkedList<Zombie> targets)
 	{	
 		if(model.getHeight() < map.getHeight(model) - MapLoader.getTileHeight()/2.0)
 		{
@@ -48,9 +51,9 @@ public class Bullet
 			model.setPos(model.get_x() + vel_x / BULLET_RESOLUTION, model.get_y() + vel_y / BULLET_RESOLUTION);
 			model.setHeight(model.getHeight() + vel_height / BULLET_RESOLUTION);	
 			
-			for(Iterator<NonPlayerObject> it = targets.iterator(); it.hasNext();)
+			for(Iterator<Zombie> it = targets.iterator(); it.hasNext();)
 			{
-				NonPlayerObject target = it.next();
+				Zombie target = it.next();
 				DynamicObject targetObj = target.getMainObject();
 				if(model.collide(targetObj))
 				{
@@ -60,6 +63,8 @@ public class Bullet
 				}
 			}
 		}
+		shadow.setPos(model.get_x(), model.get_y());
+		shadow.setHeight(map.getHeight(shadow));
 	}
 	
 	public boolean update()
@@ -70,8 +75,13 @@ public class Bullet
 		return false;
 	}
 	
-	public DynamicObject getDynamicObject()
+	public DynamicObject getMainObject()
 	{
 		return model;
+	}
+	
+	public DynamicObject getShadow()
+	{
+		return shadow;
 	}
 }

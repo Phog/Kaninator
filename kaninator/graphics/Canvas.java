@@ -36,23 +36,41 @@ public interface Canvas
 	public void draw();
 	
 	/**
-	 * Getter for the window width
-	 * @return The width of the screen.
+	 * Getter for the width of the drawable area.
+	 * @return The width of the drawable area.
 	 */
 	public int getWidth();
 	
 	/**
-	 * Getter for the window height
-	 * @return The height of the screen.
+	 * Getter for the height of the drawable area.
+	 * @return The height of the drawable area..
 	 */
 	public int getHeight();
 	
+	/**
+	 * Getter for the window width
+	 * @return The width of the window.
+	 */
+	public int getResWidth();
+
+	/** 
+	 * Getter for the window height
+	 * @return The height of the window.
+	 */
+	public int getResHeight();
 	
 	/**
 	 * Getter for the window insets
 	 * @return The top/left border size.
 	 */
 	public Dimension getInsets();
+	
+	/**
+	 * Sets the size of the window to the size contained in the dimension.
+	 * @param size The Dimension object containing the size of the screen.
+	 * @see java.awt.Dimension
+	 */
+	public void setSize(Dimension size);
 	
 	/**
 	 * Hides alternatively shows the mouse cursor when above the window.

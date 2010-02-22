@@ -6,6 +6,7 @@ package kaninator.game;
 import kaninator.mechanics.*;
 import kaninator.graphics.*;
 import kaninator.io.*;
+import kaninator.sound.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,8 +30,9 @@ public class Game extends GameState
 	private static final double ZOMBIE_SPAWN_PROBABILITY = 0.85;
 	
 	private ArrayList<Animation> zombAnim;
+	private SoundClip squirt;
 
-	private LinkedList<NonPlayerObject> enemies;
+	private LinkedList<Zombie> enemies;
 	private LinkedList<DynamicObject> enemyList;
 	private LinkedList<DynamicObject> bullets;
 	
@@ -68,22 +70,30 @@ public class Game extends GameState
 			ArrayList<Animation> gunAnim = AnimationFactory.createAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
 			ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(new Image("/resources/crosshair.png"));
 			Drawable bullet = new Image("/resources/bullet.png");
+			SoundClip shotgun = new SoundClip("/resources/shotgun.wav");
+			SoundClip ow = new SoundClip("/resources/ow.wav");
+			squirt = new SoundClip("/resources/squirt.wav");
 
 				
 			bullets = new LinkedList<DynamicObject>();
-			gun = new Gun(null, map, bullet, bullets, 25.0);
-			player = new Player(playerAnim, gunAnim, crosshairAnim, map, gun, 0, 0, 5.0);
+			gun = new Gun(gunAnim, shotgun, map, bullet, bullets, 25.0);
+			player = new Player(playerAnim, crosshairAnim, ow, map, gun, 0, 0, 5.0);
 			hud = new Text("HP: " + player.getHp() + " Score: " + score, "Impact", 16, Font.PLAIN, Color.RED);
 			
 			//create enemies
 			zombAnim = AnimationFactory.createAnimations("/resources/zombSheet.png", true, 64, 64, 0.25);
-			enemies = new LinkedList<NonPlayerObject>();
+			enemies = new LinkedList<Zombie>();
 			enemyList = new LinkedList<DynamicObject>();
 		}
 		catch(IOException e)
 		{
 			System.out.println("FILE ERROR: " + e);
 		}
+	}
+	
+	public int getScore()
+	{
+		return score;
 	}
 	
 	/**
@@ -112,9 +122,9 @@ public class Game extends GameState
 			spawnZombies();
 			
 			gun.observeBullets(enemies);
-			for(Iterator<NonPlayerObject> i = enemies.iterator(); i.hasNext();)
+			for(Iterator<Zombie> i = enemies.iterator(); i.hasNext();)
 			{
-				NonPlayerObject npo = i.next();
+				Zombie npo = i.next();
 				npo.observe();
 			}
 			
@@ -123,9 +133,9 @@ public class Game extends GameState
 			camera.renderGUI();
 			
 			gun.updateBullets();
-			for(Iterator<NonPlayerObject> i = enemies.iterator(); i.hasNext();)
+			for(Iterator<Zombie> i = enemies.iterator(); i.hasNext();)
 			{
-				NonPlayerObject npo = i.next();
+				Zombie npo = i.next();
 				if(npo.act(enemies))
 				{
 					score += framesAlive / TIME_POINTS_RATIO;
@@ -177,7 +187,7 @@ public class Game extends GameState
 			{
 				double pos_y = Math.random() * map.getTiles().size() * MapLoader.getTileSize();
 				double pos_x = Math.random() * map.getTiles().get(0).size() * MapLoader.getTileSize();
-				NonPlayerObject enemy = new NonPlayerObject(newList, map, player.getMainObject(), pos_x, pos_y, 5.0);
+				Zombie enemy = new Zombie(newList, map, squirt, player.getMainObject(), pos_x, pos_y, 5.0);
 				enemies.add(enemy);
 				for(DynamicObject obj: enemy.getDynamicObjects())
 					enemyList.add(obj);

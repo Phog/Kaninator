@@ -8,6 +8,7 @@ import kaninator.graphics.Screen;
 import kaninator.mechanics.*;
 import kaninator.io.*;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * This is the main class of the game.
@@ -18,7 +19,7 @@ public class Kaninator
 {
 	public static final int SENTINEL = -1, NEW_GAME = 0, RESUME_GAME = 1, SETTINGS = 2, HIGH_SCORES = 3, MAIN_MENU = 4, GAME_OVER = 5;
 	public static final int FRAME_DELAY = 1000/30;
-	public static final int DEBOUNCE_DELAY = 1000/10;
+	public static final int DEBOUNCE_DELAY = 1000/5;
 	/**
 	 * The main function 
 	 * @param args The command line parameters passed to the program  
@@ -51,10 +52,16 @@ public class Kaninator
 		
 		
 		//Initializes the different states
-		states[0] = null; //The game itself
-		states[1] = new Settings(camera, gui, keyboard, mouse, screen); //The settings menu
-		states[2] = new Highscore(camera, gui, keyboard, mouse); //The high scores menu
-		states[3] = new Main(camera, gui, keyboard, mouse); //The main menu
+		Game game = null; //The game itself
+		Settings settings  = new Settings(camera, gui, keyboard, mouse, screen); //The settings menu
+		Highscore highscore = new Highscore(camera, gui, keyboard, mouse, "/resources/highscores.scr"); //The high scores menu
+		Main main = new Main(camera, gui, keyboard, mouse); //The main menu
+		
+		//And store them in the state array
+		states[0] = game; 
+		states[1] = settings;
+		states[2] = highscore;
+		states[3] = main;
 		
 		//Loops through the states until one returns the sentinel
 		int stateIndex = MAIN_MENU;
@@ -67,11 +74,14 @@ public class Kaninator
 						if(states[0] != null)
 							break;
 				case NEW_GAME:
-						states[0] = new Game(camera, gui, keyboard, mouse, screen);
+						states[0] = game = new Game(camera, gui, keyboard, mouse, screen);
 						break;
 				case GAME_OVER:
-						states[0] = null;
-						stateIndex = MAIN_MENU;
+						String name = JOptionPane.showInputDialog(null, "Game Over!", "Enter your name:", JOptionPane.QUESTION_MESSAGE);
+						int score = game.getScore();
+						highscore.addScore(name, score);
+						states[0] = game = null;
+						stateIndex = HIGH_SCORES;
 				default:
 						stateIndex--;
 				

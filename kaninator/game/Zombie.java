@@ -6,15 +6,16 @@ package kaninator.game;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import kaninator.sound.SoundClip;
 import kaninator.graphics.Animation;
 import kaninator.mechanics.DynamicObject;
 
 /**
  * @author phedman
  */
-public class NonPlayerObject
+public class Zombie
 {
-	private static final int MAX_ACTIVE_DISTANCE = 256;
+	private static final int MAX_ACTIVE_DISTANCE = 333;
 	private static final int MIN_DISTANCE_BETWEEN = 48;
 	private static final int MAX_STRAFE_DIFFERENCE = 8;
 	private static final double ZOMBIE_SPEED = 5.0;
@@ -22,16 +23,18 @@ public class NonPlayerObject
 	private Map map;
 	private Model model;
 	private DynamicObject player;
+	private SoundClip squirt;
 	private double distance;
 	private boolean dead;
 	
-	public NonPlayerObject(ArrayList<Animation> animations, Map _map, DynamicObject _player, double x, double y, double radius_constant)
+	public Zombie(ArrayList<Animation> animations, Map _map, SoundClip _squirt, DynamicObject _player, double x, double y, double radius_constant)
 	{
 		if(animations == null || animations.size() == 0)
 			return;
 		
 		map = _map;
 		model = new Model(animations, map, x, y, radius_constant, ZOMBIE_SPEED);
+		squirt = _squirt;
 		
 		player = _player;
 		distance = Double.MAX_VALUE;
@@ -115,15 +118,16 @@ public class NonPlayerObject
 	public void kill()
 	{
 		dead = true;
+		squirt.playClip();
 	}
 	
-	public boolean act(LinkedList<NonPlayerObject> others)
+	public boolean act(LinkedList<Zombie> others)
 	{
 		if(dead)
 			return true;
 		
-		NonPlayerObject leader = null;
-		for(NonPlayerObject otherone : others)
+		Zombie leader = null;
+		for(Zombie otherone : others)
 		{
 			if(distanceTo(otherone.getMainObject()) < MIN_DISTANCE_BETWEEN)
 				if(distance > otherone.distance)

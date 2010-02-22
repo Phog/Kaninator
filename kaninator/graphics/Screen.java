@@ -5,7 +5,6 @@ package kaninator.graphics;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Image;
 import java.awt.image.MemoryImageSource;
 import java.util.*;
 
@@ -20,11 +19,17 @@ import java.util.*;
  */
 public class Screen implements Canvas
 {	
-
+	/**
+	 * The canvas onto which the game will be drawn.
+	 * Extending JPanel turned out to be much faster than using BufferStrategy.
+	 * @author phedman
+	 * @see javax.swing.JPanel
+	 */
 	private class InternalCanvas extends JPanel
 	{
 		/**
-		 * 
+		 * Default serialVersionUID.
+		 * Suppresses a warning.
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -191,6 +196,10 @@ public class Screen implements Canvas
 		return insets;
 	}
 	
+	/**
+	 * Hides alternatively shows the mouse cursor when above the window.
+	 * @param hide True to hide, false to show the cursor.
+	 */
 	public void hideCursor(boolean hide)
 	{
 		if(hide)

@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import kaninator.graphics.*;
 import kaninator.io.MapLoader;
 import kaninator.mechanics.DynamicObject;
+import kaninator.sound.SoundClip;
 
 /**
  * @author phedman
@@ -16,69 +17,50 @@ import kaninator.mechanics.DynamicObject;
 public class Player
 {
 	public static final int MOVE_UP = 1, MOVE_DOWN = 2, MOVE_LEFT = 4, MOVE_RIGHT = 8, MOVE_JUMP = 16;
-	private static final int MAX_STRAFE_DIFFERENCE = 64;
 	private static final int HURT_DELAY = 30;
 	private static final int HURT_AMOUNT = 13;
 	private static double PLAYER_SPEED = 6.0;
 	private static double MAX_AIM_UP = 5.0;
-
 	
 	private Gun gun;
-	private DynamicObject gunModel, crosshair;
-	private double gunOffsetX, gunOffsetY;
+	private DynamicObject crosshair;
 	
 	private Map map;
 	private Model model;
+	private SoundClip ow;
 	private int moveState;
 	private int hp, hurtDelay;
 	
-	public Player(ArrayList<Animation> playerAnim, ArrayList<Animation> gunAnim, ArrayList<Animation> crosshairAnim, Map _map, Gun _gun, double x, double y, double radius_constant)
+	public Player(ArrayList<Animation> playerAnim, ArrayList<Animation> crosshairAnim, SoundClip _ow, Map _map, Gun _gun, double x, double y, double radius_constant)
 	{
-		if(playerAnim == null || playerAnim.size() == 0 || gunAnim == null || gunAnim.size() == 0)
+		if(playerAnim == null || playerAnim.size() == 0)
 			return;
 		
 		map = _map;
 		model = new Model(playerAnim, map, x, y, radius_constant, PLAYER_SPEED);
+		ow = _ow;
 		
 		crosshair = new DynamicObject(crosshairAnim, 0);
-		gunModel = new DynamicObject(gunAnim, 0.0);
 		gun = _gun;
 		gun.setWielder(model.getModel());
 		
-		gunOffsetX = gunOffsetY = moveState = 0;
+		moveState = hurtDelay = 0;
 		hp = 100;
-		hurtDelay = 0;
+		
 	}
 	
-	public boolean update(LinkedList<NonPlayerObject> others)
+	public boolean update(LinkedList<Zombie> others)
 	{
 		if(moveState > 0)
 			model.advanceAnimation();
 		
 		model.update();	
-		
-		gunModel.setPos(model.getModel().get_x(), model.getModel().get_y());
-		gunModel.setPosOffset(gunOffsetX * gunModel.getAnimation().getWidth()/3, gunOffsetY * gunModel.getAnimation().getHeight()/4);
-		
-		switch(gunModel.getState())
-		{
-			case 1:
-			case 3:
-			case 6:
-				gunModel.setHeight(model.getModel().getHeight());
-				gunModel.setHeightOffset(model.getModel().getAnimation().getHeight()/5);
-				break;
-			default:
-				gunModel.setHeight(model.getModel().getHeight() + model.getModel().getAnimation().getHeight()/2);
-				gunModel.setHeightOffset(-model.getModel().getAnimation().getHeight()/3);
-				break;
-		}
-		
+		gun.update();
 		
 		if(others == null)
 			return (hp <= 0);
 			
-		for(NonPlayerObject other : others)
+		for(Zombie other : others)
 		{
 			DynamicObject otherModel = other.getDynamicObjects().get(1);
 			if(otherModel.collide(model.getModel()))
@@ -110,40 +92,7 @@ public class Player
 		crosshair.setHeight(map.getHeightAt(iso_x, iso_y));
 		
 		gun.aimAt(vec_x, vec_y, height);
-		aimGunModel(vec_x, vec_y);
-	}
-	
-	private void aimGunModel(double vec_x, double vec_y)
-	{
-		double length = Math.sqrt(vec_x*vec_x + vec_y*vec_y);
-		gunOffsetX = vec_x / length;
-		gunOffsetY = vec_y / length;
-		
-		if(Math.abs(Math.abs(vec_x) - Math.abs(vec_y)) < MAX_STRAFE_DIFFERENCE)
-		{
-			if(vec_x > 0 && vec_y > 0)
-				gunModel.setState(0);
-			else if(vec_x < 0 && vec_y > 0)
-				gunModel.setState(5);
-			else if(vec_x > 0 && vec_y < 0)
-				gunModel.setState(2);
-			else
-				gunModel.setState(1);
-		}
-		else if(Math.abs(vec_x) > Math.abs(vec_y))
-		{
-			if(vec_x > 0)
-				gunModel.setState(4);
-			else
-				gunModel.setState(6);
-		}
-		else
-		{
-			if(vec_y > 0)
-				gunModel.setState(7);
-			else
-				gunModel.setState(3);
-		}
+		gun.aimModel(vec_x, vec_y);
 	}
 	
 	public int getHp()
@@ -155,6 +104,7 @@ public class Player
 	{
 		if(hurtDelay <= 0)
 		{
+			ow.playClip();
 			hp -= damage;
 			hurtDelay = HURT_DELAY;
 		}
@@ -251,7 +201,7 @@ public class Player
 	public LinkedList<DynamicObject> getDynamicObjects()
 	{
 		LinkedList<DynamicObject> objects = model.getDynamicObjects();
-		objects.addFirst(gunModel);
+		objects.addFirst(gun.getMainObject());
 		objects.add(crosshair);
 		return objects;
 	}

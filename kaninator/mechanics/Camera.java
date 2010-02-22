@@ -141,11 +141,20 @@ public class Camera
 		tiles = _tiles;
 	}
 	
+	
+	/**
+	 * Gets the x-coordinate of the camera.
+	 * @return The cameras x-coordinate
+	 */
 	public int get_x()
 	{
 		return x;
 	}
-
+	
+	/**
+	 * Gets the y-coordinate of the camera.
+	 * @return The cameras y-coordinate.
+	 */
 	public int get_y()
 	{
 		return y;
