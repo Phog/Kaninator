@@ -19,10 +19,6 @@ public class NorthSlope extends StaticObject
 		super(_tile, _lower, _height, x , y);
 	}
 	
-	/* (non-Javadoc)
-	 * @see kaninator.mechanics.StaticObject#getHeight(double, double)
-	 */
-	@Override
 	public double getHeight(double x, double y)
 	{
 		return height - MapLoader.getTileHeight() +  y / 2.0;

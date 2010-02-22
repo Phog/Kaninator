@@ -7,7 +7,6 @@ import kaninator.mechanics.*;
 import kaninator.graphics.*;
 import kaninator.io.*;
 
-import java.awt.event.*;
 import java.awt.Color;
 import java.awt.Font;
 

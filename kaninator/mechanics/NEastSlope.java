@@ -17,10 +17,6 @@ public class NEastSlope extends StaticObject
 		super(_tile, _lower, _height, x , y);
 	}
 	
-	/* (non-Javadoc)
-	 * @see kaninator.mechanics.StaticObject#getHeight(double, double)
-	 */
-	@Override
 	public double getHeight(double x, double y)
 	{
 		double tempHeight = (x - y);

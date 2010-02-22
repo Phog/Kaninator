@@ -52,4 +52,12 @@ public class Keyboard extends KeyAdapter
 	{
 		keyStates.put(event.getKeyCode(), true);
 	}
+	
+	/**
+	 * Clears the internal keystates, setting them to false.
+	 */
+	public void clear()
+	{
+		keyStates.clear();
+	}
 }

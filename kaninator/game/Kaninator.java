@@ -67,6 +67,9 @@ public class Kaninator
 		int stateIndex = MAIN_MENU;
 		while(stateIndex > SENTINEL)
 		{
+			//clear up the keystates to avoid keys getting stuck if the windows goes out of focus
+			keyboard.clear();
+			mouse.clear();
 			switch(stateIndex)
 			{
 				case RESUME_GAME:

@@ -40,8 +40,8 @@ public class Image implements Drawable
 	    getDefaultConfiguration();
 	
 		buffer = ImageIO.read(this.getClass().getResource(filepath));
-		//moveToVram();
-		//maintainImg();
+		moveToVram();
+		maintainImg();
 	}
 	
 	public Image(BufferedImage _buffer)
@@ -52,9 +52,8 @@ public class Image implements Drawable
 	    getDefaultConfiguration();
 	
 		buffer = _buffer;
-		optimizeImage();
-		//moveToVram();
-		//maintainImg();
+		moveToVram();
+		maintainImg();
 	}
 	
 	/**
@@ -65,9 +64,8 @@ public class Image implements Drawable
 	 */
 	public void draw(Graphics2D g, int x, int y)
 	{
-		//maintainImg();
-		//g.drawImage(vramImg, x, y, null);
-		g.drawImage(buffer, null, x, y);
+		maintainImg();
+		g.drawImage(vramImg, x, y, null);
 	}
 
 	/**
@@ -94,7 +92,7 @@ public class Image implements Drawable
 	 * @see java.awt.image.VolatileImage
 	 * @see java.awt.image.BufferedImage
 	 */
-/*	private void moveToVram()
+	private void moveToVram()
 	{
 	    //Create new VolatileImage
 		int transparency = (buffer.getTransparency() == Transparency.OPAQUE) ? Transparency.OPAQUE : Settings.forceTransparency;
@@ -112,42 +110,21 @@ public class Image implements Drawable
 	    //Actually draw the image and dispose of context no longer needed
 	    g2d.drawImage(buffer, 0, 0, null);
 	    g2d.dispose();
-	}*/
-	private void optimizeImage()
-	{
-	    //Create new VolatileImage
-		int transparency = (buffer.getTransparency() == Transparency.OPAQUE) ? Transparency.OPAQUE : Settings.forceTransparency;
-	    BufferedImage temp = gfxConf.createCompatibleImage(buffer.getWidth(),
-	    			buffer.getHeight(), transparency);
-
-	    //Get drawing context into the image
-	    Graphics2D g2d = (Graphics2D) temp.getGraphics();
-	    
-	    //Make transparent images possible
-	    g2d.setComposite(AlphaComposite.Src);
-	    g2d.setColor(new Color(0,0,0,0));
-	    g2d.fillRect(0, 0, temp.getWidth(), temp.getHeight());
-	
-	    //Actually draw the image and dispose of context no longer needed
-	    g2d.drawImage(buffer, 0, 0, null);
-	    g2d.dispose();
-	    
-	    buffer = temp;
 	}
-	
+
 	/**
 	 * Checks if the VolatileImage is valid, if not it attempts to recreate it.
 	 * @see java.awt.image.VolatileImage
 	 * @see java.awt.image.BufferedImage
 	 */
-/*	private void maintainImg()
+	private void maintainImg()
 	{
 		if(vramImg.contentsLost())
 		{
 			moveToVram();
 			maintainImg();
 		}
-	}*/
+	}
 	
 	protected void finalize()
 	{

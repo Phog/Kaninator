@@ -178,5 +178,14 @@ public class Mouse
 		else
 			return false;
 	}
+	
+	/**
+	 * Clears the internal button states, setting them to false.
+	 */
+	public void clear()
+	{
+		for(int i = 0; i < keyStates.length; i++)
+			keyStates[i] = false;
+	}
 
 }
