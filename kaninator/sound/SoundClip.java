@@ -51,4 +51,12 @@ public class SoundClip
 			clip.start();
 		}
 	}
+	
+	protected void finalize()
+	{
+		if(clip != null)
+		{
+			clip.close();
+		}
+	}
 }
