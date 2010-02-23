@@ -6,6 +6,7 @@ package kaninator.game;
 import kaninator.mechanics.*;
 import kaninator.mechanics.Menu;
 import kaninator.graphics.Canvas;
+import kaninator.graphics.ImageFactory;
 import kaninator.graphics.Text;
 import kaninator.io.*;
 
@@ -19,7 +20,6 @@ import java.awt.*;
  */
 public class Settings extends GameState
 {
-	public static int forceTransparency = Transparency.BITMASK;
 	public static Dimension resolutions[]  = {new Dimension(640, 480),
 										new Dimension(800, 480),
 										new Dimension(800, 600),
@@ -52,9 +52,9 @@ public class Settings extends GameState
 		resolutionOff = new Text("Resolution: " + canvas.getResWidth() + "x" + canvas.getResHeight(), "Impact", 32, Font.BOLD, Color.WHITE);
 		resolutionOn = new Text("Resolution: " + canvas.getResWidth() + "x" + canvas.getResHeight(), "Impact", 32, Font.BOLD, Color.RED);
 		
-		transparencyOff = new Text("Transparency: " + ((forceTransparency == Transparency.BITMASK) ? 
+		transparencyOff = new Text("Transparency: " + ((ImageFactory.getTransparency() == Transparency.BITMASK) ? 
 										"BITMASK" : "ALPHA"), "Impact", 32, Font.BOLD, Color.WHITE);
-		transparencyOn = new Text("Transparency: " + ((forceTransparency == Transparency.BITMASK) ? 
+		transparencyOn = new Text("Transparency: " + ((ImageFactory.getTransparency() == Transparency.BITMASK) ? 
 										"BITMASK" : "ALPHA"), "Impact", 32, Font.BOLD, Color.RED);
 		
 		menu.addEntry(resolutionOff, resolutionOn);
@@ -114,14 +114,11 @@ public class Settings extends GameState
 				}
 				else if(retValue == 1)
 				{
-					if(forceTransparency == Transparency.BITMASK)
-						forceTransparency = Transparency.TRANSLUCENT;
-					else
-						forceTransparency = Transparency.BITMASK;
+					ImageFactory.toggleTransparency();
 					
-					transparencyOff.setText("Transparency: " + ((forceTransparency == Transparency.BITMASK) ? 
+					transparencyOff.setText("Transparency: " + ((ImageFactory.getTransparency()  == Transparency.BITMASK) ? 
 											"BITMASK" : "ALPHA"));
-					transparencyOn.setText("Transparency: " + ((forceTransparency == Transparency.BITMASK) ? 
+					transparencyOn.setText("Transparency: " + ((ImageFactory.getTransparency()  == Transparency.BITMASK) ? 
 											"BITMASK" : "ALPHA"));	
 				}
 				else

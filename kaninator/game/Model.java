@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import kaninator.graphics.*;
-import kaninator.io.AnimationFactory;
 import kaninator.io.MapLoader;
 import kaninator.mechanics.DynamicObject;
 

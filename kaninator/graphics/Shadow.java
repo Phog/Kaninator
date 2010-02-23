@@ -36,5 +36,9 @@ public class Shadow implements Drawable
 	{
 		return (int)radius;
 	}
+	
+	public void update()
+	{
+	}
 
 }

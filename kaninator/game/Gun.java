@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import kaninator.graphics.Animation;
+import kaninator.graphics.AnimationFactory;
 import kaninator.graphics.Drawable;
 import kaninator.graphics.Shadow;
 import kaninator.io.*;

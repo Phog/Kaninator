@@ -27,4 +27,10 @@ public interface Drawable
 	 * @return The height of the drawable.
 	 */
 	public int getHeight();
+	
+	
+	/**
+	 * Updates the drawable.
+	 */
+	public void update();
 }

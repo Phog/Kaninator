@@ -21,7 +21,7 @@ public class SoundClip
 	 * @param filepath Path to the sound file
 	 * @throws IOException Thrown if the file isn't found, if it is invalid or can't be loaded. 
 	 */
-	public SoundClip(String filepath) throws IOException
+	protected SoundClip(String filepath) throws IOException
 	{
 		try
 		{
@@ -41,6 +41,11 @@ public class SoundClip
 			System.out.println("Couldn't reserve sound line: " + e);
 			throw new IOException("Couldn't reserve sound line");
 		}
+	}
+	
+	protected SoundClip()
+	{
+		clip = null;
 	}
 	
 	public void playClip()

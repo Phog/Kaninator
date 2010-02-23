@@ -80,4 +80,8 @@ public class Text implements Drawable
 	{
 		text = _text;
 	}
+	
+	public void update()
+	{	
+	}
 }

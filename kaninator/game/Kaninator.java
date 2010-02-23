@@ -3,7 +3,9 @@
  */
 package kaninator.game;
 
+import kaninator.graphics.Drawable;
 import kaninator.graphics.Image;
+import kaninator.graphics.ImageFactory;
 import kaninator.graphics.Screen;
 import kaninator.mechanics.*;
 import kaninator.io.*;
@@ -28,15 +30,8 @@ public class Kaninator
 	{
 		//All the possible states of the game
 		GameState states[] = new GameState[4];
-		
-		Image background = null;
-		try
-		{
-			background = new Image("/resources/background.jpg");
-		}
-		catch(Exception e)
-		{	
-		}
+
+		Drawable background = ImageFactory.getImage("/resources/background.jpg");
 		
 		//Creates the depencies used in the different stages
 		JFrame frame = new JFrame();
@@ -80,9 +75,7 @@ public class Kaninator
 						states[0] = game = new Game(camera, gui, keyboard, mouse, screen);
 						break;
 				case GAME_OVER:
-						String name = JOptionPane.showInputDialog(null, "Game Over!", "Enter your name:", JOptionPane.QUESTION_MESSAGE);
-						int score = game.getScore();
-						highscore.addScore(name, score);
+						highscore.addScore(game.getScore());
 						states[0] = game = null;
 						stateIndex = HIGH_SCORES;
 				default:

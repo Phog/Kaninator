@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 /**
  * The settings state.
  * The player can view the high scores in this state.
@@ -135,10 +137,14 @@ public class Highscore extends GameState
 		scoreFile.close();
 	}
 	
-	public void addScore(String name, int score)
+	public void addScore(int score)
 	{
 		Score newScore = new Score();
-		newScore.name = name;
+		newScore.name = JOptionPane.showInputDialog(null, "Game Over!", "Enter your name:", JOptionPane.WARNING_MESSAGE);
+		
+		if(newScore.name == null || newScore.name.length() < 1)
+			return;
+		
 		newScore.score = score;
 		scores.add(newScore);
 		

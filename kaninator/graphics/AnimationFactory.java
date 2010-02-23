@@ -2,9 +2,7 @@
  * Input from the keyboard and mouse and file input/output are wrapped
  * in this package to keep the design modular.
  */
-package kaninator.io;
-
-import kaninator.graphics.*;
+package kaninator.graphics;
 
 import java.awt.geom.AffineTransform;
 import java.awt.image.*;
@@ -12,13 +10,15 @@ import java.awt.image.*;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 
 /**
  * @author phedman
  */
 public final class AnimationFactory
 {
+	private static HashMap<String, ArrayList<Animation>> animMap = new HashMap<String, ArrayList<Animation>>();
+	
 	private static Animation createAnimation(BufferedImage buffer, boolean mirror, int height, int width, int column, double speed)
 	{
 		ArrayList<Drawable> drawList = new ArrayList<Drawable>();
@@ -48,22 +48,46 @@ public final class AnimationFactory
 		return animList;
 	}
 	
-	public static ArrayList<Animation> createAnimations(String filepath, boolean mirror, int height, int width, double speed) throws IOException 
+	private static ArrayList<Animation> createAnimations(String filepath, boolean mirror, int height, int width, double speed)
 	{
 		ArrayList<Animation> returnList = new ArrayList<Animation>();
-		BufferedImage buffer = ImageIO.read(returnList.getClass().getResource(filepath));
-		
-		int numCol = buffer.getWidth()/width;
-		for(int i = 0; i < numCol; i++)
-			returnList.add(createAnimation(buffer, false, height, width, i, speed));
-		
-		if(mirror && numCol >= 2)
+		try
+			{
+			BufferedImage buffer = ImageIO.read(returnList.getClass().getResource(filepath));
+			
+			int numCol = buffer.getWidth()/width;
+			for(int i = 0; i < numCol; i++)
+				returnList.add(createAnimation(buffer, false, height, width, i, speed));
+			
+			if(mirror && numCol >= 2)
+			{
+				for(int i = 2; i < numCol; i++)
+					returnList.add(createAnimation(buffer, true, height, width, i, speed));
+			}
+		}
+		catch(IOException e)
 		{
-			for(int i = 2; i < numCol; i++)
-				returnList.add(createAnimation(buffer, true, height, width, i, speed));
+			//TODO: ERROR HANDLING
 		}
 		
 		return returnList;
+	}
+	
+	public static void updateTransparencies()
+	{
+		for(ArrayList<Animation> animList : animMap.values())
+			for(Animation anim : animList)
+				anim.update();
+	}
+	
+	public static ArrayList<Animation> getAnimations(String filepath, boolean mirror, int height, int width, double speed)
+	{
+		if(animMap.containsKey(filepath))
+			return cloneAnimations(animMap.get(filepath));
+		
+		ArrayList<Animation> animations = createAnimations(filepath, mirror, height, width, speed);
+		animMap.put(filepath, animations);
+		return animations;
 	}
 	
 	public static ArrayList<Animation> cloneAnimations(ArrayList<Animation> anims)

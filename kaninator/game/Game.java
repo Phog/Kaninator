@@ -53,7 +53,7 @@ public class Game extends GameState
 	 * @param _gui The gui class used for overlays.
 	 * @param _keyboard The keyboard class for key input.
 	 * @param _mouse Mouse input.
-	 * @see kaninator.io.AnimationFactory
+	 * @see kaninator.graphics.AnimationFactory
 	 * @see kaninator.io.MapLoader
 	 */
 	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse, Canvas _canvas)
@@ -66,13 +66,13 @@ public class Game extends GameState
 		{
 			//load files
 			map = MapLoader.readMap("/resources/testmap.map");
-			ArrayList<Animation> playerAnim = AnimationFactory.createAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
-			ArrayList<Animation> gunAnim = AnimationFactory.createAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
-			ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(new Image("/resources/crosshair.png"));
-			Drawable bullet = new Image("/resources/bullet.png");
-			SoundClip shotgun = new SoundClip("/resources/shotgun.wav");
-			SoundClip ow = new SoundClip("/resources/ow.wav");
-			squirt = new SoundClip("/resources/squirt.wav");
+			ArrayList<Animation> playerAnim = AnimationFactory.getAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
+			ArrayList<Animation> gunAnim = AnimationFactory.getAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
+			ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(ImageFactory.getImage("/resources/crosshair.png"));
+			Drawable bullet = ImageFactory.getImage("/resources/bullet.png");
+			SoundClip shotgun = SoundFactory.getClip("/resources/shotgun.wav");
+			SoundClip ow = SoundFactory.getClip("/resources/ow.wav");
+			squirt = SoundFactory.getClip("/resources/squirt.wav");
 
 				
 			bullets = new LinkedList<DynamicObject>();
@@ -81,7 +81,7 @@ public class Game extends GameState
 			hud = new Text("HP: " + player.getHp() + " Score: " + score, "Impact", 16, Font.PLAIN, Color.RED);
 			
 			//create enemies
-			zombAnim = AnimationFactory.createAnimations("/resources/zombSheet.png", true, 64, 64, 0.25);
+			zombAnim = AnimationFactory.getAnimations("/resources/zombSheet.png", true, 64, 64, 0.25);
 			enemies = new LinkedList<Zombie>();
 			enemyList = new LinkedList<DynamicObject>();
 		}

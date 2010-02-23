@@ -15,7 +15,7 @@ public class Animation implements Drawable
 	private double currentFrame, speed;
 	ArrayList<Drawable> frames;
 	
-	public Animation(ArrayList<Drawable> _frames, double _speed)
+	protected Animation(ArrayList<Drawable> _frames, double _speed)
 	{
 		lock = false;
 		frames = _frames;
@@ -63,6 +63,13 @@ public class Animation implements Drawable
 		currentFrame = 0.0;
 	}
 
+	
+	public void update()
+	{
+		for(Drawable frame : frames)
+			frame.update();
+	}
+	
 	public Animation clone()
 	{
 		return new Animation(frames, speed);

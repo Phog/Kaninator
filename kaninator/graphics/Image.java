@@ -32,7 +32,7 @@ public class Image implements Drawable
 	 * @param filepath Path to the image file
 	 * @throws IOException Thrown if the file isn't found or if it is invalid.
 	 */
-	public Image(String filepath) throws IOException
+	protected Image(String filepath) throws IOException
 	{
 		//Obtain the current system graphical settings
 		gfxConf = GraphicsEnvironment.
@@ -44,7 +44,7 @@ public class Image implements Drawable
 		maintainImg();
 	}
 	
-	public Image(BufferedImage _buffer)
+	protected Image(BufferedImage _buffer)
 	{
 		//Obtain the current system graphical settings
 		gfxConf = GraphicsEnvironment.
@@ -86,6 +86,15 @@ public class Image implements Drawable
 		return buffer.getWidth();
 	}
 	
+	
+	/**
+	 * Updates the image, effectively moving it to vram again.
+	 */
+	public void update()
+	{
+		moveToVram();
+	}
+	
 	/**
 	 * Creates a VolatileImage from the BufferedImage.
 	 * Effectively copying the image to vram.
@@ -95,7 +104,7 @@ public class Image implements Drawable
 	private void moveToVram()
 	{
 	    //Create new VolatileImage
-		int transparency = (buffer.getTransparency() == Transparency.OPAQUE) ? Transparency.OPAQUE : Settings.forceTransparency;
+		int transparency = (buffer.getTransparency() == Transparency.OPAQUE) ? Transparency.OPAQUE : ImageFactory.getTransparency();
 	    vramImg = gfxConf.createCompatibleVolatileImage(buffer.getWidth(),
 	    			buffer.getHeight(), transparency);
 
