@@ -56,39 +56,42 @@ public class Game extends GameState
 	 * @see kaninator.graphics.AnimationFactory
 	 * @see kaninator.io.MapLoader
 	 */
-	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse, Canvas _canvas)
+	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse, Canvas _canvas, String mapPath) throws IOException
 	{
 		super(_camera, _gui, _keyboard, _mouse);
 		canvas = _canvas;
 		score = 0;
 		framesAlive = 0;
+		
+		//load files
+		map = MapLoader.readMap(mapPath);
+		ArrayList<Animation> playerAnim = AnimationFactory.getAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
+		ArrayList<Animation> gunAnim = AnimationFactory.getAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
+		ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(ImageFactory.getImage("/resources/crosshair.png"));
+		
+		Drawable bullet = ImageFactory.getImage("/resources/bullet.png");
+		SoundClip shotgun = SoundFactory.getClip("/resources/shotgun.wav");
+		SoundClip ow = SoundFactory.getClip("/resources/ow.wav");
+		squirt = SoundFactory.getClip("/resources/squirt.wav");
+		
+		//create objects
+		bullets = new LinkedList<DynamicObject>();
 		try
 		{
-			//load files
-			map = MapLoader.readMap("/resources/testmap.map");
-			ArrayList<Animation> playerAnim = AnimationFactory.getAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
-			ArrayList<Animation> gunAnim = AnimationFactory.getAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
-			ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(ImageFactory.getImage("/resources/crosshair.png"));
-			Drawable bullet = ImageFactory.getImage("/resources/bullet.png");
-			SoundClip shotgun = SoundFactory.getClip("/resources/shotgun.wav");
-			SoundClip ow = SoundFactory.getClip("/resources/ow.wav");
-			squirt = SoundFactory.getClip("/resources/squirt.wav");
-
-				
-			bullets = new LinkedList<DynamicObject>();
 			gun = new Gun(gunAnim, shotgun, map, bullet, bullets, 25.0);
 			player = new Player(playerAnim, crosshairAnim, ow, map, gun, 0, 0, 5.0);
-			hud = new Text("HP: " + player.getHp() + " Score: " + score, "Impact", 16, Font.PLAIN, Color.RED);
-			
-			//create enemies
-			zombAnim = AnimationFactory.getAnimations("/resources/zombSheet.png", true, 64, 64, 0.25);
-			enemies = new LinkedList<Zombie>();
-			enemyList = new LinkedList<DynamicObject>();
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
-			System.out.println("FILE ERROR: " + e);
+			throw new IOException("Couldn't create game objects:\n" + e);
 		}
+
+		hud = new Text("HP: " + player.getHp() + " Score: " + score, "Impact", 16, Font.PLAIN, Color.RED);
+		
+		//create enemies
+		zombAnim = AnimationFactory.getAnimations("/resources/zombSheet.png", true, 64, 64, 0.25);
+		enemies = new LinkedList<Zombie>();
+		enemyList = new LinkedList<DynamicObject>();
 	}
 	
 	public int getScore()
@@ -143,7 +146,6 @@ public class Game extends GameState
 					for(DynamicObject obj : npo.getDynamicObjects())
 						enemyList.remove(obj);
 				}
-
 			}
 			
 			if(player.update(enemies))
@@ -158,12 +160,18 @@ public class Game extends GameState
 			
 			try 
 			{
-				Thread.sleep(Kaninator.FRAME_DELAY - (System.currentTimeMillis() - oldTime));
-			} catch(Exception e)
+				long sleepTime = Kaninator.FRAME_DELAY - (System.currentTimeMillis() - oldTime);
+				if(sleepTime > 0)
+					Thread.sleep(sleepTime);
+			} 
+			catch(InterruptedException e)
 			{
-				
+				System.out.println("Frame sleep interrupted: " + e);
 			}
-			oldTime = System.currentTimeMillis();
+			finally
+			{
+				oldTime = System.currentTimeMillis();
+			}
 		}
 		
 		gui.clearSection(0, 0);
@@ -178,21 +186,29 @@ public class Game extends GameState
 	
 	private void spawnZombies()
 	{
-		if(enemies.size() < MAX_ZOMBIES && Math.random() > ZOMBIE_SPAWN_PROBABILITY)
+		try
 		{
-			int numZombies = (int)(Math.random() * (MAX_ZOMBIES - enemies.size()));
-			ArrayList<Animation> newList = AnimationFactory.cloneAnimations(zombAnim);
-			
-			for(int i = 0; i < numZombies; i++)
+			if(enemies.size() < MAX_ZOMBIES && Math.random() > ZOMBIE_SPAWN_PROBABILITY)
 			{
-				double pos_y = Math.random() * map.getTiles().size() * MapLoader.getTileSize();
-				double pos_x = Math.random() * map.getTiles().get(0).size() * MapLoader.getTileSize();
-				Zombie enemy = new Zombie(newList, map, squirt, player.getMainObject(), pos_x, pos_y, 5.0);
-				enemies.add(enemy);
-				for(DynamicObject obj: enemy.getDynamicObjects())
-					enemyList.add(obj);
-				newList = AnimationFactory.cloneAnimations(zombAnim);
+				int numZombies = (int)(Math.random() * (MAX_ZOMBIES - enemies.size()));
+				ArrayList<Animation> newList = AnimationFactory.cloneAnimations(zombAnim);
+				
+				for(int i = 0; i < numZombies; i++)
+				{
+					double pos_y = Math.random() * map.getTiles().size() * MapLoader.getTileSize();
+					double pos_x = Math.random() * map.getTiles().get(0).size() * MapLoader.getTileSize();
+					Zombie enemy = new Zombie(newList, map, squirt, player.getMainObject(), pos_x, pos_y, 5.0);
+					enemies.add(enemy);
+					for(DynamicObject obj: enemy.getDynamicObjects())
+						enemyList.add(obj);
+					newList = AnimationFactory.cloneAnimations(zombAnim);
+				}
 			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("ERR: Couldn't spawn zombies:\n" + e);
+			System.exit(0);
 		}
 	}
 	

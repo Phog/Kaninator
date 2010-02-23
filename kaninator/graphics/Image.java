@@ -8,6 +8,7 @@ import java.awt.image.*;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * A drawable image object.
@@ -37,7 +38,11 @@ public class Image implements Drawable
 	    getLocalGraphicsEnvironment().getDefaultScreenDevice().
 	    getDefaultConfiguration();
 	
-		buffer = ImageIO.read(this.getClass().getResource(filepath));
+		URL url = this.getClass().getResource(filepath);
+		if(url == null)
+			throw new IOException("ERR: File not found: " + filepath);
+	
+		buffer = ImageIO.read(url);
 		moveToVram();
 		maintainImg();
 	}
@@ -133,6 +138,9 @@ public class Image implements Drawable
 		}
 	}
 	
+	/**
+	 * Needed to release the system resources when the Images are freed by the garbage collector.
+	 */
 	protected void finalize()
 	{
 		if(vramImg != null)

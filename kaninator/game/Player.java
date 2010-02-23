@@ -31,11 +31,8 @@ public class Player
 	private int moveState;
 	private int hp, hurtDelay;
 	
-	public Player(ArrayList<Animation> playerAnim, ArrayList<Animation> crosshairAnim, SoundClip _ow, Map _map, Gun _gun, double x, double y, double radius_constant)
+	public Player(ArrayList<Animation> playerAnim, ArrayList<Animation> crosshairAnim, SoundClip _ow, Map _map, Gun _gun, double x, double y, double radius_constant) throws Exception
 	{
-		if(playerAnim == null || playerAnim.size() == 0)
-			return;
-		
 		map = _map;
 		model = new Model(playerAnim, map, x, y, radius_constant, PLAYER_SPEED);
 		ow = _ow;

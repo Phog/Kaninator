@@ -50,7 +50,7 @@ public class Screen implements Canvas
 				{
 					//Unwrap the drawable contained in the VisibleElement and draw it to the screen
 					Drawable drawable = elem.getDrawable();
-					drawable.draw(g, elem.get_x(), elem.get_y() - elem.get_height());
+					drawable.draw(g, elem.get_x(), elem.get_y() - elem.getHeight());
 				}
 			}
 			
@@ -73,8 +73,7 @@ public class Screen implements Canvas
 	
 	/**
 	 * Creates and initializes a window and shows it on the screen.
-	 * @param width Window width
-	 * @param height Window height
+	 * @param size The Dimension object containing the width and the height of the window.
 	 * @param fullscreen Fullscreen mode? true/false
 	 * @param title The window title
 	 */
@@ -101,9 +100,6 @@ public class Screen implements Canvas
 	/**
 	 * Adds a VisibleElement to the tail of the drawing queue.
 	 * @see kaninator.graphics.VisibleElement
-	 */
-	/* (non-Javadoc)
-	 * @see kaninator.graphics.Canvas#addDrawable(kaninator.graphics.Drawable)
 	 */
 	public void addElement(VisibleElement elem)
 	{

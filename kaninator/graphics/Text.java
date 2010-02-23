@@ -60,7 +60,7 @@ public class Text implements Drawable
 	 */
 	public int getHeight()
 	{
-		return (int)layout.getBounds().getHeight();//(int)metrics.getHeight();
+		return (int)layout.getBounds().getHeight();
 	}
 	
 	/**
@@ -69,18 +69,21 @@ public class Text implements Drawable
 	 */
 	public int getWidth()
 	{
-		return (int)layout.getBounds().getWidth();//SwingUtilities.computeStringWidth(metrics, text);  
+		return (int)layout.getBounds().getWidth();
 	}
 	
 	/**
 	 * Setter for the text to be displayed.
-	 * @param text The text you want the Text object to draw.
+	 * @param _text The text you want the Text object to draw.
 	 */
 	public void setText(String _text)
 	{
 		text = _text;
 	}
 	
+	/**
+	 * Dummy method needed to implement the Drawable interface.
+	 */
 	public void update()
 	{	
 	}

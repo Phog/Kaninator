@@ -27,11 +27,8 @@ public class Zombie
 	private double distance;
 	private boolean dead;
 	
-	public Zombie(ArrayList<Animation> animations, Map _map, SoundClip _squirt, DynamicObject _player, double x, double y, double radius_constant)
+	public Zombie(ArrayList<Animation> animations, Map _map, SoundClip _squirt, DynamicObject _player, double x, double y, double radius_constant) throws Exception
 	{
-		if(animations == null || animations.size() == 0)
-			return;
-		
 		map = _map;
 		model = new Model(animations, map, x, y, radius_constant, ZOMBIE_SPEED);
 		squirt = _squirt;

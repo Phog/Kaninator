@@ -24,10 +24,11 @@ public class Model
 	private DynamicObject model, shadow;
 	private Map map;
 	
-	public Model(ArrayList <Animation> animations, Map _map, double x, double y, double radius_constant, double speed)
+	public Model(ArrayList <Animation> animations, Map _map, double x, double y, double radius_constant, double speed) throws Exception
 	{
-		if(animations == null || animations.size() == 0)
-			return;
+		if(animations == null || animations.size() < 1)
+			throw new Exception("ERR: Model animation doesn't exist");
+		
 		map = _map;
 		
 		double radius = animations.get(0).getWidth()/radius_constant;

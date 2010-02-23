@@ -117,7 +117,7 @@ public class Camera
 	
 	/**
 	 * Sets the DynamicObjects belonging to the enemies the  camera should be aware of.
-	 * @param object The DynamicObjects you want to show on screen.
+	 * @param _enemyObjects The DynamicObjects you want to show on screen.
 	 */
 	public void setEnemyObjects(LinkedList<DynamicObject> _enemyObjects)
 	{

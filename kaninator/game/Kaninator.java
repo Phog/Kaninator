@@ -3,6 +3,8 @@
  */
 package kaninator.game;
 
+import java.io.IOException;
+
 import kaninator.graphics.Drawable;
 import kaninator.graphics.ImageFactory;
 import kaninator.graphics.Screen;
@@ -70,7 +72,15 @@ public class Kaninator
 						if(states[0] != null)
 							break;
 				case NEW_GAME:
-						states[0] = game = new Game(camera, gui, keyboard, mouse, screen);
+						try
+						{
+							states[0] = game = new Game(camera, gui, keyboard, mouse, screen, "/resources/gamemap.map");
+						}
+						catch(IOException e)
+						{
+							System.out.println("ERR: Couldn't create game: " + e);
+							stateIndex = MAIN_MENU - 1;
+						}
 						break;
 				case GAME_OVER:
 						highscore.addScore(game.getScore());

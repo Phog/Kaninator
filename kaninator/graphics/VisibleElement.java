@@ -5,7 +5,7 @@ package kaninator.graphics;
 
 /**
  * An intermediate form of the visible objects
- * Wraps the Drawable objects together with the onscreen coordinates
+ * Wraps the Drawable objects together with the on screen coordinates
  * so they can be drawn by a Canvas object.
  * @see kaninator.graphics.Drawable
  * @see kaninator.graphics.Canvas
@@ -17,10 +17,11 @@ public class VisibleElement
 	private int x, y, height;
 	
 	/**
-	 * Wraps a drawable object with the onscreen coordinates x and y.
+	 * Wraps a drawable object with the onscreen coordinates x, y, and the height it is positioned at.
 	 * @param _drawable The drawable in question.
 	 * @param _x The x-coordinate for the element.
 	 * @param _y The y-coordinate for the element.
+	 * @param _height The height the element is positioned at.
 	 */
 	public VisibleElement(Drawable _drawable, int _x, int _y, int _height)
 	{
@@ -31,7 +32,7 @@ public class VisibleElement
 	}
 	
 	/**
-	 * Getter method
+	 * Getter method.
 	 * @return The wrapped Drawable object.
 	 */
 	public Drawable getDrawable()
@@ -40,7 +41,7 @@ public class VisibleElement
 	}
 	
 	/**
-	 * Getter method
+	 * Getter method.
 	 * @return The x-coordinate for the element.
 	 */
 	public int get_x()
@@ -49,7 +50,7 @@ public class VisibleElement
 	}
 	
 	/**
-	 * Getter method
+	 * Getter method.
 	 * @return The y-coordinate for the element.
 	 */
 	public int get_y()
@@ -57,7 +58,11 @@ public class VisibleElement
 		return y;
 	}
 	
-	public int get_height()
+	/**
+	 * Getter method.
+	 * @return The height the element is positioned at.
+	 */
+	public int getHeight()
 	{
 		return height;
 	}

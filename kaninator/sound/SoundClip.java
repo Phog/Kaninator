@@ -6,17 +6,21 @@ package kaninator.sound;
 import javax.sound.sampled.*;
 
 import java.io.*;
+import java.net.URL;
 
 
 /**
  * Primitive sound clip class for sound effects.
+ * Should only be constructed from the SoundFactory class.
  * @author phedman
+ * @see kaninator.sound.SoundFactory
  */
 public class SoundClip
 {
-	Clip clip;
+	private Clip clip;
 	/**
-	 * Attempts to load a sound clip from a file
+	 * Attempts to load a sound clip from a file.
+	 * For internal use only.
 	 * Throws IOException if unsuccessful.
 	 * @param filepath Path to the sound file
 	 * @throws IOException Thrown if the file isn't found, if it is invalid or can't be loaded. 
@@ -25,7 +29,11 @@ public class SoundClip
 	{
 		try
 		{
-		    File soundFile = new File(this.getClass().getResource(filepath).getPath());
+			URL url = this.getClass().getResource(filepath);
+			if(url == null)
+				throw new IOException("ERR: File not fould: " + filepath);
+			
+		    File soundFile = new File(url.getPath());
 		    AudioInputStream sound = AudioSystem.getAudioInputStream(soundFile);
 		    DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
 		    clip = (Clip)AudioSystem.getLine(info);
@@ -33,21 +41,26 @@ public class SoundClip
 		}
 		catch(UnsupportedAudioFileException e)
 		{
-			System.out.println("Sound format invalid: " + e);
-			throw new IOException("Invalid format");
+			throw new IOException("ERR: Invalid format: " + e);
 		}
 		catch(LineUnavailableException e)
 		{
-			System.out.println("Couldn't reserve sound line: " + e);
-			throw new IOException("Couldn't reserve sound line");
+			throw new IOException("ERR: Couldn't reserve sound line:" + e);
 		}
 	}
 	
+	/**
+	 * Creates an empty sound clip, used to represent faulty sounds.
+	 * For internal use only.
+	 */
 	protected SoundClip()
 	{
 		clip = null;
 	}
 	
+	/**
+	 * If the sound clip is valid, then rewind it and play it.
+	 */
 	public void playClip()
 	{
 		if(clip != null)
@@ -57,6 +70,9 @@ public class SoundClip
 		}
 	}
 	
+	/**
+	 * Needed to release the system resources when the sound clips are freed by the garbage collector.
+	 */
 	protected void finalize()
 	{
 		if(clip != null)

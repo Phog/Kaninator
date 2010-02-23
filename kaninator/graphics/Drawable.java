@@ -30,7 +30,7 @@ public interface Drawable
 	
 	
 	/**
-	 * Updates the drawable.
+	 * Updates the drawable with the new transparency information.
 	 */
 	public void update();
 }

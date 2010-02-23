@@ -58,22 +58,11 @@ public class Highscore extends GameState
 		scores = new ArrayList<Score>();
 		
 		menu.setTitle(new Text("High Scores!", "Impact", 32, Font.BOLD, Color.WHITE));
+		
 		URL url = this.getClass().getResource(filepath);
+		path = (url == null) ? filepath : url.getPath();
 		
-		if(url != null)
-			path = url.getPath();
-		else
-			path = " ";
 		readScores();
-		
-	/*	menu.addEntry(new Text("Peter - 1337!", "Impact", 32, Font.BOLD, Color.WHITE),
-						new Text("Peter - 1337!", "Impact", 32, Font.BOLD, Color.WHITE));
-		
-		menu.addEntry(new Text("Arno - 6!", "Impact", 32, Font.BOLD, Color.WHITE),
-						new Text("Arno - 6!", "Impact", 32, Font.BOLD, Color.WHITE));
-		
-*/
-
 	}
 		
 	private void readScores()
@@ -86,7 +75,7 @@ public class Highscore extends GameState
 		}
 		catch(FileNotFoundException e)
 		{
-			System.out.println("High score file not found: " + e);
+			System.out.println("ERR: High score file not found: " + e);
 			System.out.println("Ignoring...");
 			return;
 		}
@@ -127,7 +116,7 @@ public class Highscore extends GameState
 		}
 		catch(FileNotFoundException e)
 		{
-			System.out.println("Could not create/edit file: " + e);
+			System.out.println("ERR: Could not create/edit high score file: " + e);
 			return;
 		}
 		
@@ -162,7 +151,7 @@ public class Highscore extends GameState
 	
 	/**
 	 * High scores menu, implemented using the Menu class.
-	 * @see kaninator.mechanics.menu 
+	 * @see kaninator.mechanics.Menu 
 	 */
 	public int doState()
 	{

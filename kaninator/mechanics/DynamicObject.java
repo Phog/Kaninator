@@ -31,7 +31,7 @@ public class DynamicObject
 	public DynamicObject(ArrayList<Animation> _animations, double _radius)
 	{
 		animations = _animations;
-		radius = _radius;;
+		radius = _radius;
 		
 		x = y = h = offsetHeight = offset_x = offset_y = state = 0;
 	}
@@ -108,7 +108,7 @@ public class DynamicObject
 	
 	/**
 	 * Moves the DynamicObject on the internal x-axis
-	 * @param vel_vert The amount of the movement.
+	 * @param vel_x The amount of the movement.
 	 */
 	public void move_x(double vel_x)
 	{
@@ -117,7 +117,7 @@ public class DynamicObject
 	
 	/**
 	 * Moves the DynamicObject  on the internal y-axis
-	 * @param vel_vert The amount of the movement.
+	 * @param vel_y The amount of the movement.
 	 */
 	public void move_y(double vel_y)
 	{

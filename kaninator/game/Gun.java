@@ -34,8 +34,11 @@ public class Gun
 	
 	private double delta_x, delta_y, delta_height, speed, delay, offset_x, offset_y;
 	
-	public Gun(ArrayList<Animation> animList, SoundClip _sound, Map _map, Drawable _bullet, LinkedList<DynamicObject> _bulletObjects, double _speed)
+	public Gun(ArrayList<Animation> animList, SoundClip _sound, Map _map, Drawable _bullet, LinkedList<DynamicObject> _bulletObjects, double _speed) throws Exception
 	{
+		if(animList == null || animList.size() < 1)
+			throw new Exception("ERR: Gun animation doesn't exist");
+		
 		model = new DynamicObject(animList, 0.0);
 		bulletObjects = _bulletObjects;
 		bullets = new LinkedList<Bullet>();
