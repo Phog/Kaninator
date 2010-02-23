@@ -9,8 +9,6 @@ import java.awt.image.*;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-import kaninator.game.Settings;
-
 /**
  * A drawable image object.
  * Makes it possible to draw images with the drawable interface.

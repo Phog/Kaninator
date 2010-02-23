@@ -1,6 +1,5 @@
 /**
- * Input from the keyboard and mouse and file input/output are wrapped
- * in this package to keep the design modular.
+ * Wrapper package for the 2D library used for the graphics.
  */
 package kaninator.graphics;
 

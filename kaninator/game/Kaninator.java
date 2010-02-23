@@ -4,13 +4,11 @@
 package kaninator.game;
 
 import kaninator.graphics.Drawable;
-import kaninator.graphics.Image;
 import kaninator.graphics.ImageFactory;
 import kaninator.graphics.Screen;
 import kaninator.mechanics.*;
 import kaninator.io.*;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 /**
  * This is the main class of the game.

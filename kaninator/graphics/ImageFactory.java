@@ -1,5 +1,5 @@
 /**
- * 
+ * Wrapper package for the 2D library used for the graphics.
  */
 package kaninator.graphics;
 

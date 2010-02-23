@@ -11,7 +11,6 @@ import kaninator.graphics.Animation;
 import kaninator.graphics.AnimationFactory;
 import kaninator.graphics.Drawable;
 import kaninator.graphics.Shadow;
-import kaninator.io.*;
 import kaninator.sound.SoundClip;
 import kaninator.mechanics.DynamicObject;
 

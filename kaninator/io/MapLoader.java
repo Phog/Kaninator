@@ -10,7 +10,6 @@ import java.util.Scanner;
 
 import kaninator.game.Map;
 import kaninator.graphics.Drawable;
-import kaninator.graphics.Image;
 import kaninator.graphics.ImageFactory;
 import kaninator.mechanics.*;
 
