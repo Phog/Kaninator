@@ -10,7 +10,12 @@ import kaninator.io.MapLoader;
 import kaninator.mechanics.DynamicObject;
 
 /**
+ * Used to represent the projectiles in the game. They contain DynamicObjects 
+ * and maintain their original velocities until they collide with something 
+ * (StaticObject or DynamicObject). They should only be constructed by the Gun class.
  * @author phedman
+ * @see kaninator.mechanics.DynamicObject
+ * @see kaniantor.game.Gun
  */
 public class Bullet
 {
@@ -20,7 +25,18 @@ public class Bullet
 	private double vel_x, vel_y, vel_height;
 	private boolean done;
 	
-	public Bullet(DynamicObject _model, DynamicObject _shadow, Map _map, DynamicObject wielder, double _vel_x, double _vel_y,  double _vel_height)
+	/**
+	 * Constructs a Bullet object, initializes the velocities and the DynamicObjects associated with it.
+	 * For internal use only, should only be called from the Gun class.
+	 * @param _model The DynamicObject used to represent the projectile itself.
+	 * @param _shadow The DynamicObject used to represent the shadow of the projectile.
+	 * @param _map The map that will be used for height checking to see if the projectile collides with StaticObjects.
+	 * @param wielder The DynamicObject that wields the gun, used to initialize the projectiles coordinates.
+	 * @param _vel_x The velocity on the internal, isometric, x-axis.
+	 * @param _vel_y The velocity on the internal, isometric, y-axis.
+	 * @param _vel_height The vertical velocity.
+	 */
+	protected Bullet(DynamicObject _model, DynamicObject _shadow, Map _map, DynamicObject wielder, double _vel_x, double _vel_y,  double _vel_height)
 	{
 		model = _model;
 		map = _map;
@@ -38,16 +54,23 @@ public class Bullet
 		done = false;
 	}
 	
+	/**
+	 * Observes if the projectile has hit a StaticObject, 
+	 * otherwise it advances the projectiles position iteratively to check
+	 * if it collides with a DynamicObject.
+	 * @param targets The List of Zombies targeted by the projectiles which we will perform collision detection against.
+	 * @see kaninator.game.Zombie
+	 */
 	public void observe(LinkedList<Zombie> targets)
 	{	
-		if(model.getHeight() < map.getHeight(model) - MapLoader.getTileHeight()/2.0)
-		{
-			done = true;
-			return;
-		}
-		
 		for(int i = 0; i < BULLET_RESOLUTION; i++)
 		{
+			if(model.getHeight() < map.getHeight(model) - MapLoader.getTileHeight()/2.0)
+			{
+				done = true;
+				return;
+			}
+			
 			model.setPos(model.get_x() + vel_x / BULLET_RESOLUTION, model.get_y() + vel_y / BULLET_RESOLUTION);
 			model.setHeight(model.getHeight() + vel_height / BULLET_RESOLUTION);	
 			
@@ -67,6 +90,12 @@ public class Bullet
 		shadow.setHeight(map.getHeight(shadow));
 	}
 	
+	
+	/**
+	 * Used to check if the projectile still is active after the observe action. 
+	 * In essence has it hit an object and needs to be destroyed.
+	 * @return true if the projectile has hit a target and needs to be destroyed, otherwise it returns false.
+	 */
 	public boolean update()
 	{
 		if(done)
@@ -75,11 +104,19 @@ public class Bullet
 		return false;
 	}
 	
+	/**
+	 * Gets the main DynamicObject, representing the projectile itself.
+	 * @return The DynamicObject for the projectile.
+	 */
 	public DynamicObject getMainObject()
 	{
 		return model;
 	}
 	
+	/**
+	 * Gets the main DynamicObject for the shadow associated with the projectile.
+	 * @return The DynamicObject for the shadow.
+	 */
 	public DynamicObject getShadow()
 	{
 		return shadow;

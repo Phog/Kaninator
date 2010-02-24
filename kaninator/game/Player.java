@@ -88,7 +88,7 @@ public class Player
 		crosshair.setPos(iso_x, iso_y);
 		crosshair.setHeight(map.getHeightAt(iso_x, iso_y));
 		
-		gun.aimAt(vec_x, vec_y, height);
+		gun.setAim(vec_x, vec_y, height);
 		gun.aimModel(vec_x, vec_y);
 	}
 	

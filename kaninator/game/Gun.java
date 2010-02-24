@@ -15,7 +15,10 @@ import kaninator.sound.SoundClip;
 import kaninator.mechanics.DynamicObject;
 
 /**
+ * Represents the gun wielded by the player in the game. Creates Bullets and also has a
+ * graphical representation of its own.
  * @author phedman
+ * @see kaninator.game.Bullet
  */
 public class Gun
 {
@@ -34,6 +37,17 @@ public class Gun
 	
 	private double delta_x, delta_y, delta_height, speed, delay, offset_x, offset_y;
 	
+	/**
+	 * Constructs a gun. Associates it with the resources needed to display the gun, 
+	 * play the a sound when it is fired and add new bullets to the game itself.
+	 * @param animList The animations used to display the gun.
+	 * @param _sound The sound to be played when the gun fires.
+	 * @param _map Map used for aiming and height checking.
+	 * @param _bullet The graphical representation of a bullet.
+	 * @param _bulletObjects The list to which the bullets will be added.
+	 * @param _speed The speed the bullets will travel at.
+	 * @throws Exception If the animation is null or of the size 0, since the model cannot be created without these.
+	 */
 	public Gun(ArrayList<Animation> animList, SoundClip _sound, Map _map, Drawable _bullet, LinkedList<DynamicObject> _bulletObjects, double _speed) throws Exception
 	{
 		if(animList == null || animList.size() < 1)
@@ -52,12 +66,25 @@ public class Gun
 		delay = offset_x = offset_y = 0.0;
 	}
 	
+	/**
+	 * Sets the wielder of the gun, to get the initial height and positions of the bullets.
+	 * The gun won't function without a wielder.
+	 * @param _wielder The DynamicObject that wields the gun.
+	 */
 	public void setWielder(DynamicObject _wielder)
 	{
 		wielder = _wielder;
 	}
 	
-	public void aimAt(double x, double y, double height)
+	/**
+	 * Aims the gun into the direction made up by the coordinates in the parameters.
+	 * In essence it treats the coordinates as a vector, normalizes them, and multiplies
+	 * them with the speed of the bullet effectively creating a new aiming vector.
+	 * @param x X coordinate of the new aiming direction.
+	 * @param y Y coordinate of the new aiming direction.
+	 * @param height The height difference of the new aiming direction.
+	 */
+	public void setAim(double x, double y, double height)
 	{
 		double length = Math.sqrt(x*x + y*y + height*height);
 
@@ -77,6 +104,12 @@ public class Gun
 			delay -= 1.0;
 	}
 	
+	/**
+	 * Updates the state (the current active animation) of the model so it corresponds with the
+	 * new aiming vector.
+	 * @param vec_x The x component of the aiming vector.
+	 * @param vec_y The y component of the aiming vector.
+	 */
 	public void aimModel(double vec_x, double vec_y)
 	{
 		double length = Math.sqrt(vec_x*vec_x + vec_y*vec_y);
@@ -109,7 +142,14 @@ public class Gun
 				model.setState(3);
 		}
 	}
-	
+
+	/**
+	 * Updates the internal state of the gun. Setting its position to the wielders position.
+	 * Tweaking the height and position of the DynamicObject with setHeightOffset
+	 * respectively setPosOffset to preserve a reasonable drawing order.
+	 * @see kaninator.mechanics.DynamicObject.setHeightOffset
+	 * @see kaninator.mechanics.DynamicObject.setPosOffset
+	 */
 	public void update()
 	{	
 		model.setPos(wielder.get_x(), wielder.get_y());
