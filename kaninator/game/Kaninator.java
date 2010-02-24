@@ -16,15 +16,23 @@ import javax.swing.JFrame;
  * This is the main class of the game.
  * The main method is a state machine containing four states: Main, Settings, Highscore and Game.
  * @author phedman
+ * @see kaninator.game.GameState
+ * @see kaninator.game.Main
+ * @see kaninator.game.Settings
+ * @see kaninator.game.Highscore
+ * @see kaninator.game.Game
  */
 public class Kaninator
 {
 	public static final int SENTINEL = -1, NEW_GAME = 0, RESUME_GAME = 1, SETTINGS = 2, HIGH_SCORES = 3, MAIN_MENU = 4, GAME_OVER = 5;
 	public static final int FRAME_DELAY = 1000/30;
 	public static final int DEBOUNCE_DELAY = 1000/5;
+	
 	/**
-	 * The main function 
-	 * @param args The command line parameters passed to the program  
+	 * The main function. A state machine that switches between the GameStates in
+	 * an array until one of them returns the SENTINEL return value instead of an index
+	 * to the next state to be performed, where it promptly shuts down the program. 
+	 * @param args The command line parameters passed to the program. Not used.
 	 */
 	public static void main(String args[])
 	{

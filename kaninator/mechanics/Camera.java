@@ -25,7 +25,7 @@ public class Camera
 	private static final double FOLLOW_SPEED = 4.0;
 	private static final double FOLLOW_BORDER_SIZE = 1.0/2.2;
 	private static final int OFF_TOP = 1, OFF_BOTTOM = 2, OFF_LEFT = 4, OFF_RIGHT = 8;
-	private static final int CAMERA_MARGIN = 3;
+	private static final int CAMERA_MARGIN = 4;
 
 	private int x, y, numHorizontalTiles;
 	
@@ -304,13 +304,18 @@ public class Camera
 					orderedObjects.put(key, list);	 
 				}
 
-				//Fill the lower tiles first
-				for(int height = 0; height < (int)object.renderHeight(); height+=32)
+				//If they aren't covered up by the surrounding tiles, then fill the lower tiles first
+				if(j >= tiles.get(i).size() - 1 || i >= tiles.size() - 1 || 
+						tiles.get(i + 1).get(j).renderHeight() + 1 < object.renderHeight() ||  
+						tiles.get(i).get(j + 1).renderHeight() + 1 < object.renderHeight())
 				{
-					if(offScreen(obj_x, obj_y, height, (int)MapLoader.getTileSize() * 2, (int)MapLoader.getTileSize()) == 0)
-						list.add(new VisibleElement(object.getLowerDrawable(),
-								obj_x, obj_y,
-								height));
+					for(int height = 0; height < (int)object.renderHeight(); height+=32)
+					{
+						if(offScreen(obj_x, obj_y, height, (int)MapLoader.getTileSize() * 2, (int)MapLoader.getTileSize()) == 0)
+							list.add(new VisibleElement(object.getLowerDrawable(),
+									obj_x, obj_y,
+									height));
+					}
 				}
 				//And top it off with the highest one
 				list.add(new VisibleElement(object.getDrawable(),

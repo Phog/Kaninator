@@ -18,13 +18,21 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 /**
- * The settings state.
+ * The High score state.
  * The player can view the high scores in this state.
+ * This class also implements the addScore method, responsible for adding new
+ * high scores to the high scores file.
  * @author phedman
  */
 public class Highscore extends GameState
 {
 	private static final int MAX_SCORES = 6;
+	
+	/**
+	 * Nested class used for storing the HighScores and sorting them
+	 * easily.
+	 * @author phedman
+	 */
 	private class Score implements Comparable<Score>
 	{
 		String name;
@@ -50,6 +58,15 @@ public class Highscore extends GameState
 	private Menu menu;
 	private String path;
 
+	
+	/**
+	 * Creates a new high scores object and tries to load the latest scores from the file at the path provided in the parameters.
+	 * @param _camera The camera class used to render the menu to the screen.
+	 * @param _gui The gui class used for overlays.
+	 * @param _keyboard The keyboard class for key input.
+	 * @param _mouse Mouse input.
+	 * @param filepath The file path at which the high scores file resides.
+	 */
 	public Highscore(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse, String filepath)
 	{
 		super(_camera, _gui, _keyboard, _mouse);
@@ -65,6 +82,9 @@ public class Highscore extends GameState
 		readScores();
 	}
 		
+	/**
+	 * Attempts to read the high scores from the file located at [path].
+	 */
 	private void readScores()
 	{
 		scores.clear();
@@ -107,6 +127,10 @@ public class Highscore extends GameState
 		
 	}
 	
+	
+	/**
+	 * Attempts to write the current scores into the file located at [path].
+	 */
 	private void writeScores()
 	{
 		PrintWriter scoreFile;
@@ -126,6 +150,14 @@ public class Highscore extends GameState
 		scoreFile.close();
 	}
 	
+	
+	/**
+	 * Asks the player for a name with a dialog box, then adds that score to the ArrayList of Scores.
+	 * Then sorts the scores and attempts to write them to the high scores file with writeScores().
+	 * @param score The score the player has achieved
+	 * @see kaninator.game.Highscore.writeScores
+	 * @see kaninator.game.Highscore.Score
+	 */
 	public void addScore(int score)
 	{
 		Score newScore = new Score();
@@ -141,6 +173,9 @@ public class Highscore extends GameState
 		writeScores();
 	}
 	
+	/**
+	 * Renders the high scores menu to the screen.
+	 */
 	private void render()
 	{
 		camera.clearGUI();
@@ -151,6 +186,8 @@ public class Highscore extends GameState
 	
 	/**
 	 * High scores menu, implemented using the Menu class.
+	 * Prints the high scores from the ArrayList of scores stored as an attribute.
+	 * Returns to the main menu when done.
 	 * @see kaninator.mechanics.Menu 
 	 */
 	public int doState()

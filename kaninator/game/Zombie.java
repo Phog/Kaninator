@@ -11,6 +11,9 @@ import kaninator.graphics.Animation;
 import kaninator.mechanics.DynamicObject;
 
 /**
+ * The main enemy class of the game. The Zombies contain
+ * model objects which represent them on screen. They can
+ * also perform rudimentary AI, trying to flock up on the player.
  * @author phedman
  */
 public class Zombie
@@ -27,6 +30,17 @@ public class Zombie
 	private double distance;
 	private boolean dead;
 	
+	/**
+	 * Constructs a Zombie object and initializes all the objects it is dependent on.
+	 * @param animations The ArrayList of Animations that build up the Zombie model. Cannot be null or of the size 0.
+	 * @param _map The game map used for height checking.
+	 * @param _squirt The sound to be played when the Zombie is hit by a bullet.
+	 * @param _player The player object the Zombies are chasing.
+	 * @param x The starting x coordinate for the player.
+	 * @param y The starting y coordinate for the player.
+	 * @param radius_constant How much the width of the Animations should be divided with to get a realistic estimate for the radius of the model.
+	 * @throws Exception Exception If the animation is null or of the size 0, since the Model object cannot be created without these.
+	 */
 	public Zombie(ArrayList<Animation> animations, Map _map, SoundClip _squirt, DynamicObject _player, double x, double y, double radius_constant) throws Exception
 	{
 		map = _map;
@@ -38,12 +52,22 @@ public class Zombie
 		dead = false;
 	}
 	
+	/**
+	 * Calculates the distance between the Zombie and the DynamicObject in the parameter
+	 * @param other The DynamicObject the distance will be calculated to.
+	 * @return The distance between the Zombie and the DynamicObject in the parameter.
+	 */
 	private double distanceTo(DynamicObject other)
 	{
 		double distTo = Math.pow((other.get_x() - model.getModel().get_x()),2) + Math.pow((other.get_y() - model.getModel().get_y()),2);
 		return Math.sqrt(distTo);
 	}
 	
+	/**
+	 * Makes the >ombie follow the DynamicObject set as the target.
+	 * Doesn't perform pathfinding or anything fancy, just brute force following, even if a wall is in the way.
+	 * @param target The DynamicObject the Zombie should follow.
+	 */
 	private void follow(DynamicObject target)
 	{
 		double delta_x = target.get_x() - model.getModel().get_x();
@@ -107,32 +131,48 @@ public class Zombie
 		}
 	}
 	
+	/**
+	 * Calculates the distance between the Zombie and the player and stores it in 
+	 * order to be able to compare distances with its peers later on.
+	 */
 	public void observe()
 	{
 		distance = distanceTo(player);
 	}
 	
+	/**
+	 * Kills the Zombie. Effectively setting the dead value to true and playing the squish sound.
+	 */
 	public void kill()
 	{
 		dead = true;
 		squirt.playClip();
 	}
 	
+	
+	/**
+	 * Performs the actions the Zombie should do. If the Zombie is already dead it returns true so
+	 * the Zombie can be removed from the list in Game. The Zombie is inactive if the distance to the
+	 * player is less than MAX_ACTIVE_DISTANCE, otherwise it compares the distances to the player with its
+	 * peers and then mimics the Zombie with the closest distance to the player.
+	 * @param others The other Zombies the Zombie collaborates with.
+	 * @return true if the Zombie is dead, otherwise false.
+	 */
 	public boolean act(LinkedList<Zombie> others)
 	{
 		if(dead)
 			return true;
 		
 		Zombie leader = null;
-		for(Zombie otherone : others)
-		{
-			if(distanceTo(otherone.getMainObject()) < MIN_DISTANCE_BETWEEN)
-				if(distance > otherone.distance)
-					leader = otherone;
-		}
-		
 		if(distance < MAX_ACTIVE_DISTANCE)
 		{
+			for(Zombie otherone : others)
+			{
+				if(distanceTo(otherone.getMainObject()) < MIN_DISTANCE_BETWEEN)
+					if(distance > otherone.distance)
+						leader = otherone;
+			}
+			
 			if(leader != null)
 			{
 				model.setVelX(leader.model.getVelX());
@@ -157,11 +197,19 @@ public class Zombie
 		return false;
 	}
 	
+	/**
+	 * Getter for the DynamicObject representing the Zombie.
+	 * @return The DynamicObject representing the Zombie.
+	 */
 	public DynamicObject getMainObject()
 	{
 		return model.getModel();
 	}
 	
+	/**
+	 * Gets all the DynamicObjects associated with the Zombie. Ie. The Zombie model itself and its shadow.
+	 * @return A LinkedList of all the DynamicObjects associated with the Zombie.
+	 */
 	public LinkedList<DynamicObject> getDynamicObjects()
 	{
 		return model.getDynamicObjects();

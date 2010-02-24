@@ -20,6 +20,14 @@ public class Main extends GameState
 {
 	private Menu menu;
 	
+
+	/**
+	 * Creates a new Main object and initializes the menu object.
+	 * @param _camera The camera class used to render the menu to the screen.
+	 * @param _gui The gui class used for overlays.
+	 * @param _keyboard The keyboard class for key input.
+	 * @param _mouse Mouse input.
+	 */
 	
 	public Main(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse)
 	{
@@ -44,7 +52,10 @@ public class Main extends GameState
 		menu.addEntry(new Text("Exit!", "Impact", 32, Font.BOLD, Color.WHITE),
 						new Text("Exit!", "Impact", 32, Font.BOLD, Color.RED));
 	}
-		
+	
+	/**
+	 * Renders the main menu to the screen.
+	 */	
 	private void render()
 	{
 		camera.clearGUI();
@@ -52,6 +63,11 @@ public class Main extends GameState
 		camera.renderGUI();
 	}
 	
+	/**
+	 * The method containing the main menu loop.
+	 * Any of the other states can be accessed from this one.
+	 * 
+	 */
 	public int doState()
 	{
 		int retvalue = 0;

@@ -19,7 +19,7 @@ import java.io.IOException;
 
 /**
  * The game state.
- * The actual game is played in this state. The gameloop resides here.
+ * The actual game is played in this state. The game loop resides here.
  * @author phedman
  * @see kaninator.game.GameState
  */
@@ -94,6 +94,10 @@ public class Game extends GameState
 		enemyList = new LinkedList<DynamicObject>();
 	}
 	
+	/**
+	 * Gets the score the player has managed to achieve. Should be called after the game is over.
+	 * @return The score the player has achieved in the current game.
+	 */
 	public int getScore()
 	{
 		return score;
@@ -101,9 +105,10 @@ public class Game extends GameState
 	
 	/**
 	 *  The game loop. Sends the DynamicObjects (Player & NonPlayerObjects) to the camera,
-	 *  enters the game loop (update objects -> update player -> update camera -> change the
-	 *  player coordinates -> loop). After the gameloop is done it clears up the objects from
+	 *  enters the game loop (update objects -> update camera -> update player -> change the
+	 *  player coordinates -> loop). After the game loop is done it clears up the objects from
 	 *  the camera.
+	 *  Returns to the main menu if the player cancels the game, otherwise the high score menu.
 	 */
 	public int doState()
 	{
@@ -153,6 +158,7 @@ public class Game extends GameState
 				retValue = Kaninator.GAME_OVER;
 				break;
 			}
+			
 			movePlayer();
 			player.move();
 			framesAlive++;
@@ -168,10 +174,7 @@ public class Game extends GameState
 			{
 				System.out.println("Frame sleep interrupted: " + e);
 			}
-			finally
-			{
-				oldTime = System.currentTimeMillis();
-			}
+			oldTime = System.currentTimeMillis();
 		}
 		
 		gui.clearSection(0, 0);
@@ -183,7 +186,10 @@ public class Game extends GameState
 		return retValue;
 	}
 	
-	
+	/**
+	 * Has a ZOMBIE_SPAWN_PROBABILITY chance to spawn a random amount of Zombies at random positions on the map.
+	 * The amount of Zombies can never exceed MAX_ZOMBIES. 
+	 */
 	private void spawnZombies()
 	{
 		try

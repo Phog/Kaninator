@@ -80,6 +80,7 @@ public class Gun
 	 * Aims the gun into the direction made up by the coordinates in the parameters.
 	 * In essence it treats the coordinates as a vector, normalizes them, and multiplies
 	 * them with the speed of the bullet effectively creating a new aiming vector.
+	 * It also decreases shoot delay for each method call.
 	 * @param x X coordinate of the new aiming direction.
 	 * @param y Y coordinate of the new aiming direction.
 	 * @param height The height difference of the new aiming direction.
@@ -170,6 +171,14 @@ public class Gun
 		}
 	}
 	
+	/**
+	 * Fires the gun. Effectively playing the SoundClip and adding a new Bullet object to the
+	 * LinkedList of Bullets contained in Game. Also sets the shoot delay to SHOOT_DELAY. Will only
+	 * fire if the shoot delay is zero, the shoot delay is decreased in setAim().
+	 * @see kaninator.game.Gun.setAim
+	 * @see kaninator.game.Bullet
+	 * @see kainator.game.Game
+	 */
 	public void shoot()
 	{
 		if(delay <= 0)
@@ -183,6 +192,14 @@ public class Gun
 		}
 	}
 	
+	/**
+	 * Loops through all the Bullets in the LinkedList and calls observe() for them:
+	 * Effectively checking them for collisions and moving them.
+	 * @param targets The LinkedList of Zombies that the Bullets should check against collisions with.
+	 * @see kaninator.game.Zombie
+	 * @see kaninator.game.Bullet.observe
+	 * @see kaninator.game.Bullet
+	 */
 	public void observeBullets(LinkedList<Zombie> targets)
 	{
 		for(Iterator<Bullet> i = bullets.iterator(); i.hasNext();)
@@ -192,6 +209,13 @@ public class Gun
 		}
 	}
 	
+	/**
+	 * Loops through all the Bullets in the LinkedList and calls update() for them:
+	 * If they return true, then delete them from the list of Bullets, and their DynamicObjects
+	 * from the list of DynamicObjects.
+	 * @see kaninator.game.Bullet
+	 * @see kaninator.game.Bullet.update
+	 */
 	public void updateBullets()
 	{
 		for(Iterator<Bullet> i = bullets.iterator(); i.hasNext();)
@@ -207,6 +231,10 @@ public class Gun
 		}
 	}
 	
+	/**
+	 * Gets the DynamicObject representing the Gun.
+	 * @return The DynamicObject containing the Animations for the gun.
+	 */
 	public DynamicObject getMainObject()
 	{
 		return model;

@@ -185,7 +185,7 @@ public class GUI
 	 * @param j The y coordinate of the screen section
 	 * @param offset The y offset into the screen section.
 	 * @param drawable The element in question
-	 * @return
+	 * @return The on-screen y coordinate for the element
 	 */
 	private int getRealY(int j, int offset, Drawable drawable)
 	{

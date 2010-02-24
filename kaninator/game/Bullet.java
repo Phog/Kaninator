@@ -57,7 +57,7 @@ public class Bullet
 	/**
 	 * Observes if the projectile has hit a StaticObject, 
 	 * otherwise it advances the projectiles position iteratively to check
-	 * if it collides with a DynamicObject.
+	 * if it collides with a DynamicObject. If the projectile hits one of the Zombies it will call the kill method on it.
 	 * @param targets The List of Zombies targeted by the projectiles which we will perform collision detection against.
 	 * @see kaninator.game.Zombie
 	 */
