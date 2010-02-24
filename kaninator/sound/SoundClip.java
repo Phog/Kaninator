@@ -33,7 +33,6 @@ public class SoundClip
 			if(url == null)
 				throw new IOException("ERR: File not found: " + filepath);
 			
-		   // File soundFile = new File(url.getPath());
 		    AudioInputStream sound = AudioSystem.getAudioInputStream(url.openStream());
 		    DataLine.Info info = new DataLine.Info(Clip.class, sound.getFormat());
 		    clip = (Clip)AudioSystem.getLine(info);
