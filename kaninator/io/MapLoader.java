@@ -70,9 +70,17 @@ public final class MapLoader
 		if(url == null)
 			throw new IOException("ERR: File not found: " + filepath);
 		
-		Scanner parser = new Scanner(new File(url.getPath()));
-		loadTiles();
+		Scanner parser;
+		try
+		{
+			parser = new Scanner(url.openStream());
+		}
+		catch(IOException e)
+		{
+			throw new IOException("ERR: Couldn't open resource: " + e);
+		}
 		
+		loadTiles();
 		int y = 0;
 		while(parser.hasNext())
 		{

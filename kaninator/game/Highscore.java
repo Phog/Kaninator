@@ -10,7 +10,6 @@ import kaninator.io.*;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -73,11 +72,9 @@ public class Highscore extends GameState
 		
 		menu = new Menu(_gui);
 		scores = new ArrayList<Score>();
+		path = filepath;
 		
 		menu.setTitle(new Text("High Scores!", "Impact", 32, Font.BOLD, Color.WHITE));
-		
-		URL url = this.getClass().getResource(filepath);
-		path = (url == null) ? filepath : url.getPath();
 		
 		readScores();
 	}
@@ -133,6 +130,9 @@ public class Highscore extends GameState
 	 */
 	private void writeScores()
 	{
+		if(path == null)
+			return;
+		
 		PrintWriter scoreFile;
 		try
 		{

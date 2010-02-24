@@ -57,7 +57,7 @@ public class Kaninator
 		//Initializes the different states
 		Game game = null; //The game itself
 		Settings settings  = new Settings(camera, gui, keyboard, mouse, screen); //The settings menu
-		Highscore highscore = new Highscore(camera, gui, keyboard, mouse, "/resources/highscores.scr"); //The high scores menu
+		Highscore highscore = new Highscore(camera, gui, keyboard, mouse, "highscores.scr"); //The high scores menu
 		Main main = new Main(camera, gui, keyboard, mouse); //The main menu
 		
 		//And store them in the state array
