@@ -75,7 +75,7 @@ public class Screen implements Canvas
 	
 	/**
 	 * Creates and initializes a window and shows it on the screen.
-	 * @param sizes An array of Dimensions containing the allowed resolutions
+	 * @param _sizes An array of Dimensions containing the allowed resolutions
 	 * @param title The window title
 	 * @see java.awt.Dimension
 	 */

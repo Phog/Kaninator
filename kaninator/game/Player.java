@@ -48,7 +48,7 @@ public class Player
 	 * @param radius_constant How much the width of the Animations should be divided with to get a realistic estimate for the radius of the model.
 	 * @throws Exception Exception If the animation is null or of the size 0, since the Model object cannot be created without these.
 	 */
-	public Player(ArrayList<Animation> playerAnim, ArrayList<Animation> crosshairAnim, SoundClip _ow, Map _map, Gun _gun, double x, double y, double radius_constant) throws Exception
+	public Player(ArrayList<Animation> playerAnim, ArrayList<Animation> crosshairAnim, SoundClip _ow, Map _map, Gun _gun, double x, double y, double radius_constant) throws ModelException
 	{
 		map = _map;
 		model = new Model(playerAnim, map, x, y, radius_constant, PLAYER_SPEED);

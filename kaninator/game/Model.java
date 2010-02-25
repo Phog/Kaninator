@@ -39,10 +39,10 @@ public class Model
 	 * @param speed The speed the model will be moving at in isometric coordinates.
 	 * @throws Exception If the animation is null or of the size 0, since the model cannot be created without these.
 	 */
-	public Model(ArrayList <Animation> animations, Map _map, double x, double y, double radius_constant, double speed) throws Exception
+	public Model(ArrayList <Animation> animations, Map _map, double x, double y, double radius_constant, double speed) throws ModelException
 	{
 		if(animations == null || animations.size() < 1)
-			throw new Exception("ERR: Model animation doesn't exist");
+			throw new ModelException("ERR: Model animation doesn't exist");
 		
 		map = _map;
 		
@@ -200,7 +200,7 @@ public class Model
 	
 	/**
 	 * Advances the currently active Animation.
-	 * @see kaninator.graphics.Animation.advance
+	 * @see kaninator.graphics.Animation#advance()
 	 */
 	public void advanceAnimation()
 	{
@@ -209,7 +209,7 @@ public class Model
 	
 	/**
 	 * Resets the currently active Animation.
-	 * @see kaninator.graphics.Animation.reset
+	 * @see kaninator.graphics.Animation#reset()
 	 */
 	public void reset()
 	{

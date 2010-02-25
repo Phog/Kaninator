@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
-import java.io.IOException;
 
 /**
  * The game state.
@@ -56,7 +55,7 @@ public class Game extends GameState
 	 * @see kaninator.graphics.AnimationFactory
 	 * @see kaninator.io.MapLoader
 	 */
-	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse, Canvas _canvas, String mapPath) throws IOException
+	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse, Canvas _canvas, String mapPath) throws GameException
 	{
 		super(_camera, _gui, _keyboard, _mouse);
 		canvas = _canvas;
@@ -64,26 +63,30 @@ public class Game extends GameState
 		framesAlive = 0;
 		
 		//load files
-		map = MapLoader.readMap(mapPath);
-		ArrayList<Animation> playerAnim = AnimationFactory.getAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
-		ArrayList<Animation> gunAnim = AnimationFactory.getAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
-		ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(ImageFactory.getImage("/resources/crosshair.png"));
-		
-		Drawable bullet = ImageFactory.getImage("/resources/bullet.png");
-		SoundClip shotgun = SoundFactory.getClip("/resources/shotgun.wav");
-		SoundClip ow = SoundFactory.getClip("/resources/ow.wav");
-		squirt = SoundFactory.getClip("/resources/squirt.wav");
-		
-		//create objects
-		bullets = new LinkedList<DynamicObject>();
 		try
 		{
+			map = MapLoader.readMap(mapPath);
+			ArrayList<Animation> playerAnim = AnimationFactory.getAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
+			ArrayList<Animation> gunAnim = AnimationFactory.getAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
+			ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(ImageFactory.getImage("/resources/crosshair.png"));
+			
+			Drawable bullet = ImageFactory.getImage("/resources/bullet.png");
+			SoundClip shotgun = SoundFactory.getClip("/resources/shotgun.wav");
+			SoundClip ow = SoundFactory.getClip("/resources/ow.wav");
+			squirt = SoundFactory.getClip("/resources/squirt.wav");
+			
+			//create objects
+			bullets = new LinkedList<DynamicObject>();
 			gun = new Gun(gunAnim, shotgun, map, bullet, bullets, 25.0);
 			player = new Player(playerAnim, crosshairAnim, ow, map, gun, 0, 0, 5.0);
 		}
-		catch(Exception e)
+		catch(ModelException e)
 		{
-			throw new IOException("Couldn't create game objects:\n" + e);
+			throw new GameException("Couldn't create game objects:\n" + e);
+		}
+		catch(MapException e)
+		{
+			throw new GameException("Load the map:\n" + e);
 		}
 
 		hud = new Text("HP: " + player.getHp() + " Score: " + score, "Impact", 16, Font.PLAIN, Color.RED);

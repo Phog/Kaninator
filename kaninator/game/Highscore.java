@@ -155,7 +155,7 @@ public class Highscore extends GameState
 	 * Asks the player for a name with a dialog box, then adds that score to the ArrayList of Scores.
 	 * Then sorts the scores and attempts to write them to the high scores file with writeScores().
 	 * @param score The score the player has achieved
-	 * @see kaninator.game.Highscore.writeScores
+	 * @see kaninator.game.Highscore#writeScores()
 	 * @see kaninator.game.Highscore.Score
 	 */
 	public void addScore(int score)

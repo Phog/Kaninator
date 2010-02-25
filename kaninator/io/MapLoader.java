@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import kaninator.game.Map;
+import kaninator.game.MapException;
 import kaninator.graphics.Drawable;
 import kaninator.graphics.ImageFactory;
 import kaninator.mechanics.*;
@@ -62,22 +63,22 @@ public final class MapLoader
 	 * @return A the Map created from the text file.
 	 * @throws IOException If the file is not found or cannot be read.
 	 */
-	public static Map readMap(String filepath) throws IOException
+	public static Map readMap(String filepath) throws MapException
 	{	
 		ArrayList<ArrayList<StaticObject>> objects = new ArrayList<ArrayList<StaticObject>>();
 
 		URL url = objects.getClass().getResource(filepath);
-		if(url == null)
-			throw new IOException("ERR: File not found: " + filepath);
-		
 		Scanner parser;
 		try
 		{
+			if(url == null)
+				throw new IOException("ERR: File not found: " + filepath);
+			
 			parser = new Scanner(url.openStream());
 		}
 		catch(IOException e)
 		{
-			throw new IOException("ERR: Couldn't open resource: " + e);
+			throw new MapException("Couldn't load map: \n" + e);
 		}
 		
 		loadTiles();

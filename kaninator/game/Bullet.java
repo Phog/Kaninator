@@ -15,7 +15,7 @@ import kaninator.mechanics.DynamicObject;
  * (StaticObject or DynamicObject). They should only be constructed by the Gun class.
  * @author phedman
  * @see kaninator.mechanics.DynamicObject
- * @see kaniantor.game.Gun
+ * @see kaninator.game.Gun
  */
 public class Bullet
 {

@@ -4,7 +4,6 @@
 package kaninator.game;
 
 import java.awt.Dimension;
-import java.io.IOException;
 
 import kaninator.graphics.Drawable;
 import kaninator.graphics.ImageFactory;
@@ -91,9 +90,9 @@ public class Kaninator
 						{
 							states[0] = game = new Game(camera, gui, keyboard, mouse, screen, "/resources/gamemap.map");
 						}
-						catch(IOException e)
+						catch(GameException e)
 						{
-							System.out.println("ERR: Couldn't create game: " + e);
+							System.out.println("ERR: Couldn't create game: \n" + e);
 							stateIndex = MAIN_MENU - 1;
 						}
 						break;

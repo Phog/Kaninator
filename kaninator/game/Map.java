@@ -44,7 +44,7 @@ public class Map
 	 * @param x The x coordinate of the point you want to calculate the height for.
 	 * @param y The y coordinate of the point you want to calculate the height for.
 	 * @return The height at the given (x,y) coordinate on the map.
-	 * @see kaninator.mechanics.StaticObjects
+	 * @see kaninator.mechanics.StaticObject
 	 */
 	public double getHeightAt(double x, double y)
 	{

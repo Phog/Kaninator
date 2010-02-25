@@ -48,10 +48,10 @@ public class Gun
 	 * @param _speed The speed the bullets will travel at.
 	 * @throws Exception If the animation is null or of the size 0, since the model cannot be created without these.
 	 */
-	public Gun(ArrayList<Animation> animList, SoundClip _sound, Map _map, Drawable _bullet, LinkedList<DynamicObject> _bulletObjects, double _speed) throws Exception
+	public Gun(ArrayList<Animation> animList, SoundClip _sound, Map _map, Drawable _bullet, LinkedList<DynamicObject> _bulletObjects, double _speed) throws ModelException
 	{
 		if(animList == null || animList.size() < 1)
-			throw new Exception("ERR: Gun animation doesn't exist");
+			throw new ModelException("ERR: Gun animation doesn't exist");
 		
 		model = new DynamicObject(animList, 0.0);
 		bulletObjects = _bulletObjects;
@@ -148,8 +148,8 @@ public class Gun
 	 * Updates the internal state of the gun. Setting its position to the wielders position.
 	 * Tweaking the height and position of the DynamicObject with setHeightOffset
 	 * respectively setPosOffset to preserve a reasonable drawing order.
-	 * @see kaninator.mechanics.DynamicObject.setHeightOffset
-	 * @see kaninator.mechanics.DynamicObject.setPosOffset
+	 * @see kaninator.mechanics.DynamicObject#setHeightOffset(double)
+	 * @see kaninator.mechanics.DynamicObject#setPosOffset(double, double)
 	 */
 	public void update()
 	{	
@@ -175,9 +175,9 @@ public class Gun
 	 * Fires the gun. Effectively playing the SoundClip and adding a new Bullet object to the
 	 * LinkedList of Bullets contained in Game. Also sets the shoot delay to SHOOT_DELAY. Will only
 	 * fire if the shoot delay is zero, the shoot delay is decreased in setAim().
-	 * @see kaninator.game.Gun.setAim
+	 * @see kaninator.game.Gun#setAim(double, double, double)
 	 * @see kaninator.game.Bullet
-	 * @see kainator.game.Game
+	 * @see kaninator.game.Game
 	 */
 	public void shoot()
 	{
@@ -197,7 +197,7 @@ public class Gun
 	 * Effectively checking them for collisions and moving them.
 	 * @param targets The LinkedList of Zombies that the Bullets should check against collisions with.
 	 * @see kaninator.game.Zombie
-	 * @see kaninator.game.Bullet.observe
+	 * @see kaninator.game.Bullet#observe(LinkedList)
 	 * @see kaninator.game.Bullet
 	 */
 	public void observeBullets(LinkedList<Zombie> targets)
@@ -214,7 +214,7 @@ public class Gun
 	 * If they return true, then delete them from the list of Bullets, and their DynamicObjects
 	 * from the list of DynamicObjects.
 	 * @see kaninator.game.Bullet
-	 * @see kaninator.game.Bullet.update
+	 * @see kaninator.game.Bullet#update()
 	 */
 	public void updateBullets()
 	{
