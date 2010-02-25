@@ -66,11 +66,9 @@ public interface Canvas
 	public Dimension getInsets();
 	
 	/**
-	 * Sets the size of the window to the size contained in the dimension.
-	 * @param size The Dimension object containing the size of the screen.
-	 * @see java.awt.Dimension
+	 * Changes the window size according to the values in an internal array.
 	 */
-	public void setSize(Dimension size);
+	public void changeSize();
 	
 	/**
 	 * Hides alternatively shows the mouse cursor when above the window.

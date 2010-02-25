@@ -20,11 +20,6 @@ import java.awt.*;
  */
 public class Settings extends GameState
 {
-	public static Dimension resolutions[]  = {new Dimension(640, 480),
-										new Dimension(800, 480),
-										new Dimension(800, 600),
-										new Dimension(1024, 600),
-										new Dimension(1024, 768)};
 	private Canvas canvas;
 	private Menu menu;
 	private Text resolutionOn, resolutionOff, transparencyOn, transparencyOff;
@@ -103,11 +98,7 @@ public class Settings extends GameState
 				
 				if(retValue == 0)
 				{
-					resIndex++;
-					if(resIndex >= resolutions.length)
-						resIndex = 0;
-					
-					canvas.setSize(resolutions[resIndex]);
+					canvas.changeSize();
 					
 					resolutionOff.setText("Resolution: " + canvas.getResWidth() + "x" + canvas.getResHeight());
 					resolutionOn.setText("Resolution: " + canvas.getResWidth() + "x" + canvas.getResHeight());

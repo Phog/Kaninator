@@ -3,6 +3,7 @@
  */
 package kaninator.game;
 
+import java.awt.Dimension;
 import java.io.IOException;
 
 import kaninator.graphics.Drawable;
@@ -39,11 +40,17 @@ public class Kaninator
 		//All the possible states of the game
 		GameState states[] = new GameState[4];
 
+		//Creates the dependencies for the components of the game.
 		Drawable background = ImageFactory.getImage("/resources/background.jpg");
+		Dimension resolutions[]  = {new Dimension(640, 480),
+									new Dimension(800, 480),
+									new Dimension(800, 600),
+									new Dimension(1024, 600),
+									new Dimension(1024, 768)};
 		
-		//Creates the depencies used in the different stages
+		//Creates the components used in the different states
 		JFrame frame = new JFrame();
-		Screen screen = new Screen(frame, Settings.resolutions[0], false, "Kaninator 0.01");
+		Screen screen = new Screen(frame, resolutions, "Kaninator 0.1 BETA");
 		GUI gui = new GUI(screen);
 		Camera camera = new Camera(screen, gui, background);
 		

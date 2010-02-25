@@ -69,16 +69,20 @@ public class Screen implements Canvas
 	private Color clearColor;
 	private LinkedList<VisibleElement> drawList;
 	private InternalCanvas canvas;
+	private Dimension sizes[];
+	private int resIndex;
 
 	
 	/**
 	 * Creates and initializes a window and shows it on the screen.
-	 * @param size The Dimension object containing the width and the height of the window.
-	 * @param fullscreen Fullscreen mode? true/false
+	 * @param sizes An array of Dimensions containing the allowed resolutions
 	 * @param title The window title
+	 * @see java.awt.Dimension
 	 */
-	public Screen(JFrame _frame, Dimension size, boolean fullscreen, String title)
+	public Screen(JFrame _frame, Dimension _sizes[], String title)
 	{
+		resIndex = 0;
+		sizes = _sizes;
 		drawList = new LinkedList<VisibleElement>();
 		
 		frame = _frame;
@@ -87,7 +91,7 @@ public class Screen implements Canvas
 		canvas.setDoubleBuffered(true);
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(size);
+		frame.setSize(sizes[resIndex]);
 		frame.setTitle(title);
 		frame.add(canvas);
 		
@@ -170,12 +174,15 @@ public class Screen implements Canvas
 	}
 	
 	/**
-	 * Sets the size of the window. Effectively the resolution.
-	 * @param size The dimension object containing the new size of the window.
+	 * Changes the window size according to the values in an internal array.
 	 */
-	public void setSize(Dimension size)
+	public void changeSize()
 	{
-		frame.setSize(size);
+		resIndex++;
+		if(resIndex >= sizes.length)
+			resIndex = 0;
+		
+		frame.setSize(sizes[resIndex]);
 	}
 	
 	/**
