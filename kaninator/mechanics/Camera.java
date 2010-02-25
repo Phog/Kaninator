@@ -10,7 +10,7 @@ import kaninator.graphics.*;
 import kaninator.io.MapLoader;
 
 /**
- * Renders the internal game objects so they can be drawn two dimensionally.
+ * Renders the internal game objects so they can be drawn two dimensionally to the screen.
  * Responsible for converting the internal three-dimensional coordinates of the objects, both static and
  * dynamic, to a 2-dimensional representation, and sorting them so they will be drawn in the correct order
  * by an object that implements the Canvas interface.
@@ -305,17 +305,16 @@ public class Camera
 				}
 
 				//If they aren't covered up by the surrounding tiles, then fill the lower tiles first
-				if(j >= tiles.get(i).size() - 1 || i >= tiles.size() - 1 || 
-						tiles.get(i + 1).get(j).renderHeight() + 1 < object.renderHeight() ||  
-						tiles.get(i).get(j + 1).renderHeight() + 1 < object.renderHeight())
+				int lowestHeight = 0;
+				if(j < tiles.get(i).size() - 1 && i < tiles.size() - 1)
+					lowestHeight = Math.min(tiles.get(i + 1).get(j).renderHeight() + 1, tiles.get(i).get(j + 1).renderHeight() + 1);
+				
+				for(int height = lowestHeight; height < (int)object.renderHeight(); height+=32)
 				{
-					for(int height = 0; height < (int)object.renderHeight(); height+=32)
-					{
-						if(offScreen(obj_x, obj_y, height, (int)MapLoader.getTileSize() * 2, (int)MapLoader.getTileSize()) == 0)
-							list.add(new VisibleElement(object.getLowerDrawable(),
-									obj_x, obj_y,
-									height));
-					}
+					if(offScreen(obj_x, obj_y, height, (int)MapLoader.getTileSize() * 2, (int)MapLoader.getTileSize()) == 0)
+						list.add(new VisibleElement(object.getLowerDrawable(),
+								obj_x, obj_y,
+								height));
 				}
 				//And top it off with the highest one
 				list.add(new VisibleElement(object.getDrawable(),
