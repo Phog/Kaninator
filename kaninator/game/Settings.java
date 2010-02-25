@@ -23,7 +23,6 @@ public class Settings extends GameState
 	private Canvas canvas;
 	private Menu menu;
 	private Text resolutionOn, resolutionOff, transparencyOn, transparencyOff;
-	private int resIndex;
 	
 	
 	/**
@@ -56,8 +55,6 @@ public class Settings extends GameState
 		menu.addEntry(transparencyOff, transparencyOn);
 		menu.addEntry(new Text("Menu!", "Impact", 32, Font.BOLD, Color.WHITE),
 						new Text("Menu!", "Impact", 32, Font.BOLD, Color.RED));
-		resIndex = 0;
-
 	}
 	
 	/**
