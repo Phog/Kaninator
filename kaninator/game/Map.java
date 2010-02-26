@@ -4,7 +4,7 @@
 package kaninator.game;
 
 import kaninator.mechanics.*;
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 import java.util.ArrayList;
 
 /**
@@ -51,8 +51,8 @@ public class Map
 		if(x < 0 || y < 0)
 			return Double.MAX_VALUE;
 		
-		int tile_x = (int)(x/MapLoader.getTileSize());
-		int tile_y = (int)(y/MapLoader.getTileSize());
+		int tile_x = (int)(x/MapFactory.getTileSize());
+		int tile_y = (int)(y/MapFactory.getTileSize());
 		
 		if(tile_y < 0 || tile_y >= tiles.size())
 			return Double.MAX_VALUE;
@@ -62,8 +62,8 @@ public class Map
 		if(tile_x < 0 || tile_x >= rowList.size())
 			return Double.MAX_VALUE;
 		
-		double delta_x = x - tile_x * MapLoader.getTileSize();
-		double delta_y = y - tile_y * MapLoader.getTileSize();
+		double delta_x = x - tile_x * MapFactory.getTileSize();
+		double delta_y = y - tile_y * MapFactory.getTileSize();
 		
 		return rowList.get(tile_x).getHeight(delta_x,delta_y);
 	}

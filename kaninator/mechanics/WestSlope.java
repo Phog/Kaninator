@@ -4,7 +4,7 @@
  */
 package kaninator.mechanics;
 
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 import kaninator.graphics.Drawable;
 
 /**
@@ -35,7 +35,7 @@ public class WestSlope extends StaticObject
 	 */
 	public double getHeight(double x, double y)
 	{
-		return height - MapLoader.getTileHeight() + x / 2.0;
+		return height - MapFactory.getTileHeight() + x / 2.0;
 	}
 
 }

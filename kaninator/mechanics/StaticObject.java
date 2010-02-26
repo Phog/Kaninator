@@ -5,7 +5,7 @@
 package kaninator.mechanics;
 
 import kaninator.graphics.Drawable;
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 
 /**
  * An abstract class representing all the static objects in the game (ie. tiles).
@@ -77,7 +77,7 @@ public abstract class StaticObject
 	 */
 	public int getDepth()
 	{
-		return x * DEPTH_OFFSET_X + y * DEPTH_OFFSET_Y + (int)(height / MapLoader.getTileHeight());
+		return x * DEPTH_OFFSET_X + y * DEPTH_OFFSET_Y + (int)(height / MapFactory.getTileHeight());
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public abstract class StaticObject
 	 */
 	public int render_x()
 	{
-		return (x - 1) * (int)MapLoader.getTileSize() - y * (int)MapLoader.getTileSize();
+		return (x - 1) * (int)MapFactory.getTileSize() - y * (int)MapFactory.getTileSize();
 	}
 	
 	/**
@@ -95,7 +95,7 @@ public abstract class StaticObject
 	 */
 	public int render_y()
 	{
-		return	y * (int)MapLoader.getTileHeight() + x * (int)MapLoader.getTileHeight();
+		return	y * (int)MapFactory.getTileHeight() + x * (int)MapFactory.getTileHeight();
 	}
 	
 	/**

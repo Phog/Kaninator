@@ -6,7 +6,7 @@ package kaninator.game;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 import kaninator.mechanics.DynamicObject;
 
 /**
@@ -65,7 +65,7 @@ public class Bullet
 	{	
 		for(int i = 0; i < BULLET_RESOLUTION; i++)
 		{
-			if(model.getHeight() < map.getHeight(model) - MapLoader.getTileHeight()/2.0)
+			if(model.getHeight() < map.getHeight(model) - MapFactory.getTileHeight()/2.0)
 			{
 				done = true;
 				return;

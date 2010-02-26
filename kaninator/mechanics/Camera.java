@@ -7,7 +7,7 @@ package kaninator.mechanics;
 import java.util.*;
 
 import kaninator.graphics.*;
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 
 /**
  * Renders the internal game objects so they can be drawn two dimensionally to the screen.
@@ -49,7 +49,7 @@ public class Camera
 		background = new VisibleElement(_background, 0, 0, 0);
 		
 		x = y = 0;
-		numHorizontalTiles = 1 + (int)(canvas.getWidth()/(MapLoader.getTileSize() * 2));
+		numHorizontalTiles = 1 + (int)(canvas.getWidth()/(MapFactory.getTileSize() * 2));
 
 		playerObjects = null;
 		bulletObjects = null;
@@ -216,13 +216,13 @@ public class Camera
 	{
 		int retValue = 0;
 		
-		if(y + imgHeight - h + CAMERA_MARGIN * MapLoader.getTileHeight() < 0)
+		if(y + imgHeight - h + CAMERA_MARGIN * MapFactory.getTileHeight() < 0)
 			retValue |= OFF_TOP;
-		if(y - h > canvas.getHeight() + CAMERA_MARGIN * MapLoader.getTileHeight())
+		if(y - h > canvas.getHeight() + CAMERA_MARGIN * MapFactory.getTileHeight())
 			retValue |= OFF_BOTTOM;
-		if(x + imgWidth + CAMERA_MARGIN * MapLoader.getTileSize() < 0)
+		if(x + imgWidth + CAMERA_MARGIN * MapFactory.getTileSize() < 0)
 			retValue |= OFF_LEFT;
-		if(x > canvas.getWidth() + CAMERA_MARGIN * MapLoader.getTileSize())
+		if(x > canvas.getWidth() + CAMERA_MARGIN * MapFactory.getTileSize())
 			retValue |= OFF_RIGHT;
 		
 		return retValue;
@@ -265,8 +265,8 @@ public class Camera
 	 */
 	private void orderStatics()
 	{
-		int camIndex_x = x / (int)MapLoader.getTileSize();
-		int camIndex_y = y / (int)MapLoader.getTileHeight();
+		int camIndex_x = x / (int)MapFactory.getTileSize();
+		int camIndex_y = y / (int)MapFactory.getTileHeight();
 		
 		//Minimum internal y coordinate for the tiles
 		int min_y = (camIndex_y + camIndex_x - 1)/2 - CAMERA_MARGIN;
@@ -293,7 +293,7 @@ public class Camera
 				int key = object.getDepth();
 
 				//If we already are below the screen, then stop drawing this column
-				if((offScreen(obj_x, obj_y, object.renderHeight(), (int)MapLoader.getTileSize() * 2, (int)MapLoader.getTileSize()) & OFF_BOTTOM) > 0)
+				if((offScreen(obj_x, obj_y, object.renderHeight(), (int)MapFactory.getTileSize() * 2, (int)MapFactory.getTileSize()) & OFF_BOTTOM) > 0)
 					break;
 
 				//If there are no tiles with the same depth value, create a new array for the depth value
@@ -311,7 +311,7 @@ public class Camera
 				
 				for(int height = lowestHeight; height < (int)object.renderHeight(); height+=32)
 				{
-					if(offScreen(obj_x, obj_y, height, (int)MapLoader.getTileSize() * 2, (int)MapLoader.getTileSize()) == 0)
+					if(offScreen(obj_x, obj_y, height, (int)MapFactory.getTileSize() * 2, (int)MapFactory.getTileSize()) == 0)
 						list.add(new VisibleElement(object.getLowerDrawable(),
 								obj_x, obj_y,
 								height));

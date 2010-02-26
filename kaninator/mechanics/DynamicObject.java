@@ -5,7 +5,7 @@
 package kaninator.mechanics;
 
 import java.util.ArrayList;
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 import kaninator.graphics.Animation;
 
 /**
@@ -183,9 +183,9 @@ public class DynamicObject
 	 */
 	public int getDepth()
 	{
-		int depth = (int)y / (int)MapLoader.getTileSize() * DEPTH_OFFSET_Y;
-		depth = depth + (int)x / (int)MapLoader.getTileSize() * DEPTH_OFFSET_X;
-		depth = depth + (int)h / (int)MapLoader.getTileHeight() + 1; 
+		int depth = (int)y / (int)MapFactory.getTileSize() * DEPTH_OFFSET_Y;
+		depth = depth + (int)x / (int)MapFactory.getTileSize() * DEPTH_OFFSET_X;
+		depth = depth + (int)h / (int)MapFactory.getTileHeight() + 1; 
 		return depth;
 	}
 	

@@ -30,7 +30,7 @@ import kaninator.mechanics.*;
  * @see kaninator.game.Map
  * @see kaninator.mechanics.StaticObject
  */
-public final class MapLoader
+public final class MapFactory
 {
 	private static final double TILE_SIZE = 64.0;
 	private static final double TILE_HEIGHT = 32.0;

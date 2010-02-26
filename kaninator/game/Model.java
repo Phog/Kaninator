@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import kaninator.graphics.*;
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 import kaninator.mechanics.DynamicObject;
 
 /**
@@ -78,11 +78,11 @@ public class Model
 		double old_x = model.get_x();
 		double old_y = model.get_y();
 		model.move_x(vel_x);
-		if(map.getHeight(model) >= model.getHeight() + MapLoader.getTileHeight()/2.0)
+		if(map.getHeight(model) >= model.getHeight() + MapFactory.getTileHeight()/2.0)
 			model.setPos(old_x, model.get_y());
 		
 		model.move_y(vel_y);
-		if(map.getHeight(model) >= model.getHeight() + MapLoader.getTileHeight()/2.0)
+		if(map.getHeight(model) >= model.getHeight() + MapFactory.getTileHeight()/2.0)
 			model.setPos(model.get_x(), old_y);
 		
 		shadow.setHeight(mapHeight);

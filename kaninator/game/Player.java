@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import kaninator.graphics.*;
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 import kaninator.mechanics.DynamicObject;
 import kaninator.sound.SoundClip;
 
@@ -112,8 +112,8 @@ public class Player
 		double vec_y = iso_y - model.getModel().get_y();
 
 		double height = (map.getHeightAt(iso_x, iso_y) - mHeight);
-		if(height > MapLoader.getTileHeight() * MAX_AIM_UP)
-			height = MapLoader.getTileHeight() * MAX_AIM_UP;
+		if(height > MapFactory.getTileHeight() * MAX_AIM_UP)
+			height = MapFactory.getTileHeight() * MAX_AIM_UP;
 		
 		crosshair.setPos(iso_x, iso_y);
 		crosshair.setHeight(map.getHeightAt(iso_x, iso_y));

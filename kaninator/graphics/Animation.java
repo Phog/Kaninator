@@ -20,8 +20,7 @@ public class Animation implements Drawable
 {
 	private boolean lock;
 	private double currentFrame, speed;
-	ArrayList<Drawable> frames;
-	
+	private ArrayList<Drawable> frames;
 	
 	/**
 	 * Constructs an Animation from an ArrayList of drawables and sets the Animation speed.
@@ -35,6 +34,15 @@ public class Animation implements Drawable
 		frames = _frames;
 		currentFrame = 0;
 		speed = _speed;
+	}
+	
+	/**
+	 * Returns the internal collection of frames, used for testing purposes only.
+	 * @return The collection containing the different frames of the Animation.
+	 */
+	protected ArrayList<Drawable> getFrames()
+	{
+		return frames;
 	}
 	
 	/**
@@ -123,6 +131,11 @@ public class Animation implements Drawable
 			frame.update();
 	}
 	
+	/**
+	 * Clones the animation.
+	 * Effectively creating a new animation with the same image data, but with different headers.
+	 * @return An identical, but still independent, Animation.
+	 */
 	public Animation clone()
 	{
 		return new Animation(frames, speed);

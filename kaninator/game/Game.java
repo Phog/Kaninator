@@ -46,14 +46,14 @@ public class Game extends GameState
 	
 	/**
 	 * Initializes the game.
-	 * Loads the map using MapLoader, creates animations for the player and the
+	 * Loads the map using MapFactory, creates animations for the player and the
 	 * zombies using AnimationFactory and positions them randomly.
 	 * @param _camera The camera class used to render the internal objects to a 2 dimensional screen.
 	 * @param _gui The gui class used for overlays.
 	 * @param _keyboard The keyboard class for key input.
 	 * @param _mouse Mouse input.
 	 * @see kaninator.graphics.AnimationFactory
-	 * @see kaninator.io.MapLoader
+	 * @see kaninator.io.MapFactory
 	 */
 	public Game(Camera _camera, GUI _gui, Keyboard _keyboard, Mouse _mouse, Canvas _canvas, String mapPath) throws GameException
 	{
@@ -65,7 +65,7 @@ public class Game extends GameState
 		//load files
 		try
 		{
-			map = MapLoader.readMap(mapPath);
+			map = MapFactory.readMap(mapPath);
 			ArrayList<Animation> playerAnim = AnimationFactory.getAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
 			ArrayList<Animation> gunAnim = AnimationFactory.getAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
 			ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(ImageFactory.getImage("/resources/crosshair.png"));
@@ -204,8 +204,8 @@ public class Game extends GameState
 				
 				for(int i = 0; i < numZombies; i++)
 				{
-					double pos_y = Math.random() * map.getTiles().size() * MapLoader.getTileSize();
-					double pos_x = Math.random() * map.getTiles().get(0).size() * MapLoader.getTileSize();
+					double pos_y = Math.random() * map.getTiles().size() * MapFactory.getTileSize();
+					double pos_x = Math.random() * map.getTiles().get(0).size() * MapFactory.getTileSize();
 					Zombie enemy = new Zombie(newList, map, squirt, player.getMainObject(), pos_x, pos_y, 5.0);
 					enemies.add(enemy);
 					for(DynamicObject obj: enemy.getDynamicObjects())

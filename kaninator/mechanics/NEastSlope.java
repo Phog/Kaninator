@@ -4,7 +4,7 @@
  */
 package kaninator.mechanics;
 
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 import kaninator.graphics.Drawable;
 
 /**
@@ -38,9 +38,9 @@ public class NEastSlope extends StaticObject
 		double tempHeight = (x - y);
 		
 		if(tempHeight > 0 )
-			return height - MapLoader.getTileHeight();
+			return height - MapFactory.getTileHeight();
 		
-		return height - MapLoader.getTileHeight() - tempHeight/2.0;
+		return height - MapFactory.getTileHeight() - tempHeight/2.0;
 	}
 
 }

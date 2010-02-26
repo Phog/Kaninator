@@ -4,7 +4,7 @@
  */
 package kaninator.mechanics;
 
-import kaninator.io.MapLoader;
+import kaninator.io.MapFactory;
 import kaninator.graphics.Drawable;
 
 /**
@@ -24,7 +24,7 @@ public class NWestSlope extends StaticObject
 	 */
 	public NWestSlope(Drawable _tile, Drawable _lower, double _height, int x, int y)
 	{
-		super(_tile, _lower, _height - MapLoader.getTileHeight(), x, y);
+		super(_tile, _lower, _height - MapFactory.getTileHeight(), x, y);
 	}
 	
 	/**
@@ -37,10 +37,10 @@ public class NWestSlope extends StaticObject
 	{
 		double tempHeight = (x + y)/2.0;
 		
-		if(tempHeight < MapLoader.getTileHeight())
+		if(tempHeight < MapFactory.getTileHeight())
 			return height;
 		
-		return height - MapLoader.getTileHeight() + tempHeight;
+		return height - MapFactory.getTileHeight() + tempHeight;
 	}
 
 }
