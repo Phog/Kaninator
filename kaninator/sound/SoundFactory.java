@@ -3,7 +3,6 @@
  */
 package kaninator.sound;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -37,7 +36,7 @@ public class SoundFactory
 		{
 			clip = new SoundClip(filepath);
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			System.out.println("ERR: Couldn't load soundclip: "+ filepath + "\n" + e);
 			return notFound;
@@ -45,5 +44,93 @@ public class SoundFactory
 		
 		soundMap.put(filepath, clip);
 		return clip;
+	}
+	
+	/**
+	 * Main method for testing purposes. Prints every test and if it succeeds, if it fails then it breaks the execution.
+	 * @param args Ignored here.
+	 */
+	public static void main(String[] args)
+	{
+		try
+		{
+			System.out.println("Testing construction phase..");	
+			if (soundMap == null)
+				failedTest("Couldn't construct the HashMap.");
+			System.out.print("..");
+			
+			if (!soundMap.isEmpty())
+				failedTest("HashMap initially not empty.");
+			System.out.print("..");
+			
+			if (notFound == null)
+				failedTest("Failed creating the dummy sound.");
+			System.out.println(".. Test Ok!");
+			
+			System.out.println("Testing getClip method..");
+			//valid call
+			SoundClip clip = getClip("/resources/ow.wav");
+			if(clip == null)
+				failedTest("getClip returned null instead of valid sound.");
+			System.out.print("..");
+			
+			if(soundMap.size() != 1)
+				failedTest("HashMap has an invalid size after getClip: (" + soundMap.size() + ")");
+			System.out.print("..");
+			
+			//valid clone
+			SoundClip clone = getClip("/resources/ow.wav");
+			if(clone == null)
+				failedTest("getClip returned null instead of valid clone.");
+			System.out.print("..");
+			
+			if(clone != clip)
+				failedTest("getClip returned new clip instead of clone.");
+			System.out.print("..");
+			
+			if(soundMap.size() != 1)
+				failedTest("HashMap has an invalid size after getClip clone: (" + soundMap.size() + ")");
+			System.out.println(".. Test Ok!");
+			
+			//invalid call: invalid string
+			SoundClip fail = getClip("GÖFÖÖÖÖ DJDJÖ MÖRM:");
+			if(fail == null)
+				failedTest("getClip returned null clip instead of dummy clip when passed invalid string.");
+			System.out.print("..");
+			
+			if(fail != notFound)
+				failedTest("getClip didn't return dummy clip when passed invalid string.");
+			System.out.print("..");
+			
+			//invalid call: null string
+			fail = getClip(null);
+			if(fail == null)
+				failedTest("getClip returned null clip instead of dummy clip when passed null string.");
+			System.out.print("..");
+			
+			if(fail != notFound)
+				failedTest("getClip didn't return dummy clip when passed null string.");
+			System.out.print("..");
+			
+			if(soundMap.size() != 1)
+				failedTest("HashMap has an invalid size after invalid getClip calls: (" + soundMap.size() + ")");
+			System.out.println(".. Test Ok!");
+				
+		}
+		catch (Exception e)
+		{
+			failedTest("Unknown exception: " + e);
+		}
+		System.out.println("TESTS: OK");
+	}
+	
+	/**
+	 * Gets called if a test fails. Testing purposes only. Prints out the failed test and exits the program.
+	 * @param test A string describing the test that failed.
+	 */
+	private static void failedTest(String test)
+	{
+		System.out.println("TEST FAILED: " + test);
+		System.exit(0);
 	}
 }

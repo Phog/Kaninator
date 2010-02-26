@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Transparency;
-import java.io.IOException;
-
 /**
  * The only way to create Images.
  * Uses a HashMap to keep track of the Images that have already been loaded in order to avoid duplicates.
@@ -70,7 +68,7 @@ public final class ImageFactory
 		{
 			retImage = new Image(filepath);
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			System.out.println("ERR: Image not found: " + filepath + "\n" + e);
 			return notFound;
@@ -88,5 +86,90 @@ public final class ImageFactory
 	{
 		for(Image img : imageMap.values())
 			img.update();
+	}
+	
+	/**
+	 * Main method for testing purposes. Prints every test and if it succeeds, if it fails then it breaks the execution.
+	 * @param args Ignored here.
+	 */
+	public static void main(String[] args)
+	{
+		try
+		{
+			System.out.println("Testing construction phase..");
+			if (transparency != Transparency.BITMASK)
+				failedTest("Transparency not BITMASK initially.");
+			
+			if (imageMap == null)
+				failedTest("Couldn't construct the HashMap.");
+			
+			if (!imageMap.isEmpty())
+				failedTest("HashMap initially not empty.");
+			
+			if (notFound == null)
+				failedTest("Failed creating the dummy image.");
+			System.out.println(".. Test Ok!");
+
+			System.out.println("Trying to update the transparencies of the elements in an empty HashMap..");
+			updateTransparencies();
+			System.out.println(".. Test Ok!");
+
+			System.out.println("Testing getImage..");
+			//valid call
+			Drawable testImage = getImage("/resources/flat.png");
+			if (testImage == notFound)
+				failedTest("Couldn't create a valid image.");
+			System.out.print("..");
+
+
+			if (imageMap.size() != 1)
+				failedTest("The image didn't get added properly to the HashMap: size not 1.");
+			System.out.print("..");
+
+			if (testImage.getHeight() != 96 || testImage.getWidth() != 128)
+				failedTest("Invalid dimensions for the image.");
+			System.out.print("..");
+
+			//invalid string
+			Drawable failImage = getImage("FGSFDS!");
+			if (failImage != notFound)
+				failedTest("Created an invalid image instead of the dummy one.");
+			System.out.print("..");
+
+			//null string
+			failImage = getImage(null);
+			if (failImage != notFound)
+				failedTest("Created invalid animations instead of the dummy one.");
+			System.out.print("..");
+			
+			if (imageMap.size() != 1)
+				failedTest("HashMap size changed after trying to get Invalid Images: not 1");
+			System.out.println(".. Test Ok!");
+
+			System.out.println("Trying to update the transparencies of the elements in a non-empty HashMap..");
+			updateTransparencies();
+			System.out.println(".. Test Ok!");
+
+			System.out.println("Testing the toggleTransparency-method..");
+			toggleTransparency();
+			if (transparency != Transparency.TRANSLUCENT)
+				failedTest("Transparency not toggled to TRANSLUCENT.");
+			System.out.println(".. Test Ok!");
+		}
+		catch (Exception e)
+		{
+			failedTest("Unknown exception: " + e);
+		}
+		System.out.println("TESTS: OK");
+	}
+	
+	/**
+	 * Gets called if a test fails. Testing purposes only. Prints out the failed test and exits the program.
+	 * @param test A string describing the test that failed.
+	 */
+	private static void failedTest(String test)
+	{
+		System.out.println("TEST FAILED: " + test);
+		System.exit(0);
 	}
 }

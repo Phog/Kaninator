@@ -119,7 +119,8 @@ public class Highscore extends GameState
 				}
 			}
 			
-			scores.add(lineScore);
+			if(lineScore.score > 0)
+				scores.add(lineScore);
 		}
 		
 	}
@@ -237,6 +238,122 @@ public class Highscore extends GameState
 		menu.clearEntries();
 
 		return Kaninator.MAIN_MENU;
+	}
+	
+	
+	/**
+	 * Main method for testing purposes. Prints every test and if it succeeds, if it fails then it breaks the execution.
+	 * @param args Ignored here.
+	 */
+	public static void main(String[] args)
+	{
+		try
+		{
+			System.out.println("Testing construction phase..");			
+			//invalid constructor call: invalid file
+			Highscore failScore = new Highscore(null, null, null, null, "invalidtestfile");
+			if(failScore == null)
+				failedTest("Couldn't create invalid Highscore object.");
+			System.out.print("..");
+			
+			if(failScore.scores == null)
+				failedTest("Scores-ArrayList null in valid Highsore object");
+			System.out.print("..");
+			
+			if(failScore.scores.size() != 0)
+				failedTest("Score count not 0 in invalid Highscore object (not possible)");
+			System.out.print("..");
+			
+			//invalid constructor call: invalid file name
+			failScore = new Highscore(null, null, null, null, "/&&@!MEJAHÖIDJIÖK/\\~åäö><|^ÖGFFFÖÖ");
+			if(failScore == null)
+				failedTest("Couldn't create invalid Highscore object.");
+			System.out.print("..");
+			
+			if(failScore.scores == null)
+				failedTest("Scores-ArrayList null in valid Highsore object");
+			System.out.print("..");
+			
+			if(failScore.scores.size() != 0)
+				failedTest("Score count not 0 in invalid Highscore object (not possible)");
+			System.out.print("..");	
+		
+			//valid constructor call
+			Highscore validScore = new Highscore(null, null, null, null, "testscores.scr");
+			if(validScore == null)
+				failedTest("Couldn't create valid Highscore object.");
+			System.out.print("..");
+			
+			if(validScore.scores == null)
+				failedTest("Scores-ArrayList null in valid Highsore object");
+			System.out.print("..");
+			
+			if(validScore.scores.size() < 3)
+				failedTest("Score count less than 3 in test-file (not possible)");
+			System.out.print("..");
+			
+			for(int i = 0; i < validScore.scores.size() - 1; i++)
+				if(validScore.scores.get(i).compareTo(validScore.scores.get(i + 1)) == 1)
+					failedTest("Valid scores out of order.");
+			System.out.println(".. Test Ok!");
+			
+			System.out.println("Testing addScore..");
+			//valid file
+			validScore.addScore(500);
+			if(validScore.scores.size() < 3)
+				failedTest("Score count less than 3 in test-file after add score");
+			System.out.print("..");
+			
+			for(int i = 0; i < validScore.scores.size() - 1; i++)
+				if(validScore.scores.get(i).compareTo(validScore.scores.get(i + 1)) == 1)
+					failedTest("Valid scores out of order after add score.");
+			System.out.print("..");
+			
+			//checking if a file has been written
+			Highscore cmpScore = new Highscore(null, null, null, null, "testscores.scr");
+			System.out.print("..");
+			
+			for(int i = 0; i < cmpScore.scores.size(); i++)
+			{
+				if(cmpScore.scores.get(i).compareTo(validScore.scores.get(i)) != 0)
+					failedTest("Valid scores not matching with the scores file.");
+				System.out.print("..");
+			}
+			
+			//invalid file
+			failScore.addScore(500);
+			if(failScore.scores.size() != 1 && failScore.scores.size() != 0)
+				failedTest("Score count invalid after add score");
+			
+			//checking if a file has been written
+			cmpScore = new Highscore(null, null, null, null, "/&&@!MEJAHÖIDJIÖK/\\~åäö><|^ÖGFFFÖÖ");
+			System.out.print("..");
+			
+			for(int i = 0; i < cmpScore.scores.size(); i++)
+			{
+				if(cmpScore.scores.get(i).compareTo(validScore.scores.get(i)) == 0)
+					failedTest("FailScores matching with a non-existent file (?)");
+				System.out.print("..");
+			}
+			System.out.println(".. Test Ok!");
+			
+			
+		}
+		catch (Exception e)
+		{
+			failedTest("Unknown exception: " + e);
+		}
+		System.out.println("TESTS: OK");
+	}
+	
+	/**
+	 * Gets called if a test fails. Testing purposes only. Prints out the failed test and exits the program.
+	 * @param test A string describing the test that failed.
+	 */
+	private static void failedTest(String test)
+	{
+		System.out.println("TEST FAILED: " + test);
+		System.exit(0);
 	}
 
 }

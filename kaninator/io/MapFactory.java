@@ -35,7 +35,7 @@ public final class MapFactory
 	private static final double TILE_SIZE = 64.0;
 	private static final double TILE_HEIGHT = 32.0;
 	
-	private static Drawable flat, ne, nw, n, e, se, s, sw, w;
+	private static Drawable flat = null, ne = null, nw = null, n = null, e = null, se = null, s = null, sw = null, w = null;
 	
 	/**
 	 * Returns the internal size (in the isometric coordinate system) of a tile.
@@ -67,16 +67,18 @@ public final class MapFactory
 	{	
 		ArrayList<ArrayList<StaticObject>> objects = new ArrayList<ArrayList<StaticObject>>();
 
-		URL url = objects.getClass().getResource(filepath);
+
 		Scanner parser;
 		try
-		{
+		{		
+			URL url = objects.getClass().getResource(filepath);
+			
 			if(url == null)
 				throw new IOException("ERR: File not found: " + filepath);
 			
 			parser = new Scanner(url.openStream());
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			throw new MapException("Couldn't load map: \n" + e);
 		}
@@ -125,12 +127,21 @@ public final class MapFactory
 	 */
 	private static ArrayList<StaticObject> parseLine(String line, int y)
 	{
-		Scanner lineScr = new Scanner(line);
 		ArrayList<StaticObject> tileList = new ArrayList<StaticObject>();
 		
+		if(line == null)
+			return tileList;
+		
+		Scanner lineScr = new Scanner(line);
 		int x = 0;
-		while(lineScr.hasNextInt())
+		while(lineScr.hasNext())
 		{
+			if(!lineScr.hasNextInt())	
+			{
+				lineScr.next();
+				continue;
+			}
+			
 			double height = lineScr.nextInt() * TILE_HEIGHT;
 			if(!lineScr.hasNextInt())
 			{
@@ -174,4 +185,145 @@ public final class MapFactory
 		return tileList;
 	}
 	
+	/**
+	 * Main method for testing purposes. Prints every test and if it succeeds, if it fails then it breaks the execution.
+	 * @param args Ignored here.
+	 */
+	public static void main(String[] args) 
+	{
+		try
+		{
+			System.out.println("Testing construction phase..");
+			if (flat != null || ne != null || nw != null || n != null || 
+				e != null || se != null || s != null || sw != null || w != null)
+				failedTest("Tile-drawables not null initially.");
+			System.out.print("..");
+			
+			loadTiles();
+			if (flat == null || ne == null || nw == null || n == null || 
+					e == null || se == null || s == null || sw == null || w == null)
+				failedTest("Tile-drawables still null after initialization.");
+			System.out.print("..");
+			
+			if(flat.getHeight() != 96 || flat.getWidth() != 128 ||
+					ne.getHeight() != 96 || ne.getWidth() != 128 ||
+					nw.getHeight() != 96 || nw.getWidth() != 128 ||
+					n.getHeight() != 96 || n.getWidth() != 128 ||
+					e.getHeight() != 96 || e.getWidth() != 128 ||
+					se.getHeight() != 96 || se.getWidth() != 128 ||
+					s.getHeight() != 96 || s.getWidth() != 128 ||
+					sw.getHeight() != 96 || sw.getWidth() != 128 ||
+					w.getHeight() != 96 || w.getWidth() != 128)
+				failedTest("Invalid dimensions for Tile-drawables");
+			System.out.println(".. Test Ok!");
+			
+			System.out.println("Testing parseLine method..");
+			//valid call
+			ArrayList<StaticObject> mapRow = parseLine("0 0  0 0  0 0  0 0  0 0", 0);
+			if(mapRow == null)
+				failedTest("parseLine returned null instead of valid row");
+			System.out.print("..");
+			
+			if(mapRow.size() != 5)
+				failedTest("parseLine returned map row of invalid length (" + mapRow.size() + ")");
+			System.out.print("..");
+			
+			//check against flat objects, they should have a uniform height.
+			for(StaticObject obj : mapRow)
+				if(obj == null || obj.getHeight(0, 0) != 0 || obj.getHeight(64, 64) != 0)
+					failedTest("parseLine returned map row with invalid StaticObjects");
+			System.out.print("..");
+			
+			//invalid call: invalid string
+			ArrayList<StaticObject> failRow = parseLine("KISSAT KOIRIA GFFÖÖGKFD 0 0  0 0 1337 ffgds 0 0", 0);
+			if(failRow == null)
+				failedTest("parseLine with invalid string returned null instead of semi-valid row");
+			System.out.print("..");
+			
+			if(failRow.size() != 3)
+				failedTest("parseLine with invalid string returned map row of invalid length (" + failRow.size() + ")");
+			System.out.print("..");
+			
+			//check against flat objects, they should have a uniform height.
+			for(StaticObject obj : mapRow)
+				if(obj == null || obj.getHeight(0, 0) != 0 || obj.getHeight(64, 64) != 0)
+					failedTest("parseLine with invalid string returned map row with invalid StaticObjects");
+			System.out.print("..");
+			
+			//invalid call: null string
+			failRow = parseLine(null, 0);
+			if(failRow == null)
+				failedTest("parseLine with null string returned null instead of semi-valid row");
+			System.out.print("..");
+			
+			if(failRow.size() != 0)
+				failedTest("parseLine with null string returned map row of invalid length(" + failRow.size() + ")");
+			System.out.println(".. Test Ok!");
+			
+			System.out.println("Testing readMap method..");
+			//valid call
+			Map map = readMap("/resources/testmap.map");
+			if(map == null)
+				failedTest("readMap returned null instead of a valid map.");
+			System.out.print("..");
+			
+			if(map.getTiles().size() != 8)
+				failedTest("readMap returned of invalid size instead of a valid map.");
+			System.out.print("..");
+			
+			for(ArrayList<StaticObject> row : map.getTiles())
+			{
+				if(row.size() != 6)
+					failedTest("readMap returned map of invalid size instead of a valid map.");
+				
+				for(StaticObject obj : row)
+					if(obj == null || obj.getHeight(0, 0) != 0 || obj.getHeight(64, 64) != 0)
+						failedTest("readMap returned map with invalid StaticObjects");
+				System.out.print("..");
+			}
+
+			
+			//invalid call: invalid string
+			try
+			{
+				readMap("GFFÖÖÖGKFKLD KOIRAT%=)(");
+				failedTest("readMap didn't throw exception for faulty filename.");
+			}
+			catch(MapException e)
+			{
+				System.out.print(e);
+				System.out.print("..");
+			}
+			
+			//invalid call: null string
+			try
+			{
+				readMap(null);
+				failedTest("readMap didn't throw exception for null filename.");
+			}
+			catch(MapException e)
+			{
+				System.out.print(e);
+				System.out.print("..");
+			}
+			System.out.println(".. Test Ok!");
+
+		}
+		catch (Exception e)
+		{
+			failedTest("Unknown exception: " + e);
+		}
+		System.out.println("TESTS: OK");
+	}
+	
+	/**
+	 * Gets called if a test fails. Testing purposes only. Prints out the failed test and exits the program.
+	 * @param test A string describing the test that failed.
+	 */
+	private static void failedTest(String test)
+	{
+		System.out.println("TEST FAILED: " + test);
+		System.exit(0);
+	}
 }
+	
