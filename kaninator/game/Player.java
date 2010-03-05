@@ -116,7 +116,7 @@ public class Player
 			height = MapFactory.getTileHeight() * MAX_AIM_UP;
 		
 		crosshair.setPos(iso_x, iso_y);
-		crosshair.setHeight(map.getHeightAt(iso_x, iso_y));
+		crosshair.setHeight(map.getHeightAt(iso_x, iso_y) + model.getModel().getAnimation().getHeight()/5.0);
 		
 		gun.setAim(vec_x, vec_y, height);
 		gun.aimModel(vec_x, vec_y);

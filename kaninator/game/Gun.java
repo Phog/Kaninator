@@ -184,7 +184,7 @@ public class Gun
 		if(delay <= 0)
 		{
 			sound.playClip();
-			Bullet bul = new Bullet(new DynamicObject(bullet, BULLET_RADIUS), new DynamicObject(shadow, BULLET_RADIUS), map, wielder, delta_x, delta_y, delta_height);
+			Bullet bul = new Bullet(new DynamicObject(bullet, BULLET_RADIUS), new DynamicObject(shadow, BULLET_RADIUS), map, model, delta_x, delta_y, delta_height);
 			bullets.add(bul);
 			bulletObjects.add(bul.getShadow());
 			bulletObjects.add(bul.getMainObject());

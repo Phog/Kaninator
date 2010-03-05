@@ -43,13 +43,9 @@ public class DynamicObject
 	 */
 	public boolean collide(DynamicObject other)
 	{
-		double middle_x = render_x() + getAnimation().getWidth()/2;
-		double middle_y = render_y() + getAnimation().getHeight();
-		
-		double other_x = other.render_x() + other.getAnimation().getWidth()/2;
-		double other_y = other.render_y() + getAnimation().getHeight();
-		
-		double distance = Math.sqrt((middle_x - other_x) * (middle_x - other_x) + (middle_y - other_y) * (middle_y - other_y));
+		double distance_x = x - other.x;
+		double distance_y = y - other.y;
+		double distance = Math.sqrt(distance_x * distance_x + distance_y * distance_y);
 		
 		return (distance <= (radius + other.radius)
 				&& Math.abs(h - other.h) <= other.getAnimation().getHeight());
