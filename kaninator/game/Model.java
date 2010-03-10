@@ -69,7 +69,7 @@ public class Model
 		vel_height -= gravity;
 		model.move_vert(vel_height);
 		double mapHeight = map.getHeight(model);
-		if(vel_height <= 0.0 && model.getHeight()<= mapHeight)
+		if(onGround())
 		{
 			vel_height = 0.0;
 			model.setHeight(mapHeight);
@@ -152,6 +152,25 @@ public class Model
 	}	
 	
 	/**
+	 * Sets vertical velocity for the model without any regard to normal jumping restrictions.
+	 * @param _vel_y The new vertical velocity.
+	 */
+	public void setVelHeight(double _vel_height)
+	{
+		vel_height = _vel_height;
+	}	
+	
+	/**
+	 * Sets the jump speed (the value the vertical velocity is set to when you first jump).
+	 * @param _jumpSpeed The new jump speed
+	 */
+	public void setJumpSpeed(double _jumpSpeed)
+	{
+		jumpSpeed = _jumpSpeed;
+	}
+	
+	
+	/**
 	 * Getter for the velocity on the x-axis for the model
 	 * @return The velocity on the x-axis.
 	 */
@@ -169,6 +188,15 @@ public class Model
 		return vel_y;
 	}
 	
+	/**
+	 * Returns true if the model is not airborne.
+	 * @return True if the model is standing on the ground, otherwise false.
+	 */
+	public boolean onGround()
+	{
+		double mapHeight = map.getHeight(model);
+		return vel_height <= 0.0 && model.getHeight() <= mapHeight;
+	}
 	
 	/**
 	 * Makes the model jump according to its jumpSpeed. Jumps only happen 

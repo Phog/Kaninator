@@ -146,7 +146,6 @@ public class Zombie
 	public void kill()
 	{
 		dead = true;
-		squirt.playClip();
 	}
 	
 	
@@ -160,8 +159,11 @@ public class Zombie
 	 */
 	public boolean act(LinkedList<Zombie> others)
 	{
-		if(dead)
+		if(dead) 
+		{
+			squirt.playClip();
 			return true;
+		}
 		
 		Zombie leader = null;
 		if(distance < MAX_ACTIVE_DISTANCE)

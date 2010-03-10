@@ -30,7 +30,7 @@ public class Camera
 	private int x, y, numHorizontalTiles;
 	
 	private LinkedList<DynamicObject> playerObjects;
-	private LinkedList<DynamicObject> bulletObjects;
+	private LinkedList<DynamicObject> objects;
 	private LinkedList<DynamicObject> enemyObjects;
 	private ArrayList<ArrayList<StaticObject>> tiles;
 	
@@ -52,7 +52,7 @@ public class Camera
 		numHorizontalTiles = 1 + (int)(canvas.getWidth()/(MapFactory.getTileSize() * 2));
 
 		playerObjects = null;
-		bulletObjects = null;
+		objects = null;
 		enemyObjects = null;
 		tiles = null;
 		orderedObjects = new TreeMap<Integer, ArrayList<VisibleElement>>();
@@ -102,15 +102,15 @@ public class Camera
 	 * Sets the DynamicObjects that are projectiles.
 	 * @param _bulletObjects The DynamicObjects you want to show on screen.
 	 */
-	public void setBulletObjects(LinkedList<DynamicObject> _bulletObjects)
+	public void setOtherObjects(LinkedList<DynamicObject> _objects)
 	{
-		bulletObjects = _bulletObjects;
+		objects = _objects;
 	}
 
 	/**
 	 * Clears the DynamicObjects that are projectiles from the camera.
 	 */
-	public void clearBulletObjects()
+	public void clearOtherObjects()
 	{
 		enemyObjects = null;
 	}
@@ -195,7 +195,7 @@ public class Camera
 		orderStatics();
 		orderDynamics(enemyObjects);
 		orderDynamics(playerObjects);
-		orderDynamics(bulletObjects);
+		orderDynamics(objects);
 
 		for(ArrayList<VisibleElement> list : orderedObjects.values())
 		{

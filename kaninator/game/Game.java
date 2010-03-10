@@ -33,19 +33,20 @@ public class Game extends GameState
 
 	private LinkedList<Zombie> enemies;
 	private LinkedList<DynamicObject> enemyList;
-	private LinkedList<DynamicObject> bullets;
+	private LinkedList<DynamicObject> objects;
 	
 	private Player player;
 	private Canvas canvas;
 	private Map map;
 	private Gun gun;
+	private GoreFactory gore;
 	private Text hud;
 	
 	private int score;
 	private long framesAlive;
 	
 	/**
-	 * Initializes the game.
+	 * Initializes the game.r
 	 * Loads the map using MapFactory, creates animations for the player and the
 	 * zombies using AnimationFactory and positions them randomly.
 	 * @param _camera The camera class used to render the internal objects to a 2 dimensional screen.
@@ -69,6 +70,8 @@ public class Game extends GameState
 			ArrayList<Animation> playerAnim = AnimationFactory.getAnimations("/resources/theSheet.png", true, 64, 64, 0.30);
 			ArrayList<Animation> gunAnim = AnimationFactory.getAnimations("/resources/gunSheet.png", true, 32, 32, 0.0);
 			ArrayList<Animation> crosshairAnim = AnimationFactory.createAnimations(ImageFactory.getImage("/resources/crosshair.png"));
+			ArrayList<Animation> headGore = AnimationFactory.createAnimations(ImageFactory.getImage("/resources/gore1.png"));
+			ArrayList<Animation> boneGore = AnimationFactory.createAnimations(ImageFactory.getImage("/resources/gore2.png"));			
 			
 			Drawable bullet = ImageFactory.getImage("/resources/bullet.png");
 			SoundClip shotgun = SoundFactory.getClip("/resources/shotgun.wav");
@@ -76,8 +79,9 @@ public class Game extends GameState
 			squirt = SoundFactory.getClip("/resources/squirt.wav");
 			
 			//create objects
-			bullets = new LinkedList<DynamicObject>();
-			gun = new Gun(gunAnim, shotgun, map, bullet, bullets, 25.0);
+			objects = new LinkedList<DynamicObject>();
+			gun = new Gun(gunAnim, shotgun, map, bullet, objects, 35.0);
+			gore = new GoreFactory(map, objects, headGore, boneGore);//TODO: add parameters
 			player = new Player(playerAnim, crosshairAnim, ow, map, gun, 0, 0, 5.0);
 		}
 		catch(ModelException e)
@@ -121,7 +125,7 @@ public class Game extends GameState
 		
 		camera.setPlayerObjects(player.getDynamicObjects());
 		camera.setEnemyObjects(enemyList);
-		camera.setBulletObjects(bullets);
+		camera.setOtherObjects(objects);
 		camera.setTiles(map.getTiles());
 		
 		long oldTime = System.currentTimeMillis();
@@ -143,12 +147,14 @@ public class Game extends GameState
 			camera.render();
 			camera.renderGUI();
 			
+			gore.updateGore();
 			gun.updateBullets();
 			for(Iterator<Zombie> i = enemies.iterator(); i.hasNext();)
 			{
 				Zombie npo = i.next();
 				if(npo.act(enemies))
 				{
+					gore.gorify(npo.getMainObject());
 					score += framesAlive / TIME_POINTS_RATIO;
 					i.remove();
 					for(DynamicObject obj : npo.getDynamicObjects())
@@ -183,7 +189,7 @@ public class Game extends GameState
 		gui.clearSection(0, 0);
 		camera.clearPlayerObjects();
 		camera.clearEnemyObjects();
-		camera.clearBulletObjects();
+		camera.clearOtherObjects();
 		canvas.hideCursor(false);
 		
 		return retValue;
@@ -200,17 +206,15 @@ public class Game extends GameState
 			if(enemies.size() < MAX_ZOMBIES && Math.random() > ZOMBIE_SPAWN_PROBABILITY)
 			{
 				int numZombies = (int)(Math.random() * (MAX_ZOMBIES - enemies.size()));
-				ArrayList<Animation> newList = AnimationFactory.cloneAnimations(zombAnim);
-				
+
 				for(int i = 0; i < numZombies; i++)
 				{
 					double pos_y = Math.random() * map.getTiles().size() * MapFactory.getTileSize();
 					double pos_x = Math.random() * map.getTiles().get(0).size() * MapFactory.getTileSize();
-					Zombie enemy = new Zombie(newList, map, squirt, player.getMainObject(), pos_x, pos_y, 5.0);
+					Zombie enemy = new Zombie(AnimationFactory.cloneAnimations(zombAnim), map, squirt, player.getMainObject(), pos_x, pos_y, 5.0);
 					enemies.add(enemy);
 					for(DynamicObject obj: enemy.getDynamicObjects())
 						enemyList.add(obj);
-					newList = AnimationFactory.cloneAnimations(zombAnim);
 				}
 			}
 		}

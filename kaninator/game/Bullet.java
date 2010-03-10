@@ -38,13 +38,16 @@ public class Bullet
 	 */
 	protected Bullet(DynamicObject _model, DynamicObject _shadow, Map _map, DynamicObject wielder, double _vel_x, double _vel_y,  double _vel_height)
 	{
+		double offset_x = _vel_x * (Math.random() - 0.5);
+		double offset_y = _vel_y * (Math.random() - 0.5);
+		
 		model = _model;
 		map = _map;
 		
 		shadow = _shadow;
-		shadow.setPos(wielder.get_x(), wielder.get_y());
+		shadow.setPos(wielder.get_x() + offset_x, wielder.get_y() + offset_y);
 		shadow.setHeight(wielder.getHeight());
-		model.setPos(wielder.get_x(), wielder.get_y());
+		model.setPos(wielder.get_x() + offset_x, wielder.get_y() + offset_y);
 		model.setHeight(wielder.getHeight());
 		
 		vel_x = _vel_x;

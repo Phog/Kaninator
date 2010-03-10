@@ -24,6 +24,7 @@ public class Gun
 {
 	private static final double BULLET_RADIUS = 16.0;
 	private static final double SHOOT_DELAY = 30.0;
+	private static final double SPREAD_VALUE = 1.0 / 25.0;
 	private static final int MAX_STRAFE_DIFFERENCE = 64;
 
 	private ArrayList<Animation> bullet;
@@ -184,10 +185,19 @@ public class Gun
 		if(delay <= 0)
 		{
 			sound.playClip();
-			Bullet bul = new Bullet(new DynamicObject(bullet, BULLET_RADIUS), new DynamicObject(shadow, BULLET_RADIUS), map, model, delta_x, delta_y, delta_height);
-			bullets.add(bul);
-			bulletObjects.add(bul.getShadow());
-			bulletObjects.add(bul.getMainObject());
+			double rite_x = -delta_y;
+			double rite_y = delta_x;
+			
+			for(int i = -2; i <= 2; i++)
+			{
+				Bullet bul = new Bullet(new DynamicObject(bullet, BULLET_RADIUS),
+										new DynamicObject(shadow, BULLET_RADIUS),
+										map, model,delta_x + rite_x * i * SPREAD_VALUE,
+										delta_y + rite_y * i * SPREAD_VALUE, delta_height);
+				bullets.add(bul);
+				bulletObjects.add(bul.getShadow());
+				bulletObjects.add(bul.getMainObject());
+			}
 			delay += SHOOT_DELAY;
 		}
 	}

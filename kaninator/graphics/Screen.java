@@ -39,7 +39,7 @@ public class Screen implements Canvas
 		public void paintComponent(Graphics graphics)
 		{
 			super.paintComponent(graphics);
-			Graphics2D g = (Graphics2D)graphics;//bufferStrat.getDrawGraphics();
+			Graphics2D g = (Graphics2D)graphics;
 			
 			g.setColor(clearColor);
 			g.fillRect(0, 0, getWidth(), getHeight());
