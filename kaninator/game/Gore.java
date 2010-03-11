@@ -24,7 +24,6 @@ public class Gore
 		ttyl = _ttyl;
 		
 		model = new Model(animations, _map, victim.get_x(), victim.get_y(), RADIUS_CONSTANT, GORE_SPEED);
-		model.update();
 		model.setVelX(vel_x);
 		model.setVelY(vel_y);
 		model.setVelHeight(GORE_JUMP_SPEED);
@@ -37,15 +36,15 @@ public class Gore
 	
 	public boolean update()
 	{
-		model.update();
-		
 		if(model.onGround())
 		{
 			model.setVelX(0);
 			model.setVelY(0);
 		}
 		
+		model.update();
 		ttyl--;
+		
 		return ttyl <= 0;
 	}
 }

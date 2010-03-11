@@ -17,6 +17,7 @@ import kaninator.mechanics.DynamicObject;
  */
 public class Model
 {
+	private static final double GROUND_TOLERANCE = 4.0;
 	private double normalSpeed;
 	private double diagonalSpeed;
 	private double jumpSpeed = 13;
@@ -49,6 +50,7 @@ public class Model
 		double radius = animations.get(0).getWidth()/radius_constant;
 		model = new DynamicObject(animations, radius);
 		model.setPos(x, y);
+		model.setHeight(map.getHeight(model));
 
 		ArrayList<Animation> shadowAnimList = AnimationFactory.createAnimations(new Shadow(radius * 2));
 	
@@ -195,7 +197,7 @@ public class Model
 	public boolean onGround()
 	{
 		double mapHeight = map.getHeight(model);
-		return vel_height <= 0.0 && model.getHeight() <= mapHeight;
+		return vel_height <= 0.0 && model.getHeight() <= mapHeight + GROUND_TOLERANCE;
 	}
 	
 	/**

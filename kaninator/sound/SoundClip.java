@@ -64,8 +64,15 @@ public class SoundClip
 	{
 		if(clip != null)
 		{
+			if(clip.isRunning())
+			{
+				clip.stop();
+				clip.flush();
+			}
+			
 			clip.setFramePosition(0);
-			clip.start();
+			if(!clip.isRunning())
+				clip.start();
 		}
 	}
 	
